@@ -3,13 +3,26 @@
 This is a book about declarative language definition with the Spoofax Language
 Workbench.
 
-This is a book in progress as Spoofax itself is very much in progress.
-Spoofax is the product of an ongoing research project that investigates the
-nature of software language definition.
-We are continuously experimenting with better ways to do things. 
+This is a book in progress just as Spoofax itself is very much in progress.
+(Although Spoofax is much further along than this book :-) Spoofax is the
+product of an ongoing research project that investigates the nature of software
+language definition. We are continuously experimenting with better ways to do
+things.
 As a result, new features are being added to Spoofax and we are also always
 working on the guts of the workbench.
 Therefore, working with Spoofax can be a somewhat rocky experience.
+
+Indeed, while I start writing this book in June 2015 using the nighly-build
+descendant of Spoofax 1.4, Spoofax is about to enter a new era.
+Within the coming months, we're planning to switch to a new version of Spoofax
+based on a complete overhaul of the internal architecture of the workbench.
+We're replacing IMP, the framework that provided the binding of Spoofax
+meta-languages to Eclipse, with Spoofax Core, a framework that defines IDE
+services independently from Eclipse. This will allow us to target other IDE
+containers such as NetBeans and IntelliJ (modulo engineering work) as well as
+support robust command-line implementations of languages defined in Spoofax. So
+there is a risk that some of the text of this book and example project that
+comes with it, will have to be rewritten some.
 
 This book and the accompanying Spoofax projects are on \BookOnGithub{github}. 
 I will consider pull requests with minor or major contributions to the book
