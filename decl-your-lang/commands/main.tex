@@ -47,6 +47,8 @@
 % \setlength{\intextsep}{\baselineskip}
 % \renewcommand{\floatpagefraction}{0.1} 
 
+%%%% book stuff
+
 \parindent0pt
 \parskip0.5\baselineskip
 
@@ -54,4 +56,8 @@
 \newcommand{\BookWebSite}{http://metaborgcube.github.io/declare-your-language}
 
 \newcommand{\BookOnGithub}[1]{\href{\BookWebSite}{#1}}
+
+\newenvironment{sidenote}[1]{
+\noindent\begin{boxedminipage}{\hsize}\textbf{#1}:
+}{\end{boxedminipage}}
 
