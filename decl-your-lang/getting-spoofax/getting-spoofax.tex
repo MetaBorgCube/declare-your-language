@@ -44,10 +44,10 @@ Adjust the font size in the \texttt{Preferences > General > Appearance > Colors
 and Fonts}, and there select \texttt{Basic > Text Font} and choose something
 appropriate. I find 14pt Monaco to work out pretty well.
 
-\paragraph{JRE Error}
+\begin{sidenote}{JRE Error}
 
-At the first time that I try out the Eclipse with pre-packaged JRE, I get the
-following error: 
+At the first time that I try out the Eclipse with
+pre-packaged JRE, I get the following error: 
 
 \begin{quote}
 'Update Installed JREs' has encountered a problem.
@@ -57,6 +57,8 @@ Resource '/.org.eclipse.jdt.core.external.folders' already exists.
 \noindent
 After ignoring the error, Spoofax appears to work fine. It is not clear at this
 point whether that is due to the fact that I had already installed JRE8.
+
+\end{sidenote} 
 
 \section{Creating a Project}
 
@@ -82,7 +84,8 @@ package and plugin that is generated from your project.
 \item[File extensions] This is the file extension that the program files in
 your language will have 
 \item[Generate .gitignore file] Of course you will maintain your project's
-version history in git. Check the box
+version history in git. Check the box so that generated code that needs not to
+be versioned is ignored by git.
 \item[Generate minimal project only] Check this box to start with a fresh
 language. In this book I will walk you through building the various elements
 that you need for your language.
@@ -115,7 +118,82 @@ You can remove a project from your workspace using \texttt{Edit > Delete}. This
 will not remove the files from the file system, unless you select that option
 using the check box.
 
+\section{Structure of a Spoofax Project}
+
+The Spoofax Editor Project wizard generates a complete Eclipse plugin project
+for your language. All that is left to do is fill in the language-specific bits.
+That is great, but the sheer number of directories and files in a project may
+seem rather overwhelming. However, it is not all that bad. You can ignore most
+of this stuff, certainly at first. Let's have a look what the wizard has
+generated.
+
+\begin{itemize}
+
+  \item \texttt{.cache/}: A cache of intermediate results produced by processing
+  the language definition.
+  \item \texttt{.externalToolBuilders/}: Automatically generated Ant files.
+  \item \texttt{.settings/}: Eclipse settings
+  \item \texttt{editor/}: This directory contains \texttt{*.esv} files, which
+  configure various aspects of the IDE for your language. Here you can change
+  the color that syntax highlighting gives to certain tokens of your syntax, or
+  define the outline view for programs in your language. A basic definition of
+  these configurations is generated automatically. 
+  \item \texttt{editor/java}: This sub-directory of the \texttt{editor/}
+  directory is unrelated to the configuration files. It contains some
+  project-specific Java code that binds it to the language-independent Spoofax
+  framework. The directory is also used as target for Java code generated from
+  the DynSem meta-language for dynamic semantics.
+  \item \texttt{icons/}: This is where icons to be used in the outline view go.
+  It is empty by default.
+  \item \texttt{include/}: This directory contains files that are generated from
+  the syntax definition for the language. (Eventually these files will end up
+  in the \texttt{src-gen} directory.)
+  \item \texttt{lib/}: This directory contains the common run-time library for
+  Spoofax projects. (Eventually this should be a binary dependency.)
+  \item \texttt{META-INF/}: This directory contains the manifest with
+  configuration information for building the Eclipse plugin.
+  \item \texttt{src-gen/}: This directory contains code generated from the
+  language definition.
+  \item \texttt{syntax/}: This is where one typically puts the modules making up
+  the syntax definition. In today's Spoofax, syntax definitions are defined
+  using the SDF3 syntax definition formalism.
+  \item \texttt{target/}: This directory contains the result of the compilation
+  of Java code.
+  \item \texttt{trans/}: This is where one usually puts the transformations
+  defining the non-syntactic aspects of a language definition, including
+  source-to-source transformations, interpretation, and code generation. All
+  these aspects used to be defined using the Stratego transformation language.
+  \item \texttt{utils/}: This directory contains Spoofax Java libraries.
+\end{itemize}
+
+Then there are some files at the top level of the project:
+
+\begin{itemize}
+  \item \texttt{.classpath}:
+  \item \texttt{.gitignore}:
+  \item \texttt{.project}:
+  \item \texttt{build.properties}: 
+  \item \texttt{build.generated.xml}: 
+  \item \texttt{build.main.xml}: 
+  \item \texttt{plugin.xml}: 
+  \item \texttt{pom.xml}: 
+\end{itemize}
+
+In summary, only the \texttt{editor/}, \texttt{syntax/}, and \texttt{trans/}
+directories contain language-specific code.
 
 
+The other directories contain either standard Spoofax code that is copied into
+the project or code that is generated from language 
+
+\section{Language Concerns}
+
+\begin{description}
+\item[Syntax]
+\item[Transformation]
+\item[Names]
+\item[Types]
+\item[Dynamic semantics]
+\end{description}
 
 
