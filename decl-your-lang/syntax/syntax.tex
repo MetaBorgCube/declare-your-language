@@ -1,0 +1,11 @@
+\chapter{Syntax}
+
+\begin{verbatim}
+context-free syntax
+  Exp.Var = ID
+  Exp.Mul = [[Exp] * [Exp]] {left}
+  Exp.Add = [[Exp] + [Exp]] {left}
+context-free priorities
+  Exp.Mul > Exp.Add
+\end{verbatim}
+

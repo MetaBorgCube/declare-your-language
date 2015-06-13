@@ -1,76 +1,35 @@
-	\maketitle
+\title{Declare Your Language}
 	
-\vspace*{\fill}
-
-This book is on \BookOnGithub{github} at \url{\GithubURL}
-
-\vspace*{\fill}
-
-copyright \copyright{} 2015 \href{http://eelcovisser.org}{Eelco Visser}
+\author{Eelco Visser\\[20pt]TU Delft}
 	
-\newpage
-\tableofcontents
+\date{June 12, 2015 -- \today}
+	
+\input{frontmatter}
 
 \newpage
-\chapter*{Preface}
+\input{preface/preface}
 
-This is a book about declarative language definition with the Spoofax Language
-Workbench.
-
-This is a book in progress as Spoofax itself is very much in progress.
-Spoofax is the product of an ongoing research project that investigates the
-nature of software language definition.
-We are continuously experimenting with better ways to do things. 
-As a result, new features are being added to Spoofax and we are also always
-working on the guts of the workbench.
-Therefore, working with Spoofax can be a somewhat rocky experience.
-
-This book and the accompanying Spoofax projects are on \BookOnGithub{github}. 
-I very much would appreciate pull requests.
-
-Eelco Visser
-
-\today
-
-\newpage
-\chapter{Declarative Language Definition}
-
-
-\section{What is a Language?}
-
-internal, external, embedded languages
-
-\newpage
-\section{Language Workbenches}
-
-what is a language workbench
-
-Xtext, MPS, Rascal, Spoofax
+%\newpage
+%\input{language-definition/language-definition}
 
 \newpage
 \input{getting-spoofax/getting-spoofax}
 
+% \newpage
+% \input{syntax/syntax}
 
-\newpage
-\chapter{Syntax}
-
-\begin{verbatim}
-context-free syntax
-  Exp.Var = ID
-  Exp.Mul = [[Exp] * [Exp]] {left}
-  Exp.Add = [[Exp] + [Exp]] {left}
-context-free priorities
-  Exp.Mul > Exp.Add
-\end{verbatim}
+% \newpage
+% \chapter{Names \& Types}
+% 
+% \newpage
+% \chapter{Transformation}
+% 
+% \newpage
+% \newpage
+% \chapter{Semantics}
 
 
-\newpage
-\chapter{Names \& Types}
-
-\newpage
-\chapter{Transformation}
-
-\newpage
-\newpage
-\chapter{Semantics}
-
+% \nocite{*}
+% \bibliographystyle{abbrv}
+% \bibliography{bibliography}
+	
