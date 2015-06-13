@@ -1,0 +1,33 @@
+module LangA.main
+
+imports
+  LangA-Colorer
+  LangA-Completions
+  LangA-Folding
+  LangA-Menus
+  LangA-Refactorings
+  LangA-References
+  LangA-Syntax
+  LangA-Views
+
+language General properties
+  
+  name:          LangA
+  id:            dyl.language.a
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the LangA language"
+  url:           http://strategoxt.org
+  
+  extensions:    la
+  table:         include/LangA.tbl
+  start symbols: Start
+  
+  provider:      include/langa.ctree
+  provider:      include/langa-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

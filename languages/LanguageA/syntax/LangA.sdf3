@@ -1,0 +1,11 @@
+module LangA
+
+imports Common
+
+context-free start-symbols Start
+
+context-free syntax
+  
+  Start = Expr
+  Expr.Int = INT
+  Expr.Add = [[Expr] + [Expr]]

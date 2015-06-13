@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/LangA
+	
+namespaces
+	
+binding rules
+

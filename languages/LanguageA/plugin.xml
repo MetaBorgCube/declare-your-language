@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="la"
+            description="LangA"
+            language="LangA"
+            derivedFrom="DynamicRoot"
+            validator="dyl.language.a.LangAValidator"
+            validatorClass="dyl.language.a.LangAValidator"
+      ></language>
+   </extension>
+   <extension
+         id="dyl.language.a.parser"
+         name="LangA Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="dyl.language.a.LangAParseController"
+            language="LangA">
+      </parser>
+   </extension>    
+</plugin>
