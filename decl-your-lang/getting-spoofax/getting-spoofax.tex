@@ -88,18 +88,34 @@ language. In this book I will walk you through building the various elements
 that you need for your language.
 \end{description}
 
-\paragraph{Renaming}
-
 Choosing the name for your language is important. Unfortunately, the name that
-you choose will be hardwired at many places in your project. Therefore, renaming
-your project and language afterwards is virtually impossible. The usual way to
-achieve a renaming is to create a new project with the right name and manually
-copy over the files from your old project.
-
+you choose will be hardwired at many places in your project. Therefore,
+\textbf{renaming} your project and language afterwards \textbf{is virtually
+impossible}.
+The usual way to achieve a renaming is to create a new project with the right
+name and manually copy over the files from your old project.
 
 \section{Importing an Existing Project}
 
+Another way to use Spoofax is to import an existing project. The
+\BookOnGithub{github repository} for this book provides a series of example
+projects which are the basis for the text in the book. To use those projects
+check out the git repository and import the projects into Eclipse as follows.
+In the \texttt{File} menu select \texttt{Import \ldots}. In the import dialog
+select \texttt{General > Existing Project into Workspace}. Browse to the
+\texttt{declare-your-language/languages} directory and select a project to
+import (or select the entire directory, which will allow you to import all
+projects at once). In the \texttt{Projects:} are select all projects that you
+want to import. Hit the \texttt{Finish} button. 
 
-\BookOnGithub{github project}
+Importing a project will add it to your workspace without copying it to the
+Workspace directory.
+
+You can remove a project from your workspace using \texttt{Edit > Delete}. This
+will not remove the files from the file system, unless you select that option
+using the check box.
+
+
+
 
 
