@@ -1,0 +1,105 @@
+\chapter{Getting Spoofax}
+
+In this chapter we discuss how to install Spoofax and setting up language
+projects.
+
+\section{Eclipse + Spoofax}
+
+Spoofax is an Eclipse plugin. Hence, the regular way to install an Eclipse
+plugin is to use its update site to add the plugin to an existing Eclipse
+installation. However, Spoofax requires a few tweaks to be applied to the
+Eclipse configuration and it requires the separate installation of Java 7 or
+later. To avoid all this hassle, Spoofax is now also distributed as a
+complete Eclipse installation with Spoofax pre-installed and all configurations
+set corectly. The download page
+
+\begin{quote}
+  \url{http://metaborg.org/download}
+\end{quote}
+
+\noindent
+provides a link to the integrated distributions. Note that this distribution is
+currently only available for the bleeding edge continuous build version of
+Spoofax. 
+
+Download the \texttt{spoofax-<os>-<arch>-jre.zip} for your computer's operating
+ system and architecture, unzip, and launch the Eclipse application inside.
+ 
+The first thing that Eclipse will ask is which Workspace to use. The Workspace
+is the default directory where projects are created. Just create a new directory
+with an appropriate name (e.g. \texttt{Workspace-Spoofax}) in an appropriate
+location in your file system.
+
+The first thing that I do when installing a new Eclipse is changing its
+appearance. In the Eclipse menu choose \texttt{Preferences}. In the dialog
+window go to \texttt{General > Appearance} and choose theme \texttt{Classic}. 
+
+Another setting that is useful to adjust is that for refresh. In the search 
+box in the Preference dialog type 'refresh'. Under \texttt{Startup and Shutdown} 
+select \texttt{Refresh workspace on startup}. Under \texttt{Workspace} unselect
+\texttt{Build automatically} and select \texttt{Refresh on access}.
+
+The default font size is configured to be 11pt, which is too small for my eyes. 
+Adjust the font size in the \texttt{Preferences > General > Appearance > Colors
+and Fonts}, and there select \texttt{Basic > Text Font} and choose something
+appropriate. I find 14pt Monaco to work out pretty well.
+
+\paragraph{JRE Error}
+
+At the first time that I try out the Eclipse with pre-packaged JRE, I get the
+following error: 
+
+\begin{quote}
+'Update Installed JREs' has encountered a problem.
+Resource '/.org.eclipse.jdt.core.external.folders' already exists.
+\end{quote} 
+
+\noindent
+After ignoring the error, Spoofax appears to work fine. It is not clear at this
+point whether that is due to the fact that I had already installed JRE8.
+
+\section{Creating a Project}
+
+To start a new language with Spoofax you need to create an Eclipse project.
+
+In the \texttt{File} menu select \texttt{New > Project \ldots}. In the dialog
+window select \texttt{Spoofax editor project} and hit the \texttt{Next >}
+button. This presents the \texttt{Spoofax Editor Project} wizard dialog in
+which you should indicate the name and file extension of your project
+and language. This information is used to instantiate all the files that are
+needed in a Spoofax project.
+
+The wizard will create a project directory in your Workspace with the following
+properties:
+
+\begin{description}
+\item[Project name] This will be the name of your project and the directory that
+contains it.
+\item[Language name] This is the name of your language, which means that it will
+be used as the basis for several file names.
+\item[Plugin ID and package name] This is the name of the Java
+package and plugin that is generated from your project.
+\item[File extensions] This is the file extension that the program files in
+your language will have 
+\item[Generate .gitignore file] Of course you will maintain your project's
+version history in git. Check the box
+\item[Generate minimal project only] Check this box to start with a fresh
+language. In this book I will walk you through building the various elements
+that you need for your language.
+\end{description}
+
+\paragraph{Renaming}
+
+Choosing the name for your language is important. Unfortunately, the name that
+you choose will be hardwired at many places in your project. Therefore, renaming
+your project and language afterwards is virtually impossible. The usual way to
+achieve a renaming is to create a new project with the right name and manually
+copy over the files from your old project.
+
+
+\section{Importing an Existing Project}
+
+
+\BookOnGithub{github project}
+
+

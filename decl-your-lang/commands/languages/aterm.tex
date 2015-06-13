@@ -1,0 +1,11 @@
+\lstdefinelanguage{ATerm} {
+  morekeywords={},
+  morekeywords=[2]{Variable},
+  otherkeywords={non-unique}, % {+,*,?}, % ,-,>
+  literate={...}{$\ldots$}2,
+  comment=[l]{\%\%},
+  mathescape=true,
+  sensitive=true
+}
+
+\newcommand{\atermcode}[1]{\lstinline[language=ATerm,basicstyle=\lstinlinestyle]{#1}}

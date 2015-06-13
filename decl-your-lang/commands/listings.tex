@@ -1,0 +1,48 @@
+\usepackage{listings}
+
+%\newcommand{\code}[1]{\lstinline[language={},basicstyle=\lstinfigurestyle]{#1}}
+\newcommand{\smcode}[1]{\lstinline[language={},basicstyle=\lstenumstyle]{#1}}
+\newcommand{\lstinlinestyle}{\fontfamily{pcr}\fontsize{9pt}{11pt}\selectfont}
+\newcommand{\lstfigurestyle}{\fontfamily{pcr}\fontsize{8pt}{10pt}\selectfont}
+\newcommand{\lstenumstyle}{\fontfamily{pcr}\fontsize{9pt}{11pt}\selectfont}
+
+\lstset{basicstyle = \lstfigurestyle}
+\lstset{tabsize = 2}
+\lstset{numberbychapter=false}
+\lstset{frame = single, framerule = 0.1pt}
+\lstset{numbers = none, numberstyle = \scriptsize\sffamily}%\textcolor{black}}
+\lstset{aboveskip=\smallskipamount, belowskip=.8\smallskipamount}
+\lstset{framexbottommargin=0pt}
+\lstset{captionpos = t}
+\lstset{escapeinside={/+}{+/}}
+\lstset{moredelim=*[is][\underbar]{_}{_}}
+\lstset{moredelim=[is][basicstyle]{`}{`}} % to escape non-keyword words
+\lstset{showstringspaces=false}
+
+\usepackage{atbegshi,ifthen,tikz}
+
+% change this to customize the appearance of the highlight
+\tikzstyle{highlighter} = [
+  lightgray,
+  line width = \baselineskip,
+]
+
+% implementation of the core highlighting logic; do not change!
+\newcounter{highlight}[page]
+\newcommand{\tikzhighlightanchor}[1]{\ensuremath{\vcenter{\hbox{\tikz[remember picture, overlay]{\coordinate (#1 highlight \arabic{highlight});}}}}}
+\newcommand{\bh}[0]{\stepcounter{highlight}\tikzhighlightanchor{begin}}
+\newcommand{\eh}[0]{\tikzhighlightanchor{end}}
+\AtBeginShipout{\AtBeginShipoutUpperLeft{\ifthenelse{\value{highlight} > 0}{\tikz[remember picture, overlay]{\foreach \stroke in {1,...,\arabic{highlight}} \draw[highlighter] (begin highlight \stroke) -- (end highlight \stroke);}}{}}}
+
+\newcommand{\langname}[1]{#1}
+
+\input{commands/languages/SDF}
+\input{commands/languages/Stratego}
+\input{commands/languages/NaBL}
+\input{commands/languages/TS}
+\input{commands/languages/Java}
+\input{commands/languages/DynSem}
+\input{commands/languages/aterm}
+\input{commands/languages/coq}
+\input{commands/languages/PCFM}
+
