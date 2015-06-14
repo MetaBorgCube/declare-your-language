@@ -2,21 +2,31 @@
 
 This is a book about declarative language definition with the Spoofax Language
 Workbench.
+The aim of Spoofax is to separate the various concerns of language definition
+and implementation and provide high-level declarative meta-languages for each
+concern.
+These meta-languages are declarative in the sense that they abstract from the
+\emph{how} of language implementation and focus on the \emph{what} of language
+design.
+For example, ``what is the syntax of my language?'', instead of ``how do I
+implement a parser for my language?''.
+Thus, a language designer should not be distracted by language implementation
+details. 
 
-This is a book in progress just as Spoofax itself is very much in progress.
+This is a book in progress, just as Spoofax itself is very much in progress.
 (Although Spoofax is much further along than this book :-) Spoofax is the
 product of an ongoing research project that investigates the nature of software
-language definition. We are continuously experimenting with better ways to do
-things.
+language definition. We are continuously experimenting with better abstractions
+for various concerns.
 As a result, new features are being added to Spoofax and we are also always
 working on the guts of the workbench.
 Therefore, working with Spoofax can be a somewhat rocky experience.
 
-Indeed, while I start writing this book in June 2015 using the nighly-build
+Indeed, while I start writing this book in June 2015 using the nightly-build
 descendant of Spoofax 1.4, Spoofax is about to enter a new era.
-Within the coming months, we're planning to switch to a new version of Spoofax
+Within the coming months, we are planning to switch to a new version of Spoofax
 based on a complete overhaul of the internal architecture of the workbench.
-We're replacing IMP, the framework that provided the binding of Spoofax
+We are replacing IMP, the framework that provided the binding of Spoofax
 meta-languages to Eclipse, with Spoofax Core, a framework that defines IDE
 services independently from Eclipse. This will allow us to target other IDE
 containers such as NetBeans and IntelliJ (modulo engineering work) as well as
