@@ -1,3 +1,57 @@
 \chapter{Testing}
 \chapterlabel{tests}
 
+Testing is indispensible during language development to validate that your
+language definition corresponds to your mental design of the language. Automatic
+testing is also indispensible for maintenance of your language; does your
+language extension still support all the original use cases?
+
+In this chapter we discuss how to test a Spoofax language definition using the
+SPT testing language \cite{KatsVV11a}. 
+
+The example project 
+
+\href{\LanguagesRepo/LanguageA}{LanguageA}
+
+\section{Testing with SPT}
+
+We start by adding a \texttt{test/} directory to our project.
+
+defining tests 
+
+start symbol
+
+
+
+\begin{verbatim}
+language LangA
+
+start symbol Expr
+
+setup [[
+	
+]]
+
+test integer constant [[
+  101
+]] parse succeeds
+ 
+test addition [[
+  1 + 2
+]] parse succeeds
+ 
+test double plus [[
+  1 ++ 2
+]] parse fails
+\end{verbatim}
+
+
+\section{Examples}
+
+SPT is great, but does not cover all usage scenarios
+
+Also, debugging of various aspects 
+
+Therefore, I always develop a collection of example programs in 
+\texttt{examples/} directory of a language project. ()
+
