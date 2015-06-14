@@ -6,8 +6,113 @@ context-free start-symbols Program Expr
 
 context-free syntax
   
-  Program = Expr
+  Start = Program
   
-  Expr.Int = INT
-  Expr.Add = [[Expr] + [Expr]]
+  Program.Program = [ 
+  	program [ID]
+  	
+  	[{Class "\n\n"}*] 
+  	
+  	run
+  	  [Expr]
+  ]
 
+  Class.Class = [
+    class [ClassName] [Extends] {
+       [{Field "\n"}*]
+       [{Method "\n\n"}*]
+    }
+  ]  
+  
+  Extends.NoExtends = []
+  Extends.Extends = [extends [ClassName]]
+  
+  Field.Field = [[Type] [FieldName];]
+
+  Method.Method =  [
+  	[Type] [MethodName]([{Param ", "}*]) {
+  		[Expr]
+  	}
+  ]
+  	
+  Param.Param = [[Type] [VarName]]
+
+context-free syntax // expressions
+
+  Expr       = [([Expr])] {bracket}
+  Expr.True  = [true]
+  Expr.False = [false]
+  Expr.Num   = INT
+  Expr.Var   = VarName   
+  Expr.Min   = [-[Expr]]
+  Expr.Not   = [![Expr]]
+  Expr.Add   = [[Expr] + [Expr]] {left}
+  Expr.Mul   = [[Expr] * [Expr]] {left} 
+  Expr.Sub   = [[Expr] - [Expr]] {left}
+  Expr.And   = [[Expr] && [Expr]] {assoc}
+  Expr.Or    = [[Expr] || [Expr]] {assoc}
+  Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
+  Expr.Neq   = [[Expr] != [Expr]] {non-assoc}
+  
+  Expr.If = [
+  	if( [Expr] ) 
+  	  [Expr] 
+  	else 
+  	  [Expr]
+  ] {right}
+  
+  Expr.Do = [
+  	{ 
+  		[{Stat "\n"}*] 
+  	}
+  ]
+  
+  Stat.Stat = [[Expr];]
+
+  Expr.Let = [
+  	let [{Bind "\n"}*] 
+  	 in [Expr]
+  ]
+  
+  Bind.Bind  = [[Type] [VarName] = [Expr]]
+    
+  Expr.Get   = [[Expr].[FieldName]]
+  Expr.Set   = [[Expr].[FieldName] = [Expr]]
+  Expr.Call  = [[Expr].[MethodName]([{Expr ", "}*])]
+
+  Expr.New   = [new [ClassName]()]
+  Expr.This  = [this]
+  Expr.Null  = [null [ClassName]]
+  Expr.Cast  = [([ClassName])[Expr]]
+ 
+  Type.NumT   = [Num]
+  Type.BoolT  = [Bool]
+  Type.ClassT = ClassName
+     
+  VarName    = ID
+  ClassName  = ID
+  FieldName  = ID 
+  MethodName = ID
+  
+  ID   = [Num]   {reject}
+  ID   = [Bool]  {reject}
+  ID   = [true]  {reject}
+  ID   = [false] {reject}
+  ID   = [this]  {reject} 
+  ID   = [new]   {reject} 
+
+context-free priorities
+
+  {Expr.Get Expr.Call Expr.Cast}
+  > {Expr.Not Expr.Min} 
+  > Expr.Mul 
+  > {left: Expr.Add Expr.Sub} 
+  > Expr.Eq 
+  > Expr.And 
+  > Expr.Or
+  > Expr.Set
+  > {Expr.If Expr.Let}
+  
+lexical restrictions
+
+  "new" -/- [a-zA-Z]
