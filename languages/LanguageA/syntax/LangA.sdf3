@@ -2,10 +2,12 @@ module LangA
 
 imports Common
 
-context-free start-symbols Start
+context-free start-symbols Program Expr
 
 context-free syntax
   
-  Start = Expr
+  Program = Expr
+  
   Expr.Int = INT
   Expr.Add = [[Expr] + [Expr]]
+

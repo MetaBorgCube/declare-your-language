@@ -1,0 +1,19 @@
+language LangA
+
+start symbol Expr
+
+setup [[
+	
+]]
+
+test integer constant [[
+  101
+]] parse succeeds
+ 
+test addition [[
+  1 + 2
+]] parse succeeds
+ 
+test double plus [[
+  1 ++ 2
+]] parse fails

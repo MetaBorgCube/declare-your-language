@@ -1,6 +1,5 @@
 [
-   Dummy            -- ,
-   Add              -- _1 KW["+"] _2,
-   COMPLETION-Start -- _1,
-   COMPLETION-Expr  -- _1
+   Int             -- _1,
+   Add             -- _1 KW["+"] _2,
+   COMPLETION-Expr -- _1
 ]

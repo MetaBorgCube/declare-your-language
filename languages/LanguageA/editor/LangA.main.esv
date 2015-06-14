@@ -21,7 +21,7 @@ language General properties
   
   extensions:    la
   table:         include/LangA.tbl
-  start symbols: Start
+  start symbols: Program
   
   provider:      include/langa.ctree
   provider:      include/langa-java.jar
