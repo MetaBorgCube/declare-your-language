@@ -1,11 +1,12 @@
 \chapter{Getting Spoofax}
+\chapterlabel{getting-spoofax}
 
 In this chapter we discuss how to install Spoofax and setting up language
 projects.
 
 \section{Eclipse + Spoofax}
 
-Spoofax is an Eclipse plugin. Hence, the regular way to install an Eclipse
+Spoofax is an Eclipse plugin. The regular way to install an Eclipse
 plugin is to use its update site to add the plugin to an existing Eclipse
 installation. However, Spoofax requires a few tweaks to be applied to the
 Eclipse configuration and it requires the separate installation of Java 7 or
@@ -33,6 +34,7 @@ location in your file system.
 The first thing that I do when installing a new Eclipse is changing its
 appearance. In the Eclipse menu choose \texttt{Preferences}. In the dialog
 window go to \texttt{General > Appearance} and choose theme \texttt{Classic}. 
+This is completely optional though.
 
 Another setting that is useful to adjust is that for refresh. In the search 
 box in the Preference dialog type 'refresh'. Under \texttt{Startup and Shutdown} 
@@ -56,7 +58,7 @@ Resource '/.org.eclipse.jdt.core.external.folders' already exists.
 
 \noindent
 After ignoring the error, Spoofax appears to work fine. It is not clear at this
-point whether that is due to the fact that I had already installed JRE8.
+point whether that is due to the fact that I had already installed JRE7.
 
 \end{sidenote} 
 
@@ -130,70 +132,124 @@ generated.
 \begin{itemize}
 
   \item \texttt{.cache/}: A cache of intermediate results produced by processing
-  the language definition.
-  \item \texttt{.externalToolBuilders/}: Automatically generated Ant files.
-  \item \texttt{.settings/}: Eclipse settings
-  \item \texttt{editor/}: This directory contains \texttt{*.esv} files, which
-  configure various aspects of the IDE for your language. Here you can change
-  the color that syntax highlighting gives to certain tokens of your syntax, or
-  define the outline view for programs in your language. A basic definition of
-  these configurations is generated automatically. 
+  the language definition. You should never have to look at this.
+  \item \texttt{.externalToolBuilders/}: Automatically generated Ant files for
+  building stuff.
+  \item \texttt{.settings/}: Some Eclipse settings \item \texttt{editor/}: This
+  directory contains \texttt{*.esv} files, which configure various aspects of
+  the IDE for your language. Here you can change the color that syntax
+  highlighting gives to certain tokens of your syntax, or define the outline
+  view for programs in your language. A basic definition of these configurations
+  is generated automatically, so you can ignore this for now. But we will get
+  back here.
   \item \texttt{editor/java}: This sub-directory of the \texttt{editor/}
   directory is unrelated to the configuration files. It contains some
-  project-specific Java code that binds it to the language-independent Spoofax
-  framework. The directory is also used as target for Java code generated from
-  the DynSem meta-language for dynamic semantics.
-  \item \texttt{icons/}: This is where icons to be used in the outline view go.
-  It is empty by default.
+  project-specific Java code inserted by the wizard that binds it to the
+  language-independent Spoofax framework. The directory is also used as target
+  for Java code generated from the DynSem meta-language for dynamic semantics.
+  And later on in the book we will add some glue code for initialization of
+  DynSem-based interpreters.
+  \item \texttt{icons/}: This is where icons to be used in the outline view are
+  stored. It is empty by default.
   \item \texttt{include/}: This directory contains files that are generated from
-  the syntax definition for the language. (Eventually these files will end up
-  in the \texttt{src-gen} directory.)
+  the syntax definition for the language. (Eventually these files will end up in
+  the \texttt{src-gen} directory.) 
   \item \texttt{lib/}: This directory contains the common run-time library for
-  Spoofax projects. (Eventually this should be a binary dependency.)
-  \item \texttt{META-INF/}: This directory contains the manifest with
-  configuration information for building the Eclipse plugin.
+  Spoofax projects. (Eventually this should be a binary dependency.) 
+  \item \texttt{META-INF/}: This directory contains the
+  manifest with configuration information for building the Eclipse plugin.
   \item \texttt{src-gen/}: This directory contains code generated from the
   language definition.
   \item \texttt{syntax/}: This is where one typically puts the modules making up
   the syntax definition. In today's Spoofax, syntax definitions are defined
   using the SDF3 syntax definition formalism.
-  \item \texttt{target/}: This directory contains the result of the compilation
-  of Java code.
+  \item \texttt{target/}: This directory contains the class files resulting from
+  the compilation of Java code.
   \item \texttt{trans/}: This is where one usually puts the transformations
   defining the non-syntactic aspects of a language definition, including
   source-to-source transformations, interpretation, and code generation. All
   these aspects used to be defined using the Stratego transformation language.
+  However, we will see that name binding and type checking are now done using
+  the NaBL and TS meta-languages, and that operational semantics is defined
+  using the DynSem meta-language.
   \item \texttt{utils/}: This directory contains Spoofax Java libraries.
 \end{itemize}
 
 Then there are some files at the top level of the project:
 
 \begin{itemize}
-  \item \texttt{.classpath}:
-  \item \texttt{.gitignore}:
-  \item \texttt{.project}:
-  \item \texttt{build.properties}: 
-  \item \texttt{build.generated.xml}: 
-  \item \texttt{build.main.xml}: 
-  \item \texttt{plugin.xml}: 
-  \item \texttt{pom.xml}: 
+  \item \texttt{.classpath}: The Java class path for the project
+  \item \texttt{.gitignore}: A specification of the (generated) files that can
+  be ignored by git version management.
+  \item \texttt{.project}: The file that makes the project directory into an
+  Eclipse project.
+  \item \texttt{build.properties}: Some parameter bindings for the Ant build
+  that determines some of the directories above, and where they could be
+  changed. But we will just stick to the standard layout.
+  \item \texttt{build.generated.xml}: The generated Ant build file that defines
+  the tasks for compiling language definitions.
+  \item \texttt{build.main.xml}: The project-specific Ant build file that binds
+  the generated build file to the project-specific properties. The file is
+  instantiated by the wizard and is one of the places where your language name
+  gets used.
+  \item \texttt{plugin.xml}: Configuration of the Eclipse plugin for your
+  language.
+  \item \texttt{pom.xml}: A Maven file. In the next version of Spoofax (see
+  Preface), building and dependency management will make heavy use of Maven.
 \end{itemize}
 
 In summary, only the \texttt{editor/}, \texttt{syntax/}, and \texttt{trans/}
-directories contain language-specific code.
-
-
+directories contain language-specific code. 
 The other directories contain either standard Spoofax code that is copied into
-the project or code that is generated from language 
+the project or code that is generated from language definitions.
 
 \section{Language Concerns}
 
+The structure of a Spoofax project does not reveal the conceptual structure of a
+Spoofax language definition. In the rest of this book we will be primarily be
+studying the definition of aspects of a language using declarative
+meta-languages. We distinguish the following concerns:
+
 \begin{description}
-\item[Syntax]
-\item[Transformation]
-\item[Names]
-\item[Types]
-\item[Dynamic semantics]
+\item[Tests] As with any form of software development, developing
+a test suite is useful as a partial specification and for catching regressions.
+In \Chapter{tests} we study the SPT testing language.
+\item[Syntax] A syntax definition describes the syntactically well-formed
+sentences (programs) of a language \emph{and} the structure of these programs.
+Since all other operations on programs are driven by this structure, syntax
+definition are the corner stone of language definitions in Spoofax. We will
+study syntax definition in SDF3 in \Chapter{syntax}.
+\item[Transformation] The parser derived from a syntax definition turns
+well-formed programs into abstract syntax trees. A wide range of semantic
+manipulations of programs can be expressed as transformations on abstract syntax
+trees. In \Chapter{transformation} we will study the definition of basic
+transformations such as desugarings using the Stratego transformation language.
+In early versions of Spoofax, all semantic concerns were adressed using
+Stratego. In recent years we have been working to add higher-level languages
+that capture our understanding of particular aspects of semantics specification.
+\item[Names] Abstract syntax trees do not take into account the graph structure
+induced by names in programs. Names are the key technique to facilitate
+abstraction in programming languages. Name resolution is concerned with
+resolving uses of names with declarations of names. In most tools, name
+resolution requires a programmatic encoding of the name binding rules of a
+language. In \Chapter{names} we will study the definition of name binding rules
+using the NaBL name binding language, which abstracts from the implementation of
+name resolution algorithms.
+\item[Type Constraints] Many languages apply restrictions to the set of programs
+that is considered valid beyond the syntactic well-formedness contraints imposed
+by a grammar. Such restrictions are typically formalized in terms of a type
+system. In \Chapter{types} we study the formalization of such constraints using
+the TS type system specification language. 
+\item[Dynamic semantics] Language workbenches traditionally use code generation
+to define the semantics of a language. For many scenarios that is the
+appropriate thing to do. However, the definition of a code generator often
+obscures the intended dynamic semantics of a language. Thus, morally, it is a
+good idea to specify the dynamic semantics of a language directly. Such a
+specification can then be used to reason about the correctness of the code
+generator. Going further, the specification of the dynamic semantics may be
+interpreted directly to produce an \emph{interpreter} for the language. In
+\Chapter{semantics} we study the DynSem DSL for the specification of the dynamic
+(operational) semantics of programming languages.
 \end{description}
 
 
