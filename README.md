@@ -7,8 +7,8 @@ concern.
 These meta-languages are declarative in the sense that they abstract from the
 _how_ of language implementation and focus on the _what_ of language
 design.
-For example, ``what is the syntax of my language?'', instead of ``how do I
-implement a parser for my language?''.
+For example, 'what is the syntax of my language?', instead of 'how do I
+implement a parser for my language?'.
 Thus, a language designer should not be distracted by language implementation
 details. 
 
