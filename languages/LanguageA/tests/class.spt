@@ -1,0 +1,13 @@
+module class
+
+language LangA
+
+test class [[
+  program test
+  class Counter {
+	Num count;
+	Num next() {{ this.count  count + 1; count; }}
+  }
+  run  
+    new Counter().next()
+]] parse succeeds

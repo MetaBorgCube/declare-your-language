@@ -1,0 +1,44 @@
+module expr
+
+language LangA
+
+test Add [[
+  1 + 2
+]] parse succeeds
+
+test Abstract syntax (1) [[
+  1
+]] parse to Num("1")
+
+test Abstract syntax (2) [[
+  1 * 2
+]] parse to Mul(Num("1"), _)
+
+test Parentheses [[
+  (1 + 2)
+]]
+
+// priority
+
+test Multiply and add (1) [[
+  1 + 2 * 3
+]] parse to Add(_, Mul(_, _))
+
+test Multiply and add (2) [[
+  1 + 2 * 3
+]] parse to [[
+  1 + (2 * 3)
+]]
+
+test Add and multiply [[
+  1 * 2 + 3
+]] parse to [[
+  (1 * 2) + 3
+]]
+
+test Add and add [[
+  1 + 2 + 3
+]] parse to [[
+  (1 + 2) + 3
+]]
+
