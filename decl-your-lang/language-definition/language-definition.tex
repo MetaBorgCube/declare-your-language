@@ -1,34 +1,91 @@
 \newpage
 \chapter{Declarative Language Definition}
 
+This chapter examines the philosophical background of language workbenches in
+general, and Spoofax in particular.
+If you just want to get on with it and start building a
+language definition with Spoofax, just proceed to \Chapter{getting-spoofax}.
 
-\section{What is a Language?}
+\section{Software Languages}
+
+programming languages
+
+expressing computation
+
+development from directly programming machine code to high-level abstractions
+
+not all languages used in software development can be characterized as
+programming languages
+
+For example, HTML is clearly a language 
+
+data formats
+
+domain-specific language
+
+the term `software language' captures this broader class of languages 
+
+Considering all these languages is useful since they share quite some
+commonality
+
+All software languages are characterized by a formal syntax. That is, the
+well-formed sentences of the languages can be formalized using a formal
+system. This can be a (context-free) grammar, but may also be a recognition
+algorithm.
+
+Furthermore, the structure assigned to well-formed sentences is assigned a
+meaning. The semantics of the language
+
+\section{Understanding Software through Linguistic Abstraction}
+
+pragmatic goals
+
+modeling
 
 capturing domain understanding
+
+\section{}
 
 internal, external, embedded languages
 
 leaky abstractions
 
-\newpage
 \section{Language Workbenches}
 
 what is a language workbench
 
-compiler-compilers (LEX/YACC)
+integrated tool for 
 
-Centaur
+\begin{itemize}
+  \item parsing
+  \item abstract syntax tree representation
+  \item static analysis
+  \item code generation (compilation)
+  \item interpretation
+  \item editor services
+\end{itemize}
 
-ASF+SDF MetaEnvironment
+while the functionality of a language workbench sounds pretty standard, there is
+a range of different approaches 
+
+different language implementation philosophies
+
+long tradition of tools to assist language developers
 
 \begin{description}
+\item[LEX/YACC] compiler-compiler
+\item[Centaur]
+\item[ASF+SDF MetaEnvironment]
+\item[JastAdd]
 \item[Xtext]
 \item[MPS]
-\item[Rascal]
 \item[Spoofax]
+\item[Rascal]
+\item[SugarJ] 
 \end{description}
 
-\section{Spoofax}
+
+\section{Declarative Language Definition}
 
 declarative meta-languages
 
@@ -38,3 +95,7 @@ separation of concerns
 
 syntax, name binding, type constraints, dynamic semantics, source-to-source
 transformations
+
+
+tension between declarative expression and programmability
+
