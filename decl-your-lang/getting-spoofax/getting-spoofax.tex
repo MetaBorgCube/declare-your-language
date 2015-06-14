@@ -120,6 +120,17 @@ You can remove a project from your workspace using \texttt{Edit > Delete}. This
 will not remove the files from the file system, unless you select that option
 using the check box.
 
+
+\section{Building the Project}
+
+After creating a project and later after changing a project, you will need to
+build it in order to use it. From the \texttt{Project} menu select the
+\texttt{Build Project} entry or invoke it through the short-cut, which is
+Alt-Command-B on the Mac. When building a project, the \texttt{Console} window
+will pop up and shows the build log. If that log ends with \texttt{BUILD
+SUCCESSFUL} all is good and your language has been built \emph{and} deployed in
+your Eclipse instance, ready to be tested.
+
 \section{Structure of a Spoofax Project}
 
 The Spoofax Editor Project wizard generates a complete Eclipse plugin project
@@ -252,4 +263,8 @@ interpreted directly to produce an \emph{interpreter} for the language. In
 (operational) semantics of programming languages.
 \end{description}
 
+\section{Getting the Example Projects}
 
+The next chapters discuss the support that Spoofax provides for these
+language concerns. Each chapter uses one or more example projects to illustrate
+the presented concepts. Download the projects from \LanguagesRepoRef\ to follow along.
