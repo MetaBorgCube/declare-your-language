@@ -1,0 +1,26 @@
+module Classes
+
+imports Expressions
+
+sorts Class Field Method Param
+
+context-free syntax
+
+  Class.Class = [
+    class [ClassName] [Extends] {
+       [{Field "\n"}*]
+       [{Method "\n\n"}*]
+    }
+  ]  
+  
+  Extends.NoExtends = []
+  Extends.Extends = [extends [ClassName]]
+  
+  Field.Field = [[Type] [FieldName];]
+
+  Method.Method =  [
+  	[Type] [MethodName]([{Param ", "}*]) [Block]
+  ]
+  	
+  Param.Param = [[Type] [VarName]]
+  

@@ -1,0 +1,5 @@
+module ProgramsPlain
+imports Classes Expressions
+sorts Program 
+context-free syntax
+  Program.Program = [program [ID] [Class*] run [Expr]]
