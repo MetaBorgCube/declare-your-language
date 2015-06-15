@@ -1,4 +1,4 @@
-\chapter{Testing}
+\chapter{Testing with SPT}
 \chapterlabel{tests}
 
 Testing is indispensible during language development to validate that your
@@ -20,17 +20,17 @@ expressions in our language.
 An SPT test module first declares its name and the language that its tests are
 about:
 
-\begin{verbatim}
-  module expr-syntax
-  language LangA
-\end{verbatim}
+\begin{lstlisting}[language=SPT]
+module expr-syntax
+language LangA
+\end{lstlisting}
 
 Next it declares the start symbol with respect to which the tests will be
 parsed:
 
-\begin{verbatim}
-  start symbol Expr
-\end{verbatim}
+\begin{lstlisting}[language=SPT]
+start symbol Expr
+\end{lstlisting}
 
 For each kind of program fragment that should be tested separately, such as
 expressions here, the corresponding non-terminal symbol should be declared as
@@ -39,20 +39,20 @@ in the next chapter.
 
 After these initial declarations follows a series of tests of the form
 
-\begin{verbatim}
-  test <name> [[ <fragment> ]] <property>
-\end{verbatim}
+\begin{lstlisting}[language=SPT]
+test <name> [[ <fragment> ]] <property>
+\end{lstlisting}
 
 where \texttt{<name>} is the descriptive name of the test (an arbitrary string),
 \texttt{<fragment>} is the language fragment to test, and \texttt{<property>}
 defines the property that should be tested.
 For example, the test
 
-\begin{verbatim}
-  test addition [[
-    1 + 2
-  ]] parse succeeds
-\end{verbatim}
+\begin{lstlisting}[language=SPT]
+test addition [[
+  1 + 2
+]] parse succeeds
+\end{lstlisting}
 
 declares a test with name \texttt{addition} that states that the string
 \texttt{1 + 2} should be parsed succesfully.
@@ -60,11 +60,11 @@ declares a test with name \texttt{addition} that states that the string
 Tests can also be negative, i.e. require that some operation fails. For example, 
 the test
 
-\begin{verbatim}
-  test double plus [[
-    1 ++ 2
-  ]] parse fails
-\end{verbatim}
+\begin{lstlisting}[language=SPT]
+test double plus [[
+  1 ++ 2
+]] parse fails
+\end{lstlisting}
 
 states that the string \texttt{1 ++ 2} should \emph{not} be parsed successfully.
 That is, the test would \emph{fail} if the string would be parsed successfully.
@@ -80,16 +80,31 @@ modules are updated immediately.
 The editor identifies using error markers the tests that fail as illustrated in 
 \Figure{expr-syntax.spt}.
 
+An alternative way of running tests is by invoking the Spoofax Test Runner (via
+the Transform menu), which invokes all test in the current test suite or all
+test suites in the project. As illustrated in \Figure{spoofax-test-runner}, the
+test runner then shows a list of all tests colored green or red to indicate that
+they passed or failed.
+
 \begin{figure}[t]
 \includegraphics[width=\hsize]{tests/expr-syntax-spt.pdf}
 \caption{Live evaluation of SPT test module with failing test case.}
 \figurelabel{expr-syntax.spt}
 \end{figure}
 
-\Figure{class.spt} illustrates another feature of SPT. The code fragments
-in a test is presented with all the features of a regular program editor.
+\begin{figure}[t]
+\includegraphics[width=\hsize]{tests/spoofax-test-runner.pdf}
+\caption{Running SPT tests using the Spoofax Test Runner invoked from the
+Transform menu.}
+\figurelabel{spoofax-test-runner}
+\end{figure}
+
+\Figure{class.spt} illustrates another feature of SPT. The code fragment
+in a test is handled as text in the language under test, separate from the 
+testing language itself. 
 For example, the syntax highlighting follows the syntax of the program under
-test and syntax errors according to the syntax under test are hightlighted.
+test, keywords of the testing language are not keywords of the language under
+test, and syntax errors according to the syntax under test are hightlighted.
 
 \begin{figure}[t]
 \includegraphics[width=\hsize]{tests/class-spt.pdf}
@@ -108,8 +123,8 @@ operations being defined on programs.
 
 \section{Further Reading}
 
-The OOPSLA 2011 papers \cite{KatsVV11,KatsVV11a} provide a complete description
-of the design and implementation of SPT.
+The OOPSLA/SPLASH 2011 papers \cite{KatsVV11,KatsVV11a} provide a complete
+description of the design and implementation of SPT.
 The \href{http://metaborg.org/spt/}{SPT} page on the metaborg site provides a
 complete overview of the testing features currrently supported by the
 language.
