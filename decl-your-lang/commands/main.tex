@@ -55,6 +55,7 @@
 \newcommand{\BookGitRepo}{https://github.com/MetaBorgCube/declare-your-language}
 \newcommand{\BookWebSite}{http://metaborgcube.github.io/declare-your-language}
 
+\newcommand{\LanguagesRepoURL}[1]{\BookGitRepo/tree/master/languages/#1}
 \newcommand{\LanguagesRepo}{\href{\BookGitRepo/tree/master/languages/}{languages}}
 \newcommand{\LanguageRepoRef}[1]{\href{\BookGitRepo/tree/master/languages/#1}{#1}}
 
@@ -63,4 +64,6 @@
 \newenvironment{sidenote}[1]{
 \noindent\begin{boxedminipage}{\hsize}\textbf{#1}:
 }{\end{boxedminipage}}
+
+\newcommand{\LanguageFile}[2]{\href{\LanguagesRepoURL/#1/#2}{#2}}
 
