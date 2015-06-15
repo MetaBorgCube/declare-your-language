@@ -6,12 +6,14 @@
 \newcommand{\lstfigurestyle}{\fontfamily{pcr}\fontsize{8pt}{10pt}\selectfont}
 \newcommand{\lstenumstyle}{\fontfamily{pcr}\fontsize{9pt}{11pt}\selectfont}
 
+%\lstset{backgroundcolor=\color{lightgray}}
+\lstset{rulecolor=\color{lightgray}}
 \lstset{basicstyle = \lstfigurestyle}
 \lstset{tabsize = 2}
 \lstset{numberbychapter=false}
-\lstset{frame = single, framerule = 0.1pt}
+\lstset{frame = single, framerule = 0.05pt}
 \lstset{numbers = none, numberstyle = \scriptsize\sffamily}%\textcolor{black}}
-\lstset{aboveskip=\smallskipamount, belowskip=.8\smallskipamount}
+\lstset{aboveskip=1.5\smallskipamount, belowskip=\smallskipamount}
 \lstset{framexbottommargin=0pt}
 \lstset{captionpos = t}
 \lstset{escapeinside={/+}{+/}}
@@ -37,6 +39,7 @@
 \newcommand{\langname}[1]{#1}
 
 \input{commands/languages/SDF}
+\input{commands/languages/SPT}
 \input{commands/languages/Stratego}
 \input{commands/languages/NaBL}
 \input{commands/languages/TS}
@@ -45,4 +48,7 @@
 \input{commands/languages/aterm}
 \input{commands/languages/coq}
 \input{commands/languages/PCFM}
+\input{commands/languages/paplj}
 
+\renewcommand{\ldots}{..}
+\renewcommand{\texttt}[1]{\smcode{#1}}

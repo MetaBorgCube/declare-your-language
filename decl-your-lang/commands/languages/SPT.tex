@@ -1,0 +1,11 @@
+\lstdefinelanguage{SPT} {
+	morekeywords={module, test, parse, succeeds, start, symbol, language},
+	otherkeywords={[,]},
+	morecomment=[l]{\%\%},
+	sensitive=true,
+	mathescape=true
+}
+
+\newcommand{\sptcode}[1]{\lstinline[language=SDF,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\sptcodebl}[1]{\lstinline[language=SDF,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\SPT}{\langname{SPT}}
