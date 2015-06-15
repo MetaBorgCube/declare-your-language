@@ -25,7 +25,23 @@ Spoofax.
 
 Download the \texttt{spoofax-<os>-<arch>-jre.zip} for your computer's operating
  system and architecture, unzip, and launch the Eclipse application inside.
- 
+
+\begin{sidenote}{JRE Error}
+
+When first running the Eclipse with pre-packaged JRE, you may get the following
+error:
+
+\begin{quote}
+'Update Installed JREs' has encountered a problem.
+Resource '/.org.eclipse.jdt.core.external.folders' already exists.
+\end{quote} 
+
+\noindent This should be a one time error during unpacking of the JRE, which you
+can safely ignore. Spoofax should work fine and the problem should not be
+reported again on restarting Eclipse.
+
+\end{sidenote} 
+
 The first thing that Eclipse will ask is which Workspace to use. The Workspace
 is the default directory where projects are created. Just create a new directory
 with an appropriate name (e.g. \texttt{Workspace-Spoofax}) in an appropriate
@@ -36,37 +52,21 @@ appearance. In the Eclipse menu choose \texttt{Preferences}. In the dialog
 window go to \texttt{General > Appearance} and choose theme \texttt{Classic}. 
 This is completely optional though.
 
-Another setting that is useful to adjust is that for refresh. In the search 
-box in the Preference dialog type 'refresh'. Under \texttt{Startup and Shutdown} 
-select \texttt{Refresh workspace on startup}. Under \texttt{Workspace} unselect
-\texttt{Build automatically} and select \texttt{Refresh on access}.
+Another setting that is useful to adjust is that for refresh. In the search box
+in the Preference dialog type 'refresh'. Under \texttt{Startup and Shutdown}
+select \texttt{Refresh workspace on startup}. Under \texttt{Workspace} select
+\texttt{Refresh on access}.
 
 The default font size is configured to be 11pt, which is too small for my eyes. 
 Adjust the font size in the \texttt{Preferences > General > Appearance > Colors
 and Fonts}, and there select \texttt{Basic > Text Font} and choose something
 appropriate. I find 14pt Monaco to work out pretty well.
 
-\begin{sidenote}{JRE Error}
-
-At the first time that I try out the Eclipse with
-pre-packaged JRE, I get the following error: 
-
-\begin{quote}
-'Update Installed JREs' has encountered a problem.
-Resource '/.org.eclipse.jdt.core.external.folders' already exists.
-\end{quote} 
-
-\noindent
-After ignoring the error, Spoofax appears to work fine. It is not clear at this
-point whether that is due to the fact that I had already installed JRE7.
-
-\end{sidenote} 
-
 \section{Creating a Project}
 
 To start a new language with Spoofax you need to create an Eclipse project.
 
-In the \texttt{File} menu select \texttt{New > Project \ldots}. In the dialog
+In the \texttt{File} menu select \texttt{New > Project ..}. In the dialog
 window select \texttt{Spoofax editor project} and hit the \texttt{Next >}
 button. This presents the \texttt{Spoofax Editor Project} wizard dialog in
 which you should indicate the name and file extension of your project
@@ -106,7 +106,7 @@ Another way to use Spoofax is to import an existing project. The
 \BookOnGithub{github repository} for this book provides a series of example
 projects which are the basis for the text in the book. To use those projects
 check out the git repository and import the projects into Eclipse as follows.
-In the \texttt{File} menu select \texttt{Import \ldots}. In the import dialog
+In the \texttt{File} menu select \texttt{Import ..}. In the import dialog
 select \texttt{General > Existing Project into Workspace}. Browse to the
 \texttt{declare-your-language/languages} directory and select a project to
 import (or select the entire directory, which will allow you to import all
