@@ -2,41 +2,43 @@ module expr
 
 language LangA
 
+start symbol Expr
+
 test Add [[
   1 + 2
 ]] parse succeeds
 
-test Abstract syntax (1) [[
+test number [[
   1
 ]] parse to Num("1")
 
-test Abstract syntax (2) [[
+test multiplication [[
   1 * 2
 ]] parse to Mul(Num("1"), _)
 
-test Parentheses [[
+test parentheses [[
   (1 + 2)
-]]
+]] parse to Add(Num("1"), Num("2"))
 
 // priority
 
-test Multiply and add (1) [[
+test multiply and add (1) [[
   1 + 2 * 3
 ]] parse to Add(_, Mul(_, _))
 
-test Multiply and add (2) [[
+test multiply and add (2) [[
   1 + 2 * 3
 ]] parse to [[
   1 + (2 * 3)
 ]]
 
-test Add and multiply [[
+test multiplication > addition [[
   1 * 2 + 3
 ]] parse to [[
   (1 * 2) + 3
-]]
+]] 
 
-test Add and add [[
+test add is left associative [[
   1 + 2 + 3
 ]] parse to [[
   (1 + 2) + 3

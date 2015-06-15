@@ -10,10 +10,6 @@ test integer constant [[
  
 test addition [[
   1 + 2 
-]] parse succeeds
- 
-test double plus [[
-  1 ++ 2
 ]] parse succeeds 
  
 test double star [[

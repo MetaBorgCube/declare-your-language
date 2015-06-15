@@ -1,0 +1,10 @@
+module expr
+
+language LangA
+
+start symbol Program
+
+test program [[
+  program foo run 1
+]] parse to Program("foo", [], _)
+

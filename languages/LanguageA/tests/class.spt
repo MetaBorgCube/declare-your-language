@@ -2,12 +2,30 @@ module class
 
 language LangA
 
+start symbol Class
+
 test class [[
-  program test
+  program test	
   class Counter {
 	Num count;
-	Num next() {{ this.count  count + 1; count; }}
+	Num next() { this.count = count + 1; count; }
   }
-  run  
-    new Counter().next()
-]] parse succeeds
+  run 1
+]] parse to Program(
+      "test"
+    , [ Class(
+          "Counter"
+        , NoExtends()
+        , [Field(NumT(), "count")]
+        , [ Method(
+              NumT()
+            , "next"
+            , []
+            , _
+            )
+          ]
+        )
+      ]
+    , Num("1")
+    )
+
