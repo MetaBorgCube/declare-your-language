@@ -2,12 +2,12 @@ module class
 
 language LangA
 
-start symbol Class
+start symbol Program
 
 test class [[
-  program test	
+  program counter	
   class Counter {
-	Num count;
+	Num count
 	Num next() { this.count = count + 1; count; }
   }
   run 1
