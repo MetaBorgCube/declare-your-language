@@ -1,4 +1,3 @@
 module LangA
 imports Programs Classes Expressions 
-context-free start-symbols Program Class Expr
- 
+context-free start-symbols Program Expr

@@ -16,7 +16,7 @@ context-free syntax
   Extends.NoExtends = []
   Extends.Extends = [extends [ClassName]]
   
-  Field.Field = [[Type] [FieldName];]
+  Field.Field = [[Type] [FieldName]]
 
   Method.Method =  [
   	[Type] [MethodName]([{Param ", "}*]) [Block]

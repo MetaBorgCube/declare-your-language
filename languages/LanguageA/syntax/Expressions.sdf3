@@ -21,7 +21,7 @@ context-free syntax // expressions
   Expr.Neq   = [[Expr] != [Expr]] {non-assoc}
   
   Expr.If = [
-  	if( [Expr] ) 
+  	if( [Expr] )
   	  [Expr] 
   	else 
   	  [Expr]
@@ -30,12 +30,13 @@ context-free syntax // expressions
   Expr = Block
   Block.Do = [
   	{ 
-  	  [{Stat "\n"}*] 
+  	  [{Seq ";\n"}*]
   	}
   ]
   
-  Stat.Stat = [[Expr];]
-
+  Seq = Expr 
+  Seq.Skip = []
+  
   Expr.Let = [
   	let [{Bind "\n"}*] 
   	 in [Expr]
