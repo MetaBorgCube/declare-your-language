@@ -1,0 +1,13 @@
+\lstdefinelanguage{ESV} {
+	morekeywords={module,imports,completions,completion,template,cursor,blank},
+  %morestring=[b]",
+	morecomment=[l]{//},
+	morecomment=[n]{/*}{*/},
+  sensitive=true,
+  mathescape=false,
+  stringstyle=\color{green}
+}
+
+\newcommand{\esvcode}[1]{\lstinline[language=TS,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\esvcodebl}[1]{\lstinline[language=TS,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\ESV}{\langname{ESV}}
