@@ -1,26 +1,26 @@
 module Classes
 
-imports Expressions
+imports Expressions Common
 
 sorts Class Field Method Param
 
 context-free syntax
 
   Class.Class = [
-    class [ClassName] [Extends] {
-       [{Field "\n"}*]
-       [{Method "\n\n"}*]
+    class [ID] [Extends] {
+      [{Field "\n"}*]
+      [{Method "\n\n"}*]
     }
-  ]  
+  ]
   
   Extends.NoExtends = []
-  Extends.Extends = [extends [ClassName]]
+  Extends.Extends = [extends [ID]]
   
-  Field.Field = [[Type] [FieldName]]
+  Field.Field = [[Type] [ID]]
 
   Method.Method =  [
-  	[Type] [MethodName]([{Param ", "}*]) [Block]
+  	[Type] [ID]([{Param ", "}*]) [Block]
   ]
   	
-  Param.Param = [[Type] [VarName]]
+  Param.Param = [[Type] [ID]]
   
