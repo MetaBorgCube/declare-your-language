@@ -1,46 +1,31 @@
-module expr
-
+module expr-arith
 language LangA
-
 start symbol Expr
-
-test Add [[
-  1 + 2
-]] parse succeeds
 
 test number [[
   1
 ]] parse to Num("1")
 
-test multiplication [[
+test number [[
+  30128
+]] parse to Num("30128")
+
+test Add [[
+  16 + 21
+]] parse to Add(Num("16"), Num("21"))
+
+test Mul [[
   1 * 2
-]] parse to Mul(Num("1"), _)
+]] parse to Mul(Num("1"), Num("2"))
 
 test parentheses [[
   (1 + 2)
 ]] parse to Add(Num("1"), Num("2"))
 
-// priority
+test Mul Add (1) [[
+  1 * (2 + 4)
+]] parse to Mul(Num("1"), Add(Num("2"), Num("4")))
 
-test multiply and add (1) [[
-  1 + 2 * 3
-]] parse to Add(_, Mul(_, _))
-
-test multiply and add (2) [[
-  1 + 2 * 3
-]] parse to [[
-  1 + (2 * 3)
-]]
-
-test multiplication > addition [[
-  1 * 2 + 3
-]] parse to [[
-  (1 * 2) + 3
-]] 
-
-test add is left associative [[
-  1 + 2 + 3
-]] parse to [[
-  (1 + 2) + 3
-]]
-
+test Mul Add (2) [[
+  (1 * 2) + 4
+]] parse to Add(Mul(Num("1"), Num("2")), Num("4"))

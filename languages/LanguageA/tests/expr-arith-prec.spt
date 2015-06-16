@@ -1,0 +1,27 @@
+module expr-arith-prec
+language LangA
+start symbol Expr
+
+test multiplication > addition (1) [[
+  1 + 2 * 3
+]] parse to [[
+  1 + (2 * 3)
+]]
+ 
+test multiplication > addition (2) [[
+  1 * 2 + 3
+]] parse to [[
+  (1 * 2) + 3
+]] 
+ 
+test addition is left associative [[
+  1 + 2 + 3
+]] parse to [[
+  (1 + 2) + 3
+]]
+ 
+test addition, subtraction is left associative [[
+  1 - 2 + 3
+]] parse to [[
+  (1 - 2) + 3
+]]
