@@ -1,0 +1,12 @@
+module PrecedenceExpressions 
+imports Common
+sorts Expr 
+context-free syntax
+  Expr.Add   = [[Term] + [Expr]]
+  Expr.Sub   = [[Term] - [Expr]]
+  Expr       = Term  
+  Term.Mul   = [[Factor] * [Term]]
+  Term       = Factor 
+  Factor.Min = [-[Expr]]
+  Factor.Num = INT 
+  Factor.Par = [([Expr])]

@@ -1,0 +1,10 @@
+module BasicExpressions 
+imports Common
+sorts Expr   
+context-free syntax
+  Expr     = [([Expr])] {bracket}
+  Expr.Num = INT 
+  Expr.Min = [-[Expr]]  
+  Expr.Add = [[Expr] + [Expr]]
+  Expr.Sub = [[Expr] - [Expr]]
+  Expr.Mul = [[Expr] * [Expr]]
