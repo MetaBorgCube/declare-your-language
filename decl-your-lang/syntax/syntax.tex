@@ -147,6 +147,31 @@ That is, given abstract syntax trees \texttt{t1} and \texttt{t2} of sorts
 \texttt{Sort1} and \texttt{Sort2}, respectively, \texttt{C(t1, t2)} is a
 well-formed term of sort \texttt{Sort0}.
 
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/Programs-sig.str}
+\caption{Algebraic signature derived from syntax definition module
+\texttt{Program}.}
+\figurelabel{program-sig}
+\end{figure}
+
+The parser generated from the underlying context-free grammar internally
+produces a \emph{derivation} (also known as \emph{parse tree}) that uses
+context-free grammar productions as node constructors. Following the
+correspondence between productions and constructors sketched above, such a parse
+tree is converted to an abstract syntax tree automatically.
+
+In the generated editor for your language, you can get the abstract syntax term
+of a program using the \texttt{Show Abstract Syntax} entry in the
+\texttt{Syntax} menu, as illustrated in \Figure{class01-abstract-syntax}.
+
+\begin{figure}[t]
+\includegraphics[width=\hsize]{syntax/class01-abstract-syntax.pdf}
+\caption{Abstract syntax term \texttt{class01.aterm} for \texttt{class01.la}
+obtained using the \texttt{Show Abstract Syntax} entry in the \texttt{Syntax}
+menu.}
+\figurelabel{class01-abstract-syntax}
+\end{figure}
+ 
 \Figure{program-sig} shows the Stratego module \texttt{Programs-sig}
 with the signature declaration corresponding to our \texttt{Programs} modules.
 The constructor declaration for \texttt{Program} describes the structure of the
@@ -154,12 +179,52 @@ abstract syntax term that we saw above. Spoofax automatically generates a
 signature module in the \texttt{src-gen/signatures} directory of the project for
 each SDF3 module.
 
-\begin{figure}[t]
-\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/Programs-sig.str}
-\caption{Algebraic signature derived from syntax definition module
-\texttt{Program}.}
-\figurelabel{program-sig}
+We have seen that by extending standard context-free grammar rules with
+constructor declarations, we get a parser, an algebraic signature (abstract
+syntax tree schema), and a mapping from parse trees to abstract syntax trees for
+free. But in addition to constructors, there is another difference between
+context-free grammar rules and template productions.
+
+\section{Layout Templates}
+
+The inverted quotation templates used as the body of an SDF3 production can be
+seen as esthetically pleasing by getting rid of the double quotes for quoting
+literals. However, we replace the double quotes by square brackets (or angle
+brackets \texttt{<Expr>}), and it requires more of those. And the esthetic
+argument will undoubtely run into people with different tastes. So, the argument
+for inverted quotation cannot just be esthetics. And indeed it is not.
+
+\begin{figure}[t]\small
+\lstinputlisting[language=paplj]{../languages/LanguageA/examples/class/class01.la}
+\lstinputlisting[language=ATerm]{../languages/LanguageA/examples/class/class01.aterm}
+\caption{LanguageA counter class in concrete and abstract syntax.}
+\figurelabel{class01.la}
 \end{figure}
+
+Consider the \LanguageRepoRef{LanguageA} program in \Figure{class01.la}.
+The syntax of a class is defined by the following production:
+
+\begin{lstlisting}[language=SDF]
+  Class.Class = [class [ClassName] [Extends] { [Field*] [Method*] }]  
+\end{lstlisting}
+
+what is the role of layout
+
+formatting
+
+
+syntax of classes, fields, and methods \Figure{Classes.sdf3}
+
+
+\lstinputlisting[language=paplj]{../languages/LanguageA/examples/class/class01.pp.la}
+
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/Classes.sdf3}
+\caption{Syntax of classes with fields and methods.}
+\figurelabel{Classes.sdf3}
+\end{figure}
+
 
 \section{Expression Syntax}
 
@@ -200,6 +265,9 @@ context-free priorities
 regained
 
 \cite{Vis97.thesis}: definition of SDF2
+
+Generalized parsing, JSGLR 
+
 
 \cite{JongeV11}: An Algorithm for Layout Preservation in Refactoring
 Transformations
