@@ -9,13 +9,13 @@ class A extends Z {
 }
 
 class B extends A {
-	Num count() { 2 }
+	Num count() { 2 } 
 }
 
 class C extends A {
-	Num count() { 3 }	
+	Num count() { 3; }	
 }
-
+ 
 run let 
   B b = new B()
   C c = new C()

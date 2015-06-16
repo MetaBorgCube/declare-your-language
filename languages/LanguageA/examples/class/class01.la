@@ -1,24 +1,7 @@
-program class01
-
-class A {
-  Num x; 
-  Num y;
+program counter	
+class Counter {
+  Num c
+  Num next() { this.c = c + 1; c }
 }
-
-class B extends A {
-  Bool x;  
-}
-
-run  
- 
-  let B b = new B()
-   in { 
-     b;
-     b.x;
-   	 b.x = true;  
-   	 b;
-   	 ((A)b).x;
-   	 // ((A)b).x = 1;  
-   	 // b;
-   }
+run new Counter().next()
    

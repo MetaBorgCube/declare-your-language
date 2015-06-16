@@ -1,0 +1,12 @@
+program counter
+
+class Counter  {
+   Num c
+   Num next() {
+     this.c = c + 1;
+     c
+   }
+}
+
+run
+  new Counter().next()

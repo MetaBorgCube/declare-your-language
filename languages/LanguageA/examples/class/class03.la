@@ -1,16 +1,16 @@
 program class03
 
 class A {
-	Num x; 
-	Num y;
+	Num x 
+	Num y
 }
 
 class B extends A {
-	Bool x;  
+	Bool x  
 }
 
 class C extends B {
-	A a;
+	A a
 }
 
 run  

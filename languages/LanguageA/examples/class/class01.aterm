@@ -1,0 +1,21 @@
+Program(
+  "counter"
+, [ Class(
+      "Counter"
+    , NoExtends()
+    , [Field(NumT(), "c")]
+    , [ Method(
+          NumT()
+        , "next"
+        , []
+        , Do(
+            [ Set(This(), "c", Add(Var("c"), Num("1")))
+            , Var("c")
+            ]
+          )
+        )
+      ]
+    )
+  ]
+, Call(New("Counter"), "next", [])
+)
