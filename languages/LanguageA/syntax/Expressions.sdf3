@@ -1,32 +1,12 @@
 module Expressions
-imports Common
 
-sorts Expr Block
+imports Common 
+imports ArithmeticExpressions 
+imports BooleanExpressions
 
-context-free syntax // expressions
+sorts Block
+context-free syntax
 
-  Expr       = [([Expr])] {bracket}
-  Expr.True  = [true]
-  Expr.False = [false]
-  Expr.Num   = INT
-  Expr.Var   = VarName   
-  Expr.Min   = [-[Expr]]
-  Expr.Not   = [![Expr]]
-  Expr.Add   = [[Expr] + [Expr]] {left}
-  Expr.Mul   = [[Expr] * [Expr]] {left} 
-  Expr.Sub   = [[Expr] - [Expr]] {left}
-  Expr.And   = [[Expr] && [Expr]] {assoc}
-  Expr.Or    = [[Expr] || [Expr]] {assoc}
-  Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
-  Expr.Neq   = [[Expr] != [Expr]] {non-assoc}
-  
-  Expr.If = [
-  	if( [Expr] )
-  	  [Expr] 
-  	else 
-  	  [Expr]
-  ] {right}
-  
   Expr = Block
   Block.Do = [
   	{ 
@@ -36,31 +16,34 @@ context-free syntax // expressions
   
   Seq = Expr 
   Seq.Skip = []
+ 
+context-free syntax // variables
+
+  Expr.Var = ID 
   
   Expr.Let = [
   	let [{Bind "\n"}*] 
   	 in [Expr]
   ]
   
-  Bind.Bind  = [[Type] [VarName] = [Expr]]
+  Bind.Bind = [[Type] [ID] = [Expr]]
+  
+context-free syntax // objects
     
-  Expr.Get   = [[Expr].[FieldName]]
-  Expr.Set   = [[Expr].[FieldName] = [Expr]]
-  Expr.Call  = [[Expr].[MethodName]([{Expr ", "}*])]
+  Expr.Get   = [[Expr].[ID]]
+  Expr.Set   = [[Expr].[ID] = [Expr]]
+  Expr.Call  = [[Expr].[ID]([{Expr ", "}*])]
 
-  Expr.New   = [new [ClassName]()]
+  Expr.New   = [new [ID]()]
   Expr.This  = [this]
-  Expr.Null  = [null [ClassName]]
-  Expr.Cast  = [([ClassName])[Expr]]
+  Expr.Null  = [null [ID]]
+  Expr.Cast  = [([ID])[Expr]]
  
   Type.NumT   = [Num]
   Type.BoolT  = [Bool]
-  Type.ClassT = ClassName
+  Type.ClassT = ID
      
-  VarName    = ID
-  ClassName  = ID
-  FieldName  = ID 
-  MethodName = ID
+context-free syntax // reserved words
   
   ID   = [Num]   {reject}
   ID   = [Bool]  {reject}

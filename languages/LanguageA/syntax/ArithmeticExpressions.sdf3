@@ -1,0 +1,16 @@
+module ArithmeticExpressions
+imports Common
+sorts Expr 
+context-free syntax
+
+  Expr       = [([Expr])] {bracket}
+  Expr.Num   = INT 
+  Expr.Min   = [-[Expr]]
+  Expr.Add   = [[Expr] + [Expr]] {left}
+  Expr.Sub   = [[Expr] - [Expr]] {left}
+  Expr.Mul   = [[Expr] * [Expr]] {left} 
+  
+context-free priorities
+
+  Expr.Min > Expr.Mul > {left: Expr.Add Expr.Sub} 
+  

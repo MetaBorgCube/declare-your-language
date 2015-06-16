@@ -1,0 +1,19 @@
+module BooleanExpressions
+
+context-free syntax
+
+  Expr.True  = [true]
+  Expr.False = [false]   
+  Expr.Not   = [![Expr]]
+  Expr.And   = [[Expr] && [Expr]] {assoc}
+  Expr.Or    = [[Expr] || [Expr]] {assoc}
+  Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
+  Expr.Neq   = [[Expr] != [Expr]] {non-assoc}
+  
+  Expr.If = [
+  	if( [Expr] )
+  	  [Expr] 
+  	else 
+  	  [Expr]
+  ] {right}
+  
