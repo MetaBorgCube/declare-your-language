@@ -12,7 +12,7 @@ test class [[
   }
   run 1
 ]] parse to Program(
-      "test"
+      "counter"
     , [ Class(
           "Counter"
         , NoExtends()
@@ -21,7 +21,13 @@ test class [[
               NumT()
             , "next"
             , []
-            , _
+            , Do(
+                [ Set(This(), "count", Add(Var("count"), 
+                 Num("1")))
+                , Var("count")
+                , Skip()
+                ]
+              )
             )
           ]
         )
