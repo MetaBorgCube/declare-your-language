@@ -75,7 +75,7 @@ syntax module defines the sorts \texttt{Program} and \texttt{Expr} as start
 symbols and imports the modules \texttt{Programs}, \texttt{Classes}, and
 \texttt{Expressions}:
 
-\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/LangA.sdf3}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/LangA.sdf3.copy}
 
 \section{Concrete and Abstract Syntax}
 
@@ -387,33 +387,217 @@ we have learned about SDF3 so far:
 
 \section{Expression Syntax}
 
-Let's try to apply these features to the definition of expression syntax.
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/BasicExpressions.sdf3}
+\caption{Definition of arithmetic expressions.}
+\figurelabel{BasicExpressions.sdf3}
+\end{figure}
 
-\begin{lstlisting}[language=SDF]
-module LangA
-imports Common
-context-free start-symbols Program Expr
-context-free syntax
-  Exp.Var = ID
-  Exp.Mul = [[Exp] * [Exp]]
-  Exp.Add = [[Exp] + [Exp]]
+Let's try to apply these features to the definition of expression syntax. 
+The module in \Figure{BasicExpressions.sdf3} defines some common operators for
+arithmetic expressions.
+Note that these productions exactly define the abstract syntax structure that we
+would like, which is confirmed by the succeeding tests in
+\Figure{expr-arith.spt}. A test such as
+
+\begin{lstlisting}[language=SPT]
+test Mul Add (1) [[
+  1 * (2 + 4)
+]] parse to Mul(Num("1"), Add(Num("2"), Num("4")))
 \end{lstlisting}
 
-templates \cite{VollebregtKV12}
+not only tests that parsing succeeds, as we saw in \Chapter{tests}, but also
+matches the tree produced for the code fragment against the expected term in the
+test.
 
+However, the \texttt{BasicExpressions} definition fails the tests in
+\Figure{expr-arith-prec.spt}, which contains tests of the form
+
+\begin{lstlisting}[language=SPT]
+test multiplication > addition (1) [[
+  1 + 2 * 3
+]] parse to [[
+  1 + (2 * 3)
+]]
+\end{lstlisting}
+
+Instead of specifying an abstract syntax term as expected result, these tests
+use a concrete syntax criterion, declaring that both expressions should result
+in the same abstract syntax term.
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/tests/expr-arith.spt}
+\caption{Testing structure of arithmetic expressions}
+\figurelabel{expr-arith.spt}
+\end{figure}
+
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/tests/expr-arith-prec.spt}
+\caption{Testing precedence of expressions}
+\figurelabel{expr-arith-prec.spt}
+\end{figure}
+
+The problem is that the \texttt{BasicExpressions} grammar is \emph{ambiguous};
+there are two (or more) possible parses for the same expression. 
+
+Ambiguity is not so much a problem for SDF3. It happily accepts an ambiguous
+grammar and generates a parser for it. When applying the parser to unambiguous
+sentences such as those in \Figure{expr-arith.spt}, it will return the one
+possible abstract syntax term. In case the parser encounters an ambiguous
+sentence, such as in the tests in \Figure{expr-arith-prec.spt}, it returns a
+\emph{parse forest} representing all possible parse trees. For example, for the
+sentence \texttt{1 + 2 * 3} it produces the term
+
+\begin{lstlisting}[language=aterm]
+amb([ Mul(Add(Num("1"), Num("2")), Num("3"))
+    , Add(Num("1"), Mul(Num("2"), Num("3")))])
+\end{lstlisting}
+
+where the \texttt{amb([..])} (ambiguity) node represents a list of all possible
+parses for the sentence. Such ambiguities can be shared. For example, in case
+the ambiguity concerns a fragment of the whole program, the ambiguity is
+restricted to the smallest part of the tree that contains it. For example,
+using the ambigous expression as body of a method
+
+\begin{lstlisting}[language=paplj]
+Num next() { 1 + 2 * 3 }
+\end{lstlisting}
+
+leads to an abstract syntax with an ambiguity as sub-term:
+
+\begin{lstlisting}[language=aterm]
+Method(NumT(), "next", [], Do([
+  amb([ Mul(Add(Num("1"), Num("2")), Num("3"))
+      , Add(Num("1"), Mul(Num("2"), Num("3")))])]))
+\end{lstlisting}
+
+\paragraph{Inspecting Ambiguities}
+
+A Spoofax generated editor gives a warning when a sub-term is ambiguous. To
+inspect and understand the ambiguity, it is most useful to inspect the abstract
+syntax term that it generates. This can be done through the \texttt{Show
+abstract syntax} entry in the \texttt{Syntax} menu. Usually it helps to reduce
+the text to a minimal example that exhibits the ambiguity. The constructors
+involved in the ambiguity indicate which productions are involved.
+
+After making a diagnosis of the ambiguity, it is typically necessary to solve
+the ambiguity by disambiguating the grammar. There are several approaches to
+doing this.
 
 \section{Disambiguation}
 \sectionlabel{disambiguation}
 
-\begin{lstlisting}[language=SDF]
-module 
-context-free syntax
-  Exp.Var = ID
-  Exp.Mul = [[Exp] * [Exp]] {left}
-  Exp.Add = [[Exp] + [Exp]] {left}
-context-free priorities
-  Exp.Mul > Exp.Add
+There are several techniques for resolving ambiguities. The basic and universal
+technique is to transform the grammar such that it no longer exhibits the
+ambiguity. How to do that depends on the nature of the ambiguity. For
+expressions as seen above, there is a standard grammar transformation technique,
+which involves introducing a new non-terminal sort for each precedence level.
+For the arithmetic expressions, this results in the grammar of
+\Figure{PrecedenceExpressions.sdf3}.
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/PrecedenceExpressions.sdf3}
+\begin{lstlisting}[language=Stratego]
+constructors
+  Add : Term * Expr -> Expr
+  Sub : Term * Expr -> Expr
+      : Term -> Expr
+  Mul : Factor * Term -> Term
+      : Factor -> Term
+  Min : Expr -> Factor
+  Num : INT -> Factor
+  Par : Expr -> Factor
 \end{lstlisting}
+\caption{Encoding precedence in grammar and corresponding algebraic signature.}
+\figurelabel{PrecedenceExpressions.sdf3}
+\end{figure}
+
+This technique works and produces a deterministic, non-left recursive grammar.
+However, it is rather tedious to develop, requires inventing names for
+precedence level (and using them consistently), and adding a new operator
+requires figuring out how to fit in the precedence chain. In addition, the
+algebraic signature corresponding to this grammar also introduces the
+intermediate sorts (\Figure{PrecedenceExpressions.sdf3}).
+
+\paragraph{Associativity and Priority}
+
+To avoid these encoding problems SDF3 provides disambiguation by means of
+associativity and priority declarations. 
+In \Figure{ArithmeticExpressions.sdf3} these are used to disambiguate the
+arithmetic expressions we saw before.
+
+An associativity annotation on a production indicates whether it is left or
+right associative. That is, whether an operator application \texttt{x o y o z}
+should be parsed as left associative (\texttt{(x o y) o z}) or as right
+associative (\texttt{x o (y o z)}).
+
+The priority relation \texttt{>} declares which production has higher priority
+(precedence). In the specification of the relation productions are identified
+using the pair non-terminal and constructor name. Thus, the usual precedence for
+arithmetic expressions is defined by the following priority declarations:
+
+\begin{lstlisting}[language=SDF]
+Expr.Min > Expr.Mul > {left: Expr.Add Expr.Sub} 
+\end{lstlisting}
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/ArithmeticExpressions.sdf3}
+\caption{Disambiguation using associativity and priority.}
+\figurelabel{ArithmeticExpressions.sdf3}
+\end{figure}
+
+
+\paragraph{Limitations}
+
+The interpretation of a priority declaration such as \texttt{Expr.Mul >
+Expr.Add} is that terms constructed with \texttt{Expr.Add} may not be (direct)
+children of terms constructed with \texttt{Expr.Mul}. This nicely captures the
+idea of precedence between binary operators. However, the approach has a
+limitation in the definition of unary prefix operators of lower priority.
+Take for example the following productions defining a let binding construct:
+
+\begin{lstlisting}[language=SDF]
+context-free syntax
+  Expr.Let  = [let [{Bind "\n"}*] in [Expr]]  
+  Bind.Bind = [[Type] [ID] = [Expr]]
+context-free priorities
+  Expr.Add > Expr.Let
+\end{lstlisting}
+
+The let binding is given lower priority than the addition. That is the right
+thing to do if we consider an expression like \texttt{let Num x = 3 in x + 4},
+which will be parsed as 
+
+\begin{lstlisting}[language=aterm]
+Let([Bind(NumT(),"x",Num("3"))], Add(Var("x"),Num("4")))
+\end{lstlisting}
+
+That is, the expression is parsed as \texttt{let Num x = 3 in (x + 4)} rather
+than as \texttt{(let Num x = 3 in x) + 4}.
+
+However, the priority declaration is too strong if we consider the expression
+\texttt{4 + let x = 3 in x}. The only way to parse this expression is as 
+
+\begin{lstlisting}[language=aterm]
+Add(Num("4"), Let([Bind(NumT(),"x",Num("3"))], Var("x")))
+\end{lstlisting}
+
+However, this term is ruled out by the priority declaration. 
+
+This poses a limitation on the coverage of SDF2 and SDF3 regarding the
+specification of existing languages. For example, languages in the ML family
+have let constructs that are treated in this manner. There are
+\href{http://eelcovisser.org/post/244/disambiguating-if-expressions-in-sdf}{solutions}
+to the problem, but not as elegant as the declaration of associativity and
+priority rules.
+
+As a workaround, users of our example language have to 'disambigutate' the
+expression explicitly using parentheses as \texttt{4 + (let x = 3 in x)}.
+Arguably this is a prefered way of writing the expression anyway.
+
+The complete syntax definitions of the expressions of our example languages are
+listed in \Section{Expressions.sdf3}.
 
 \section{Lexical Syntax}
 
@@ -479,12 +663,88 @@ which states that the symbols of an addition can be separated by whitespace or
 comments. This desugaring is \emph{not} applied to lexical syntax productions,
 which entails that the symbols making up a lexeme cannot be separated by layout.
 
-\paragraph{Disambiguation}
+\paragraph{Lexical Disambiguation}
+
+When parsing is implemented using a separate scanner based on a finite
+automaton, it typically implements greedy matching for tokens. That is, when a
+potential identifier token is followed by a letter, the automaton will continue
+and add that letter to the sequence of characters of the identifier. In a
+scannerless parser based on generalized parsing, the parser can make the
+decision that there are two possible parses, one where the letter is included
+in the identifier, and one where it is not. For example, take the following
+grammar for function application in a functional language:
+
+\begin{lstlisting}[language=SDF]
+Exp.Var = ID
+Exp.App = [[Exp] [Exp]] {left}
+\end{lstlisting}
+
+Clearly, a string \texttt{f x y} denotes the term
+\texttt{App(App(Var("f"),Var("x")), Var("y"))} in this language. However,
+without counter measures, the string \texttt{fxy} \emph{also} denotes that term.
+In fact, it may ambiguously denote the terms
+\texttt{Var("fxy")}, 
+\texttt{App(Var("fx"),Var("y"))}, 
+\texttt{App(Var("f"),Var("xy"))}, and
+\texttt{App(App(Var("f"),Var("x")),Var("y"))}.
+
+Greedy matching is modeled in SDF3 by means of follow restrictions that rule out
+the scenario that a character is not included in the sequence of characters of a
+token. For example, the follow restriction for identifiers
+
+\begin{lstlisting}[language=SDF]
+lexical restrictions
+	ID -/- [a-zA-Z0-9\_]
+\end{lstlisting}
+
+states that an identifier may not be followed by a letter, digit, or underscore.
+
+\paragraph{Reserved Words}
+
+Another form of lexical ambiguity is caused by the overlap between identifiers
+and keywords. For example, the Boolean constant \texttt{true} also matches the
+syntax of identifiers. This form of ambiguity is addressed by means of
+\sdfcode{reject} productions
+
+\begin{lstlisting}[language=SDF]
+lexical syntax // reserved words
+  ID      = Keyword {reject}
+  Keyword = "Num"    
+  Keyword = "Bool"   
+  Keyword = "true"   
+  Keyword = "false"  
+  Keyword = "this"  
+  Keyword = "new"
+\end{lstlisting}
+
+
+\paragraph{Layout-Sensitive Syntax}
+
+Languages such as Haskell and Python have layout-sensitive syntax. That is,
+newlines and indentation are taken into account for disambiguation. SDF3
+supports Erdweg's layout constraints to define layout-sensitive languages
+\cite{ErdwegRKO12}.
+
 
 \section{Error Recovery}
 
-\cite{JongeKVS12}
-
+When programming in an IDE, the edited code is most of the time in a
+syntactically incorrect state. Nonetheless, even when our program is in such a
+state, we would like to get editor services such as syntax highlighting, type
+checking, and reference resolution. However, such services require an abstract
+syntax tree to work with, which cannot be delivered by a failing parser.
+Therefore, it is crucial that a parser for an IDE supports error recovery.
+Spoofax realizes parse error recovery by generating an extension of the user
+provided syntax definition that makes the grammar more \emph{permissive}. This
+permissive grammar is then interpreted by a back-tracking extension of the JSGLR
+parser that uses permissive productions when parsing with regular productions
+fails. For a full treatment of this topic see the TOPLAS 2012 article
+\cite{JongeKVS12}. An understanding of the approach is not needed for the
+casual SDF3 user. Spoofax automatically generates a permissive grammar and
+deploys it in the editor for your language. To get an impression of the
+generated rules, have a look at the generated
+\texttt{include/LangA-Permissive.def} syntax definition in the LanguageA
+project.
 
 \section{Further Reading}
 
@@ -493,11 +753,12 @@ think about syntax in terms of the (tree) structures underlying programs instead
 of in terms of parsing algorithmics \cite{KatsVW10}.
 SDF3 is the third generation Syntax Definition Formalism that takes declarative
 syntax definition as its guiding design principle.
-The original Syntax Definition Formalism SDF \cite{HeeringHKR89} introduced the
-specification of lexical syntax and context-free syntax in a single formalism,
-the adaptation of Tomita's generalized LR-parsing algorithm to programming
-language grammars \cite{Rekers1992,Tomita85}, the automatic mapping of parse
-trees to compact abstract syntax trees, and disambiguation by means of
+
+The original \emph{Syntax Definition Formalism SDF} \cite{HeeringHKR89}
+introduced the specification of lexical syntax and context-free syntax in a
+single formalism, the adaptation of Tomita's generalized LR-parsing algorithm to
+programming language grammars \cite{Rekers1992,Tomita85}, the automatic mapping
+of parse trees to compact abstract syntax trees, and disambiguation by means of
 associativity and priorities.
 The second generation SDF2 truly integrated lexical and context-free syntax by
 using a single formalism (context-free grammar productions) for the
@@ -505,24 +766,60 @@ specification of both \cite{Vis97.thesis,Visser-1997-SDF} and supporting this by
 the introduction of scannerless, generalized (LR) parsing~\cite{Vis97.sglr}.
 This required the introduction of lexical disambiguation techniques such as
 reject productions and follow restrictions. The third generation SDF3 introduced
-the notion of template productions for the derivation of pretty-printers and code completion schemas \cite{VollebregtKV12}.
+the notion of template productions for the derivation of pretty-printers and
+code completion schemas \cite{VollebregtKV12}.
 Furthermore, SDF3 first formalized the declaration of abstract syntax tree
-constructors as part of production rules and their use for the specification of
-priorities.
+constructors as part of production rules and their use in shortcuts for the
+specification of priorities. (In the application of SDF in ASF+SDF, trees were
+never presented in abstract syntax form. In SDF2 production annotations were
+used to attach constructor names to productions, but these had no formal status
+in the language.)
 
+The notion of \emph{disambiguation filters} provides a general framework to
+formalize the separation of grammar productions, defining the structure of
+sentences, and disambiguation rules, selecting a tree from a parse
+forest~\cite{KlintV94,BrandSVV02}.
 
 Pretty-printing using the box language is implemented in the
 \href{http://releases.strategoxt.org/docs/api/libstratego-gpp/stable/docs/}{libstratego-gpp}
 Stratego library, based on the work of Merijn de Jonge \cite{Jonge02}. The
 general approach of generating pretty-printers was first explored in the ASF+SDF
 MetaEnvironment \cite{BV94,BrandV96}.
+The pretty-printers generated by Spoofax are not (yet) true formatters, since
+they erase the whitespace and comment in the original program. 
+However, Spoofax provides all the ingredients for layout preserving formatters
+as developed to support refactoring transformations~\cite{JongeV11}.
 
-\cite{JongeV11}: An Algorithm for Layout Preservation in Refactoring
-Transformations
+SDF3 features modules to divide a syntax definition into reusable parts. The
+implementation of SDF3 is modular to some extent.
+Generation of signatures, completion rules, and pretty-printers are translated
+module by module. However, the core of the implementation, the generation of
+parse tables, is not modular due to the non-compositional nature of LR parse
+table generation. The parse table composition approach of Bravenboer and Visser
+\cite{BravenboerV08} was shown to yield considerable performance gain for
+practical grammars, but does not yet support cross-module priority declarations,
+and is therefore not yet integrated in Spoofax.
 
-\cite{BravenboerTV06}: syntax of AspectJ
+Determining whether a context-free grammar is ambiguous is an undecidable
+problem. However, using a generalized parsing algorithm such as GLR or GLL makes
+it possible to work with ambiguous grammars and explore ambiguity as it is
+encountered in practical programs. In recent years a number of algorithms and
+tools such as AmbiDexter \cite{BastenS10} have been developed that automate this
+exploration attempting to either verify unambiguity or find counter examples.
+Spoofax has not yet integrated such tools. 
 
-\cite{KlintV94,BrandSVV02}: disambiguation filters
+Scannerless generalized parsing is an excellent basis for supporting the
+combination of languages. This has been demonstrated in a wide range of applications,
+including meta-programming with concrete object syntax~\cite{Visser02},
+embedding of domain-specific languages in a general purpose (Java) language
+\cite{BravenboerV04}, and the syntax of AspectJ~\cite{BravenboerTV06}.
+The SugarJ extensible language \cite{ErdwegRKO11} uses SDF2 (and Stratego) to
+define modules that extend the host language with new syntax. 
+Many of these extension projects rely on parameterized modules in SDF2, a
+feature that has not been ported to SDF3.
 
+\newpage
+\section{Complete Syntax Definition of Expressions}
+\sectionlabel{Expressions.sdf3}
 
-\cite{BravenboerV08}: Parse table composition
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/Expressions.sdf3}
