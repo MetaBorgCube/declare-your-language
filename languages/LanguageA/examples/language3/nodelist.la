@@ -1,0 +1,55 @@
+program nodelist
+
+class Node {
+   Num id EdgeList edges
+}
+
+class NodeList {
+   Node head 
+   NodeList tail 
+   Bool hasValue 
+   Bool hasNext
+   Node add(Node n) {
+     if(this.hasValue)
+       let NodeList newTail = new NodeList()
+        in {
+          newTail.head = this.head;
+          newTail.hasNext = this.hasNext;
+          this.tail = newTail;
+          this.hasNext = true;
+          this.hasValue = true;
+          this.head = n;
+        }
+     else
+       {
+         this.hasValue = true;
+         this.head = n
+       }
+   }
+
+   Bool contains(Node n) {
+     if(n.id == this.head.id)
+       true
+     else
+       if(!this.hasNext)
+         false
+       else
+         this.tail.contains(n)
+   }
+}
+
+run
+  let Node n1 = new Node()
+      Node n2 = new Node()
+      Node n3 = new Node()
+      NodeList list = new NodeList()
+   in {
+     n1.id = 1;
+     n2.id = 2;
+     n3.id = 3;
+     list.add(n1);
+     list.add(n2);
+     list.contains(n1);
+     list.contains(n2);
+     list.contains(n3);
+   }

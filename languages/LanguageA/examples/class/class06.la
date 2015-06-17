@@ -3,11 +3,11 @@ program class06
 // error: cyclic inheritance
 
 class Foo extends Bar {
-	Num x;
+	Num x
 }
 
 class Bar extends Foo {
-	Num y;
+	Num y
 }
 
 run

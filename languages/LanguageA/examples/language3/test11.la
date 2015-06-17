@@ -1,0 +1,30 @@
+program test11
+
+class A {
+	 Num value
+	 
+   Num double(Num i) {
+     i * 2
+   }
+
+   Num quadruple(Num i) {
+   	 this.value;
+   	 this.value = 3;
+   	 this.value = i;
+   	 this.value = this.double(i);
+   	 this.value = this.double(6);
+   	 i;
+   	 this.double(6);
+   	 this.double(i);
+   	 let A t = this in t . double(i);
+     let Num x = this . double(6) 
+      in this.double(x);
+     let Num x = this.double(i) 
+      in this.double(x);
+   }
+} 
+
+run
+  new A().quadruple(6)
+  
+  
