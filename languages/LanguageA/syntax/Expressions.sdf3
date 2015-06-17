@@ -1,8 +1,31 @@
 module Expressions
 
 imports Common 
-imports ArithmeticExpressions 
-imports BooleanExpressions
+
+sorts Expr 
+context-free syntax // arithmetic
+  Expr     = [([Expr])] {bracket}
+  Expr.Num = INT 
+  Expr.Min = [-[Expr]]
+  Expr.Add = [[Expr] + [Expr]] {left}
+  Expr.Sub = [[Expr] - [Expr]] {left}
+  Expr.Mul = [[Expr] * [Expr]] {left} 
+  
+context-free syntax // booleans
+  Expr.True  = [true]
+  Expr.False = [false]   
+  Expr.Not   = [![Expr]]
+  Expr.And   = [[Expr] && [Expr]] {assoc}
+  Expr.Or    = [[Expr] || [Expr]] {assoc}
+  Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
+  Expr.Neq   = [[Expr] != [Expr]] {non-assoc}
+  
+  Expr.If = [
+  	if( [Expr] )
+  	  [Expr] 
+  	else 
+  	  [Expr]
+  ] {right}
 
 sorts Block
 context-free syntax
@@ -42,15 +65,6 @@ context-free syntax // objects
   Type.NumT   = [Num]
   Type.BoolT  = [Bool]
   Type.ClassT = ID
-     
-context-free syntax // reserved words
-  
-  ID   = [Num]   {reject}
-  ID   = [Bool]  {reject}
-  ID   = [true]  {reject}
-  ID   = [false] {reject}
-  ID   = [this]  {reject} 
-  ID   = [new]   {reject} 
 
 context-free priorities
 
@@ -65,5 +79,14 @@ context-free priorities
   > {Expr.If Expr.Let}
   
 lexical restrictions
-
   "new" -/- [a-zA-Z]
+  
+lexical syntax // reserved words
+  ID      = Keyword {reject}
+  Keyword = "Num"    
+  Keyword = "Bool"   
+  Keyword = "true"   
+  Keyword = "false"  
+  Keyword = "this"  
+  Keyword = "new"
+  
