@@ -7,6 +7,6 @@ context-free syntax
   Expr       = Term  
   Term.Mul   = [[Factor] * [Term]]
   Term       = Factor 
-  Factor.Min = [-[Expr]]
+  Factor.Min = [-[Factor]]
   Factor.Num = INT 
   Factor.Par = [([Expr])]
