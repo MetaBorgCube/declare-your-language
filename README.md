@@ -18,6 +18,6 @@ Author: @eelcovisser
 
 Contributions (pull requests) are welcome.
 
-# News
+### News
 
 * June 17, 2015: Release 3: Added chapters on _Testing with SPT_ and _Syntax Definition with SDF3_.
