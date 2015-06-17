@@ -17,3 +17,7 @@ The current version of the book: [PDF](https://github.com/MetaBorgCube/declare-y
 Author: @eelcovisser
 
 Contributions (pull requests) are welcome.
+
+# News
+
+* June 17, 2015: Release 3: Added chapters on _Testing with SPT_ and _Syntax Definition with SDF3_.
