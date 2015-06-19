@@ -21,7 +21,7 @@ language General properties
   
   extensions:    lb
   table:         include/LangB.tbl
-  start symbols: Start
+  start symbols: Program
   
   provider:      include/langb.ctree
   provider:      include/langb-java.jar
