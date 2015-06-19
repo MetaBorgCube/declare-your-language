@@ -1,0 +1,33 @@
+module LangB.main
+
+imports
+  LangB-Colorer
+  LangB-Completions
+  LangB-Folding
+  LangB-Menus
+  LangB-Refactorings
+  LangB-References
+  LangB-Syntax
+  LangB-Views
+
+language General properties
+  
+  name:          LangB
+  id:            org.metaborg.dyl.languageb
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the LangB language"
+  url:           http://strategoxt.org
+  
+  extensions:    lb
+  table:         include/LangB.tbl
+  start symbols: Start
+  
+  provider:      include/langb.ctree
+  provider:      include/langb-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="lb"
+            description="LangB"
+            language="LangB"
+            derivedFrom="DynamicRoot"
+            validator="org.metaborg.dyl.languageb.LangBValidator"
+            validatorClass="org.metaborg.dyl.languageb.LangBValidator"
+      ></language>
+   </extension>
+   <extension
+         id="org.metaborg.dyl.languageb.parser"
+         name="LangB Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="org.metaborg.dyl.languageb.LangBParseController"
+            language="LangB">
+      </parser>
+   </extension>    
+</plugin>

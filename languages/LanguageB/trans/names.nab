@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/LangB
+	
+namespaces
+	
+binding rules
+

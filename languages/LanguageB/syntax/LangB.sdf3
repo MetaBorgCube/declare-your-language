@@ -1,0 +1,12 @@
+module LangB
+
+imports
+	
+	Common
+
+context-free start-symbols Start 
+ 
+context-free syntax
+  
+  Start.Dummy = <>
+
