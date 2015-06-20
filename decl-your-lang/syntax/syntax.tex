@@ -1,4 +1,4 @@
-\chapter{Syntax Definition in SDF3}
+\chapter{Syntax Definition with SDF3}
 \chapterlabel{syntax}
 
 In this chapter we study declarative syntax definition with SDF3.
@@ -819,7 +819,23 @@ Many of these extension projects rely on parameterized modules in SDF2, a
 feature that has not been ported to SDF3.
 
 \newpage
-\section{Complete Syntax Definition of Expressions}
+\section{Complete Syntax Definition}
 \sectionlabel{Expressions.sdf3}
 
+This section gives the complete syntax definition for our example language
+(except for the \texttt{Common} module shown in \Figure{Common.sdf3}).
+
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/LangA.sdf3.copy}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/Programs.sdf3}
+\lstinputlisting[language=SDF]{../languages/LanguageA/syntax/Classes.sdf3}
 \lstinputlisting[language=SDF]{../languages/LanguageA/syntax/Expressions.sdf3}
+
+\section{Complete Signature}
+
+This section gives the complete algebraic signature derived from the syntax
+definition of our example language.
+
+\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/LangA-sig.str}
+\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/Programs-sig.str}
+\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/Classes-sig.str}
+\lstinputlisting[language=Stratego]{../languages/LanguageA/src-gen/signatures/Expressions-sig.str}
