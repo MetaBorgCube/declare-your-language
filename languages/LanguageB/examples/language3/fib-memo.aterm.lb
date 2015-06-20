@@ -1,0 +1,83 @@
+Program(
+  "FibMemo"
+, [ Class(
+      "Fib"
+    , NoExtends()
+    , [ Field(NumT(), "n")
+      , Field(NumT(), "fib")
+      , Field(ClassT("Fib"), "fibn1")
+      ]
+    , [ Method(
+          ClassT("Fib")
+        , "initialize"
+        , []
+        , Do(
+            [ If(
+                Eq(Get(This(), "n"), Num("0"))
+              , Do(
+                  [Set(This(), "fib", Num("0")), This(), Skip()]
+                )
+              , Do(
+                  [ If(
+                      Eq(Get(This(), "n"), Num("1"))
+                    , Set(This(), "fib", Num("1"))
+                    , Set(This(), "fib", Min(Num("1")))
+                    )
+                  , Set(This(), "fibn1", New("Fib"))
+                  , Set(
+                      Get(This(), "fibn1")
+                    , "n"
+                    , Sub(Get(This(), "n"), Num("1"))
+                    )
+                  , Call(Get(This(), "fibn1"), "initialize", [])
+                  , Skip()
+                  ]
+                )
+              )
+            ]
+          )
+        )
+      , Method(
+          ClassT("Fib")
+        , "getn1"
+        , []
+        , Do([Get(This(), "fibn1")])
+        )
+      , Method(
+          NumT()
+        , "calculate"
+        , []
+        , Do(
+            [ If(
+                Neq(Get(This(), "fib"), Num("-1"))
+              , Get(This(), "fib")
+              , Set(
+                  This()
+                , "fib"
+                , Add(
+                    Call(Get(This(), "fibn1"), "calculate", [])
+                  , Call(
+                      Call(Get(This(), "fibn1"), "getn1", [])
+                    , "calculate"
+                    , []
+                    )
+                  )
+                )
+              )
+            ]
+          )
+        )
+      ]
+    )
+  ]
+, Let(
+    [Bind(ClassT("Fib"), "fib", New("Fib"))]
+  , Do(
+      [ Set(Var("fib"), "n", Num("10"))
+      , Call(Var("fib"), "initialize", [])
+      , Call(Var("fib"), "calculate", [])
+      , Skip()
+      ]
+    )
+  )
+)

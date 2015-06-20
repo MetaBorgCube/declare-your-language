@@ -29,6 +29,11 @@ menus
       action: "Partition"            = debug-task-partition
       action: "Selection"            = debug-task-selection
     end
+   
+  menu: "Transformation" 			   (openeditor) (realtime)
+  
+    action: "Desugar"                = editor-desugar 
+    action: "Desugar AST"            = editor-desugar-ast
   
   menu: "Generation"                   (openeditor) (realtime)
     

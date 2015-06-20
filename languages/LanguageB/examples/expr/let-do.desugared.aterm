@@ -1,0 +1,10 @@
+Program("letdo", []
+, Let([Bind(NumT(), "x", Num("1"))]
+  , Let([Bind(NumT(), "y", Add(Var("x"), Num("1")))]
+    , Do([ Set(Var("o"), "x", Var("x"))
+         , Do([ Set(Var("o"), "y", Var("y"))
+              , Add(Get(Var("o"), "x"), Get(Var("o"), "y"))])]
+      )
+    )
+  )
+)

@@ -1,0 +1,5 @@
+Program(
+  "andor"
+, []
+, Or(Var("x"), And(False(), Var("y")))
+)

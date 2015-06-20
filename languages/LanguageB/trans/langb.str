@@ -19,6 +19,7 @@ imports
 	check
 	generate
 	pp
+	desugar
 
 rules // Analysis
 	
@@ -67,10 +68,23 @@ rules // Editor services
   editor-format:
     (selected, position, ast, path, project-path) -> (filename, result)
     with
-    	ext      := <get-extension> path;
+      ext      := <get-extension> path;
       filename := <guarantee-extension(|$[pp.[ext]])> path;
       result   := <pp-debug> selected
-
+      
+  editor-desugar:
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path;
+      filename := <guarantee-extension(|$[desugared.[ext]])> path;
+      result   := <desugar-all; pp-debug> selected  
+      
+  editor-desugar-ast:
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      filename := <guarantee-extension(|$[desugared.aterm])> path;
+      result   := <desugar-all> selected  	
+	
 rules // Debugging
 	
 	// Prints the abstract syntax ATerm of a selection.

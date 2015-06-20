@@ -1,0 +1,9 @@
+Program(
+  "andor"
+, []
+, If(
+    Var("x")
+  , True()
+  , If(False(), Var("y"), False())
+  )
+)

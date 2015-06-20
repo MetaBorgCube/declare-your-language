@@ -1,0 +1,11 @@
+program andor
+
+
+run
+  if( x )
+    true
+  else
+    if( false )
+      y
+    else
+      false
