@@ -1,15 +1,157 @@
-\chapter{Transformation}
+\chapter{Transformation with Stratego}
 \chapterlabel{transformation}
 
-\section{Terms and Signatures}
+The parsers generated from SDF3 syntax definitions produce abstract syntax
+terms. Semantic manipulation of programs in Spoofax is done by manipulating
+these terms. In this chapter we study the definition of transformations on
+(abstract syntax) terms with the Stratego strategic rewriting language.
 
-we've already seen those in the syntax chapter
+\begin{figure}[p]
+\begin{minipage}[t]{0.47\hsize}
+\lstinputlisting[language=paplj]{../languages/LanguageB/examples/expr/let-do.lb}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.47\hsize}
+\lstinputlisting[language=paplj]{../languages/LanguageB/examples/expr/let-do.desugared.lb.txt}
+\end{minipage}
+\caption{Program before and after desugaring (concrete syntax).}
+\bigskip
+\figurelabel{desugaring-concrete}
+\lstinputlisting[language=aterm]{../languages/LanguageB/examples/expr/let-do.aterm.txt}
+\lstinputlisting[language=aterm]{../languages/LanguageB/examples/expr/let-do.desugared.aterm.txt}
+\caption{Program before and after desugaring (abstract syntax).}
+\figurelabel{desugaring-abstract}
+\end{figure}
 
-\section{Rewrite Rules}
+\section{Term Transformations}
+
+A desugaring transformation simplifies the programs of a language to use only a
+subset of the constructs of the language or only simplified applications of
+constructs. 
+For example, \Figure{desugaring-concrete} shows a program before and after
+desugaring let bindings and sequential compositions. After desugaring, let
+bindings contain only a single binding sequential composition `blocks' contain
+at most two expresssions (and no `skips').
+\Figure{desugaring-abstract} shows the abstract syntax term of the same
+program before and after desugaring.
+
+\Figure{Terms.sdf3} defines the syntax of the format of terms that we use here.
+A term is a string literal, a number literal, a constructor application, or a
+list of terms (between square brackets.)
+The algebraic signature corresponding to a syntax definition describes the
+subset of terms that are well-formed abstract syntax terms.
+
+Thus, defining a transformation such as desugaring on programs, requires a
+transformation on the underlying abstract syntax terms. 
+The Stratego language supports the definition of such transformations by means
+of term rewrite rules.
+
+\begin{figure}
+\lstinputlisting[language=SDF]{../languages/Stratego/syntax/Terms.sdf3}
+\caption{Syntax of terms.}
+\figurelabel{Terms.sdf3}
+\end{figure}
 
 
-\section{Strategies}
+\section{Term Rewrite Rules}
 
+A term rewrite rule is a schematic description of a transformation on terms.
+For example, the rule
+
+\begin{lstlisting}[language=Stratego]
+desugar-let :
+  Let([b1, b2 | bs], e) -> Let([b1], Let([b2 | bs], e))
+\end{lstlisting}
+
+transforms a \texttt{Let} term with a list containing at least two bindings
+(\texttt{b1} and \texttt{b2}) and some other bindings (\texttt{bs}), into a
+\texttt{Let} term with the first binding \texttt{b1} and a nested \texttt{Let}
+with the other bindings.
+In general, a term rewrite rule has the form
+
+\begin{lstlisting}[language=Stratego]
+l : lhs -> rhs
+\end{lstlisting}
+
+where \texttt{l} is the name of the rule, and \texttt{lhs} and \texttt{rhs} are
+\emph{term patterns}.
+A rewrite rule applies to a term if the left-hand side pattern \emph{matches}
+the term, and results in the instantiation of the right-hand side pattern,
+replacing the pattern variables with the terms bound to them by the match.
+
+\Figure{desugar-rules.str} gives more examples of desugaring rules on
+expressions.
+
+
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/desugar-rules.str}
+\caption{Term rewrite rules for desugaring expressions.}
+\figurelabel{desugar-rules.str}
+\end{figure}
+
+
+\paragraph{Term Patterns and Pattern Matching}
+
+A term \texttt{pattern} is a term extended with variables and list match
+patterns as formalized by the syntax definition in \Figure{Patterns.sdf3}.
+Roughly, a term matches a pattern if it has the same
+shape as the pattern. That is, a term matches a pattern if its outermost constructor is the
+same as the outermost constructor of the pattern, and the sub-terms match the
+corresponding sub-patterns, or the pattern is a variable.
+\Figure{pattern-matching} gives a precise definition of pattern matching.
+
+\begin{figure}[p]
+\lstinputlisting[language=SDF]{../languages/Stratego/syntax/Patterns.sdf3}
+\caption{Syntax of patterns.}
+\figurelabel{Patterns.sdf3}
+\bigbreak
+\begin{boxedminipage}{\hsize}
+A term matches a term pattern if one of the following cases aplies
+\begin{itemize}
+  \item The pattern is string literal and the term is the same string literal.
+  \item The pattern is a number literal and the term is the same number literal.
+  \item The pattern is a constructor application \oldtexttt{c(p$_1$,..,p$_n$)}, the
+  term is a constructor application \oldtexttt{c(t$_1$,..,t$_n$)} of the same
+  constructor \oldtexttt{c}, and the sub-patterns \oldtexttt{p$_1$,..,p$_n$} match the sub-terms
+  \oldtexttt{t$_1$,..,t$_n$}.
+  \item The pattern is a list pattern \oldtexttt{[p$_1$,..,p$_n$]}, the term is a list
+  \oldtexttt{[t$_1$,..,t$_n$]}, and the patterns \oldtexttt{p$_1$,..,p$_n$} match the
+  terms \oldtexttt{t$1$,..,t$_n$}.
+  \item The pattern is a list pattern \oldtexttt{[p$_1$,..,p$_n$|p]}, the term is a list
+  \oldtexttt{[t$_1$,..,t$_m$]}, $n \leq m$, the patterns \oldtexttt{p$_1$,..,p$_n$}
+  match the terms \oldtexttt{t$_1$,..,t$_n$}, and the pattern \oldtexttt{p} matches
+  \oldtexttt{[t$_{m+1}$,..,t$_m$]}.
+  \item The pattern is a pattern variable, in which case the term is bound to
+  the variable.
+\end{itemize}
+\end{boxedminipage}
+\caption{Definition of term pattern matching.}
+\figurelabel{pattern-matching}
+\end{figure}
+
+
+\section{Term Rewriting Strategies}
+
+Term rewriting is the repeated application of rewrite rules to a term.
+In 
+
+In traditional term rewriting a term is normalized with respect to a set of term
+rewrite rules. That is, 
+
+Instead of providing a standard strategy 
+
+the exhaustive application of a set of rules to a term
+
+normalization
+
+\begin{figure}
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/desugar.str}
+\caption{Strategies for desugaring expressions.}
+\figurelabel{desugar.str}
+\end{figure}
+
+
+\section{Conditional Rules}
 
 \section{String Templates}
 
@@ -17,13 +159,17 @@ we've already seen those in the syntax chapter
 \section{Spoofax Builders}
 
 
-
-
-
-
 \section{Further Reading}
 
+\cite{Klint93,BrandDHJJKKMOSVVV01}: ASF+SDF MetaEnvironment
+
+term rewriting, innermost rewriting strategy
+
 \cite{VisserBT98}: first definition of Stratego
+
+\cite{JongeVV01}: XT
+
+\cite{Visser01}: Stratego RTA'01
 
 \cite{Visser03}: Stratego/XT 0.9
 
