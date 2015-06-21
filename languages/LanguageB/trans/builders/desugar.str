@@ -1,0 +1,22 @@
+module desugar
+
+imports desugar pp
+
+rules
+	
+  editor-desugar:
+    (selected, position, ast, path, project-path) 
+    -> (filename, result)
+    with
+      ext      := <get-extension> path;
+      filename := 
+      	<guarantee-extension(|$[desugared.[ext]])> path;
+      result   := <desugar-all; pp-debug> selected  
+      
+  editor-desugar-ast:
+    (selected, position, ast, path, project-path) 
+    -> (filename, result)
+    with
+      filename := 
+      	<guarantee-extension(|$[desugared.aterm])> path;
+      result   := <desugar-all> selected  	
