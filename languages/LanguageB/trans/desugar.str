@@ -4,7 +4,8 @@ imports desugar-rules
 
 strategies
 	
-  pre-desugar = innermost(desugar-let)
+  pre-desugar = 
+  	innermost(desugar-let)
 	
   post-desugar =
     innermost(desugar-or <+ desugar-and <+ desugar-do)
