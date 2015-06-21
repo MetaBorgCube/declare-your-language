@@ -1,0 +1,2 @@
+module classes-to-xml
+imports src-gen/signatures/Classes-sig

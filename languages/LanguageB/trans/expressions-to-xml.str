@@ -1,0 +1,6 @@
+module expressions-to-xml
+imports src-gen/signatures/Expressions-sig
+rules
+	
+  to-xml : Var(x) -> $[<var>[x]</var>]
+  
