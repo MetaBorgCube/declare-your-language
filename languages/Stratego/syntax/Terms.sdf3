@@ -1,0 +1,10 @@
+module Terms
+imports Common
+sorts Term Constr
+context-free syntax
+  Constr   = STRING
+  Constr   = ID
+  Term.Str = STRING
+  Term.Num = NUMBER
+  Term.App = [[Constr]([{Term ","}*])]
+  Term.Lst = <[<{Term ","}*>]> 

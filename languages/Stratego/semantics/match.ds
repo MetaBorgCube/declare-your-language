@@ -1,0 +1,38 @@
+module match
+imports semantics/terms
+signature
+  sorts U
+  constructors
+    U : U
+    
+  semantic components
+    Subs -> Map<String, Term>
+  variables
+    S : Subs
+  arrows
+    Pat --> U
+    List(Pat) --> List(Term)
+
+rules
+
+  Term Str(s1) |- Pstr(s2) --> U() where s1 == s2.
+  Term Num(n1) |- Pnum(n2) --> U() where n1 == n2.
+  
+  Term t |- Pvar(x) :: Subs subs --> U() :: Subs {x |--> t, subs}.
+  //where subs[x] undefined
+
+  Term App(c1, ts) |- Papp(c2, ps) --> U()
+  where c1 == c2; List(Term) ts |- ps --> [].
+  
+  Term Lst(ts) |- Plst(ps) --> U()
+  where List(Term) ts |- ps --> [].
+   
+  Term Lst(ts) |- Pltl(ps, p) --> U()
+  where List(Term) ts |- ps --> ts';
+        Term Lst(ts') |- p --> U().
+  
+  List(Term) ts |- []: List(Pat) --> ts.
+  
+  List(Term) [t | ts] |- [p | ps]: List(Pat) --> ts'
+  where Term t |- p --> U();
+        List(Term) ts |- ps --> ts'.

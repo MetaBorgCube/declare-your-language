@@ -1,0 +1,18 @@
+module terms
+signature
+  sorts Term Constr 
+  constructors
+    str2constr : String -> Constr {implicit}
+    Str : String -> Term
+    Num : String -> Term
+    App : Constr * List(Term) -> Term
+    Lst : List(Term) -> Term
+
+  sorts Pat
+  constructors
+    Pstr : String -> Pat
+    Pnum : String -> Pat
+    Papp : Constr * List(Pat) -> Pat
+    Plst : List(Pat) -> Pat
+    Pltl : List(Pat) * Pat -> Pat
+    Pvar : String -> Pat

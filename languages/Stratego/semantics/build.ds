@@ -1,0 +1,24 @@
+module build
+imports semantics/match
+
+signature
+  arrows 
+    Pat -b-> Term
+    List(Pat) -b-> List(Term)  
+  constructors
+    append : List(Term) *List(Term) --> List(Term)
+    
+rules
+  
+  S |- Pvar(x) -b-> S[x].
+  
+  Pnum(n) -b-> Num(n).
+  
+  Pstr(s) -b-> Str(s).
+  
+  Papp(c, ps) -b-> App(c, ps).
+  
+  Plst(ps) -b-> Lst(ps).
+  
+  Pltl(ps, p) -b-> Lst(append(ps, ts))
+  where p -b-> Lst(ts).

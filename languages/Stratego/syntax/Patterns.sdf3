@@ -1,0 +1,10 @@
+module Patterns
+imports Common Terms
+sorts Pat
+context-free syntax
+  Pat.Pstr = STRING
+  Pat.Pnum = NUMBER
+  Pat.Papp = [[Constr]([{Pat ","}*])] 
+  Pat.Plst = <[<{Pat ","}*>]>
+  Pat.Pltl = <[<{Pat ","}*> | <Pat>]>
+  Pat.Pvar = ID

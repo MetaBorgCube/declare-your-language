@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="stratego"
+            description="Stratego"
+            language="Stratego"
+            derivedFrom="DynamicRoot"
+            validator="org.metaborgcube.lang.stratego.StrategoValidator"
+            validatorClass="org.metaborgcube.lang.stratego.StrategoValidator"
+      ></language>
+   </extension>
+   <extension
+         id="org.metaborgcube.lang.stratego.parser"
+         name="Stratego Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="org.metaborgcube.lang.stratego.StrategoParseController"
+            language="Stratego">
+      </parser>
+   </extension>    
+</plugin>

@@ -1,0 +1,7 @@
+module Stratego-Refactorings
+
+imports Stratego-Refactorings.generated
+
+refactorings
+
+  text reconstruction : construct-textual-change

@@ -1,0 +1,13 @@
+module editor/Stratego-Outliner
+
+imports
+  
+  include/Stratego
+  lib/runtime/editor/outline-library
+  lib/runtime/editor/origins
+  editor/Stratego-Outliner.generated
+
+rules
+  
+  to-outline-label = fail
+  

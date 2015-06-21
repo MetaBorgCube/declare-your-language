@@ -1,0 +1,33 @@
+module Stratego.main
+
+imports
+  Stratego-Colorer
+  Stratego-Completions
+  Stratego-Folding
+  Stratego-Menus
+  Stratego-Refactorings
+  Stratego-References
+  Stratego-Syntax
+  Stratego-Views
+
+language General properties
+  
+  name:          Stratego
+  id:            org.metaborgcube.lang.stratego
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the Stratego language"
+  url:           http://strategoxt.org
+  
+  extensions:    stratego
+  table:         include/Stratego.tbl
+  start symbols: Start
+  
+  provider:      include/stratego.ctree
+  provider:      include/stratego-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

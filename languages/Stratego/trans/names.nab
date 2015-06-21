@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/Stratego
+	
+namespaces
+	
+binding rules
+

@@ -1,0 +1,44 @@
+module Stratego
+
+imports Common Terms Patterns
+
+context-free start-symbols Module
+
+context-free syntax
+  
+  Module.Module = [
+  	module [ID]
+  	[Section*]
+  ]
+  
+  Section.Rules = [
+  	rules 
+  	  [Rule*]
+  ]
+   
+  Section.Strategies = [
+  	strategies
+  	  [StrategyDef*]
+  ]
+
+  Rule.Rule = [
+  	[ID] : 
+  	   [Pat] -> [Term]
+  ]
+  
+  StrategyDef.StrategyDef = [
+  	[ID]([StrParam]|[TrmParam]) = [Strategy]
+  ]
+  
+  StrParam.StrParam = ID
+  TrmParam.TrmParam = ID
+  
+  Strategy.Id   = [id]
+  Strategy.Fail = [fail]
+  
+  Strategy.Call = ID
+  
+  Strategy.Match = [?[Pat]]
+  Strategy.Build = [![Pat]]
+  
+  
