@@ -1,5 +1,7 @@
 module LangB-Menus
 
+imports LangB-Menu-Transformation
+
 menus
   
   menu: "Syntax"                       (openeditor)
@@ -29,11 +31,6 @@ menus
       action: "Partition"            = debug-task-partition
       action: "Selection"            = debug-task-selection
     end
-   
-  menu: "Transformation" 			   (openeditor) (realtime)
-  
-    action: "Desugar"                = editor-desugar 
-    action: "Desugar AST"            = editor-desugar-ast
   
   menu: "Generation"                   (openeditor) (realtime)
     

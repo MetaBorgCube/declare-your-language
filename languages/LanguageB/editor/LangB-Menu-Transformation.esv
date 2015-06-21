@@ -1,0 +1,8 @@
+module LangB-Menu-Transformation
+
+menus
+   
+  menu: "Transformation" (openeditor) (realtime)
+  
+    action: "Desugar"     = editor-desugar 
+    action: "Desugar AST" = editor-desugar-ast
