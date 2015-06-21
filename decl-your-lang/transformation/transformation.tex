@@ -132,31 +132,140 @@ A term matches a term pattern if one of the following cases aplies
 
 \section{Term Rewriting Strategies}
 
-Term rewriting is the repeated application of rewrite rules to a term.
-In 
+Term rewriting is the process of applying term rewrite rules to (the sub-terms
+of) a term until a \emph{normal form} is reached. That is, until no more
+sub-terms match the left-hand side of a rule. In traditional rewrite engines,
+rules would be applied using a standard \emph{strategy} to find \emph{reducible
+expressions} (also known as \emph{redices}).
+However, in practice rewrite rules (for program transformation) may be
+\emph{non-confluent}, i.e. produce multiple different results depending on the
+application order, and/or may be \emph{non-terminating}. Circumventing such
+problems in a traditional rewrite engine requires extending terms with
+additional information in order to control execution.
 
-In traditional term rewriting a term is normalized with respect to a set of term
-rewrite rules. That is, 
+In order to provide more control over the rewriting process, Stratego supports
+\emph{programmable} rewriting strategies, which make it possible to
+\emph{select} the rules to apply and to determine the search algorithm used to
+find redices.
+Indeed, such strategies do not necessarily lead to a (unique) normal form in the
+traditional sense.
 
-Instead of providing a standard strategy 
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/traversals.str}
+\caption{Definitions of traversal strategies (included in the standard
+Stratego library).}
+\figurelabel{traversals.str}
+\end{figure}
 
-the exhaustive application of a set of rules to a term
+A Stratego strategy is a partial function from terms to terms. A strategy is a
+partial function since the application to a term may fail. For example, applying
+a rewrite rule to a term fails if the term does not match the left-hand side of
+the rule. Strategies are defined in terms of a small set of strategy
+combinators:
 
-normalization
+\begin{description}
+\item[\oldtexttt{id}] The identity strategy always succeeds and returns the term
+to which it is applied.
+\item[\oldtexttt{fail}] The failure strategy always fails.
+\item[\oldtexttt{l}] The application of a rewrite rule by invoking its name
+\oldtexttt{l}. If successful, returns the instantiation of the right-hand side
+of the rule.
+\item[\oldtexttt{s$_1$; s$_2$}] The sequential composition of two strategies.
+\oldtexttt{s$_2$} is applied to the term returned by the
+application of \oldtexttt{s$_1$}. Fails if either strategy fails.
+\item[\oldtexttt{s$_1$ <+ s$_2$}] The ordered choice between two strategies.
+If the application of \oldtexttt{s$_1$} is successful, its result is returned,
+otherwise \oldtexttt{s$_2$} is applied to the original term.
+\item[\oldtexttt{all(s)}] A one-level traversal operator that visit all direct
+sub-terms of a term, applying \oldtexttt{s} to each, returning the application
+of the original constructor to the transformed sub-terms.
+\item[\oldtexttt{one(s)}] This one-level traversal operator visits the direct
+sub-terms of a term from left to right, applying \oldtexttt{s} until it
+succeeds, returning the original term with the first sub-term for which
+\oldtexttt{s} succeeds replaced.
+\end{description}
 
-\begin{figure}
+\Figure{traversals.str} shows the application of these combinators in the
+definition of several strategies from the standard Stratego library.
+\Figure{desugar.str} uses the \texttt{innermost} strategy to define several
+desugaring transformations using the desugaring rules from
+\Figure{desugar-rules.str}.
+
+\begin{figure}[t]
 \lstinputlisting[language=Stratego]{../languages/LanguageB/trans/desugar.str}
 \caption{Strategies for desugaring expressions.}
 \figurelabel{desugar.str}
 \end{figure}
 
 
-\section{Conditional Rules}
+\section{Conditional and Parameterized Rules}
 
-\section{String Templates}
+In \Figure{traversals.str} we saw that strategy definitions can be parameterized
+with strategy arguments. The strategy \texttt{bottomup(s)} takes a strategy
+parameter \texttt{s} that is instantiated with some transformation to apply to
+each node of a term. Rules can be parameterized in the same way.
+\Figure{list-strategies.str} gives examples of such parameterized rules. For
+example, the \texttt{map(s)} rule applies a transformation \texttt{s} to all the
+elements of a list, and \texttt{filter(s)} filters the elements of a list using
+(the success/failure behaviour of) the transformation parameter \texttt{s}. 
 
+application of a strategy
+
+
+rule with side conditions
+
+where
+
+with
+
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/list-strategies.str}
+\caption{Parameterized rules.}
+\figurelabel{list-strategies.str}
+\end{figure}
+
+\section{String Interpolation}
+
+generating strings
+
+\texttt{$[.. [] ..]}
+
+
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/to-xml.str}
+\caption{Using string interpolation to translate programs to textual XML
+representation.}
+\figurelabel{to-xml.str}
+\end{figure}
 
 \section{Spoofax Builders}
+
+builders are actions that can be applied to program from the editor
+
+definition of these actions consists of three ingredients
+
+the definition of the transformation to apply
+
+the defnition of the menu entry
+
+the glue code that turns a regular AST transformation into a Spoofax builder
+that can be called from a menu
+
+interface wih editor
+
+
+\begin{figure}[p]
+\lstinputlisting[language=ESV]{../languages/LanguageB/editor/LangB-Menu-Transformation.esv}
+\caption{Configuration of Transformation menu.}
+\figurelabel{LangB-Menu-Transformation.esv}
+\bigskip
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/builders/desugar.str}
+\caption{Configuration of Transformation menu.}
+\figurelabel{LangB-Menu-Transformation.esv}
+\end{figure}
+
+
+
 
 
 \section{Further Reading}
@@ -164,6 +273,8 @@ normalization
 \cite{Klint93,BrandDHJJKKMOSVVV01}: ASF+SDF MetaEnvironment
 
 term rewriting, innermost rewriting strategy
+
+strategies in ELAN \cite{BorovanskyKKMV96,BorovanskyKKMR98}
 
 \cite{VisserBT98}: first definition of Stratego
 
@@ -179,3 +290,17 @@ term rewriting, innermost rewriting strategy
 
 
 \cite{Visser02}: meta-programming with concrete object syntax
+
+\paragraph{Online Documentation}
+
+The
+online \href{http://releases.strategoxt.org/strategoxt-manual/strategoxt-manual-0.17pre18721-8c3vml4h/manual/
+}{StrategoXT manual} \cite{StrategoXTReferenceManual}
+
+In particular, 
+\href{http://releases.strategoxt.org/strategoxt-manual/strategoxt-manual-0.17pre18721-8c3vml4h/manual/chunk-chapter/stratego-language.html}{Part
+III. The Stratego Language} provides an extended introduction to the language.
+
+
+\href{http://releases.strategoxt.org}{releases.strategoxt.org}
+
