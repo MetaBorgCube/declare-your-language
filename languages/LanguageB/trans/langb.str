@@ -1,10 +1,9 @@
 module langb
 
-imports
-	include/LangB
-	names
-	check
-	generate
-	pp
-    builders/main
+imports builders/main
+
+// imports names
+// imports check
+// imports generate
+// imports pp
 
