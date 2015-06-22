@@ -1,0 +1,39 @@
+module classes-to-xml
+imports src-gen/signatures/Classes-sig
+
+rules
+	
+  to-xml : Class(name, extends, fields, methods) -> $[
+  	<class name="[name]" extends="[<to-xml <+ dbg(|"extends: ")>extends]">
+  	  <fields>
+  	    [<map(to-xml <+ dbg(|"field: "))>fields]
+  	  </fields>
+  	  <methods>
+  	    [<map(to-xml <+ dbg(|"method: "))>methods]
+  	  </methods>
+  	</class>
+  ]
+  
+  to-xml : NoExtends() -> $[Object]
+  
+  to-xml : Extends(name) -> name
+  
+  to-xml : Field(t, name) -> $[<field name="[name]">[<to-xml>t]</field>]
+  
+  to-xml : Method(t, name, params, e) -> $[
+  	<method name="[name]">
+  	   <type>[<to-xml>t]</type>
+  	   <params>
+  	      [<map(to-xml)>params]
+  	   </params>
+  	   <body>
+  	     [<to-xml>e]
+  	   </body>
+  	</method>
+  ]
+  
+  to-xml : Param(t, name) -> $[
+  	<param name="[name]">
+  	  [<to-xml>t]
+  	</param>
+  ]

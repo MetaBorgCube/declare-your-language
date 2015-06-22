@@ -1,0 +1,90 @@
+module expressions-to-xml
+imports src-gen/signatures/Expressions-sig
+rules
+
+  to-xml : Num(i)      -> $[<num>[i]</num>] 
+  to-xml : Min(e)      -> $[<min>[<to-xml>e]</min>] 
+  to-xml : Add(e1, e2) -> $[<add>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </add>]
+  to-xml : Sub(e1, e2) -> $[<sub>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </sub>]
+  to-xml : Mul(e1, e2) -> $[<mul>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </mul>]
+ 
+  to-xml : True()      -> $[<true/>]
+  to-xml : False()     -> $[<false/>]
+  to-xml : Not(e)      -> $[<not>[<to-xml>e]</not>]
+  to-xml : And(e1, e2) -> $[<and>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </and>]
+  to-xml : Or(e1, e2)  -> $[<or>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </or>]
+  to-xml : Eq(e1, e2)  -> $[<eq>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </eq>]
+  to-xml : Neq(e1, e2) -> $[<neq>
+                              [<to-xml>e1]
+                              [<to-xml>e2]
+                            </neq>]
+  to-xml : If(e1,e2,e3)-> $[<if>
+  	                          [<to-xml>e1]
+  	                          [<to-xml>e2]
+  	                          [<to-xml>e3]
+  	                        </if>]
+  to-xml : Do(es)      -> $[<do>
+  	                          [<map(to-xml)>es]
+                            </do>]
+  to-xml : Skip()      -> $[<skip/>]
+  	
+  to-xml : Var(x) -> $[<var>[x]</var>]
+  
+  to-xml : Let(bs, e) ->
+  	$[<let>
+  	    [<map(to-xml)>bs]
+  	    [<to-xml>e]
+  	  </let>]
+ 
+  to-xml : Bind(t, name, e) ->
+  	$[<bind name="[name]">
+  	    <type>[<to-xml>t]</type>
+  	    [<to-xml>e]
+  	  </bind>]
+  
+  to-xml : Get(e, name) -> $[
+  	<get name="[name]">[<to-xml>e]</get>
+  ]
+  
+  to-xml : Set(e1, name, e2) -> $[
+  	<set name="[name]">[<to-xml>e1][<to-xml>e2]</set>
+  ]
+  
+  to-xml : Call(e1, name, es) -> $[
+  	<call name="[name]">
+  	  [<to-xml>e1]
+  	  [<map(to-xml)>es]
+  	</call>
+  ]
+    
+  to-xml : New(name) -> $[<new name="[name]"/>]
+  
+  to-xml : This() -> $[<this/>]
+  
+  to-xml : Null(name) -> $[<null name="[name]"/>]
+  
+  to-xml : Cast(name, e) -> $[<cast name="[name]">[<to-xml>e]</cast>]
+  
+  to-xml : NumT() -> $[<numt/>]
+  to-xml : BoolT() -> $[<boolt/>]
+  to-xml : ClassT(name) -> $[<classt name="[name]"/>]
+  
+  
