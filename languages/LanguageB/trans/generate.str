@@ -1,7 +1,6 @@
 module generate
 
-imports
-	
-	include/LangB
+imports include/LangB
+
 rules 
 
