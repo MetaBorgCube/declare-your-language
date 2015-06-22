@@ -1,7 +1,7 @@
-module desugar
-
-imports desugar pp
-
+module transformation
+imports desugar 
+imports pp 
+imports to-xml/to-xml
 rules
 	
   editor-desugar:
@@ -20,3 +20,11 @@ rules
       filename := 
       	<guarantee-extension(|$[desugared.aterm])> path;
       result   := <desugar-all> selected  	
+            
+  editor-to-xml:
+    (selected, position, ast, path, project-path) 
+    -> (filename, result)
+    with
+      filename := 
+      	<guarantee-extension(|$[xml])> path;
+      result   := <to-xml> selected  
