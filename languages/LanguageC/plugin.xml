@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="lc"
+            description="LangC"
+            language="LangC"
+            derivedFrom="DynamicRoot"
+            validator="org.metaborgcube.languagec.LangCValidator"
+            validatorClass="org.metaborgcube.languagec.LangCValidator"
+      ></language>
+   </extension>
+   <extension
+         id="org.metaborgcube.languagec.parser"
+         name="LangC Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="org.metaborgcube.languagec.LangCParseController"
+            language="LangC">
+      </parser>
+   </extension>    
+</plugin>

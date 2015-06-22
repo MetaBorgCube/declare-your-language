@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/LangC
+	
+namespaces
+	
+binding rules
+

@@ -1,0 +1,33 @@
+module LangC.main
+
+imports
+  LangC-Colorer
+  LangC-Completions
+  LangC-Folding
+  LangC-Menus
+  LangC-Refactorings
+  LangC-References
+  LangC-Syntax
+  LangC-Views
+
+language General properties
+  
+  name:          LangC
+  id:            org.metaborgcube.languagec
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the LangC language"
+  url:           http://strategoxt.org
+  
+  extensions:    lc
+  table:         include/LangC.tbl
+  start symbols: Start
+  
+  provider:      include/langc.ctree
+  provider:      include/langc-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

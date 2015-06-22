@@ -1,0 +1,13 @@
+module editor/LangC-Outliner
+
+imports
+  
+  include/LangC
+  lib/runtime/editor/outline-library
+  lib/runtime/editor/origins
+  editor/LangC-Outliner.generated
+
+rules
+  
+  to-outline-label = fail
+  
