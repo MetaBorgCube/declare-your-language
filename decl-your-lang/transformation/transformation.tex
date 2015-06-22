@@ -4,7 +4,8 @@
 The parsers generated from SDF3 syntax definitions produce abstract syntax
 terms. Semantic manipulation of programs in Spoofax is done by manipulating
 these terms. In this chapter we study the definition of transformations on
-(abstract syntax) terms with the Stratego strategic rewriting language.
+(abstract syntax) terms with the Stratego strategic rewriting language. The code
+in this chapter can be found in the \LanguageRepoRef{LanguageB} project.
 
 \begin{figure}[p]
 \begin{minipage}[t]{0.47\hsize}
@@ -108,19 +109,19 @@ corresponding sub-patterns, or the pattern is a variable.
 \begin{boxedminipage}{\hsize}
 A term matches a term pattern if one of the following cases aplies
 \begin{itemize}
-  \item The pattern is string literal and the term is the same string literal.
+  \item The pattern is a string literal and the term is the same string literal.
   \item The pattern is a number literal and the term is the same number literal.
   \item The pattern is a constructor application \oldtexttt{c(p$_1$,..,p$_n$)}, the
   term is a constructor application \oldtexttt{c(t$_1$,..,t$_n$)} of the same
-  constructor \oldtexttt{c}, and the sub-patterns \oldtexttt{p$_1$,..,p$_n$} match the sub-terms
-  \oldtexttt{t$_1$,..,t$_n$}.
+  constructor \oldtexttt{c}, and the sub-terms
+  \oldtexttt{t$_1$,..,t$_n$} match the sub-patterns \oldtexttt{p$_1$,..,p$_n$}.
   \item The pattern is a list pattern \oldtexttt{[p$_1$,..,p$_n$]}, the term is a list
-  \oldtexttt{[t$_1$,..,t$_n$]}, and the patterns \oldtexttt{p$_1$,..,p$_n$} match the
-  terms \oldtexttt{t$1$,..,t$_n$}.
+  \oldtexttt{[t$_1$,..,t$_n$]}, and the terms \oldtexttt{t$1$,..,t$_n$} match
+  the patterns \oldtexttt{p$_1$,..,p$_n$} .
   \item The pattern is a list pattern \oldtexttt{[p$_1$,..,p$_n$|p]}, the term is a list
-  \oldtexttt{[t$_1$,..,t$_m$]}, $n \leq m$, the patterns \oldtexttt{p$_1$,..,p$_n$}
-  match the terms \oldtexttt{t$_1$,..,t$_n$}, and the pattern \oldtexttt{p} matches
-  \oldtexttt{[t$_{m+1}$,..,t$_m$]}.
+  \oldtexttt{[t$_1$,..,t$_m$]}, $n \leq m$, the terms
+  \oldtexttt{t$_1$,..,t$_n$} match the patterns \oldtexttt{p$_1$,..,p$_n$},
+  and \oldtexttt{[t$_{m+1}$,..,t$_m$]} matches the pattern \oldtexttt{p}.
   \item The pattern is a pattern variable, in which case the term is bound to
   the variable.
 \end{itemize}
@@ -135,8 +136,8 @@ A term matches a term pattern if one of the following cases aplies
 Term rewriting is the process of applying term rewrite rules to (the sub-terms
 of) a term until a \emph{normal form} is reached. That is, until no more
 sub-terms match the left-hand side of a rule. In traditional rewrite engines,
-rules would be applied using a standard \emph{strategy} to find \emph{reducible
-expressions} (also known as \emph{redices}).
+rules are applied using a standard \emph{strategy} to find \emph{reducible
+expressions} (or \emph{redices}).
 However, in practice rewrite rules (for program transformation) may be
 \emph{non-confluent}, i.e. produce multiple different results depending on the
 application order, and/or may be \emph{non-terminating}. Circumventing such
@@ -150,8 +151,23 @@ find redices.
 Indeed, such strategies do not necessarily lead to a (unique) normal form in the
 traditional sense.
 
+The Stratego library provides a large collection of generic (traversal)
+strategies. These strategies are generic in the sense that they do not depend on
+the abstract syntax of a particular language. For example, \Figure{desugar.str}
+uses the \texttt{innermost} strategy from the library to define several
+desugaring transformations using the desugaring rules from
+\Figure{desugar-rules.str}.
+
 \begin{figure}[t]
-\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/traversals.str}
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/desugar.str}
+\caption{Strategies for desugaring expressions.}
+\figurelabel{desugar.str}
+\end{figure}
+
+\section{Defining Strategies}
+
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/stratego-lib/traversals.str}
 \caption{Definitions of traversal strategies (included in the standard
 Stratego library).}
 \figurelabel{traversals.str}
@@ -160,16 +176,27 @@ Stratego library).}
 A Stratego strategy is a partial function from terms to terms. A strategy is a
 partial function since the application to a term may fail. For example, applying
 a rewrite rule to a term fails if the term does not match the left-hand side of
-the rule. Strategies are defined in terms of a small set of strategy
-combinators:
+the rule. Strategies are defined in terms of a small set of basic
+transformation operations:
 
 \begin{description}
 \item[\oldtexttt{id}] The identity strategy always succeeds and returns the term
 to which it is applied.
 \item[\oldtexttt{fail}] The failure strategy always fails.
-\item[\oldtexttt{l}] The application of a rewrite rule by invoking its name
-\oldtexttt{l}. If successful, returns the instantiation of the right-hand side
-of the rule.
+\item[\oldtexttt{f}] The application of a rewrite rule or strategy
+\oldtexttt{f} to the current term. If successful, returns the instantiation of
+the right-hand side of the rule.
+\item[\oldtexttt{<f>p}] The application of a rewrite rule or strategy
+\oldtexttt{f} to the term pattern \oldtexttt{p}.
+\item[\oldtexttt{?p}] Match the term against the pattern \oldtexttt{p}.
+\item[\oldtexttt{!p}] Replace the term by instantiating the pattern
+\oldtexttt{p} (also known as \emph{build}).
+\end{description}
+
+These basic transformation operations are combined using strategy
+\emph{combinators}:
+
+\begin{description}
 \item[\oldtexttt{s$_1$; s$_2$}] The sequential composition of two strategies.
 \oldtexttt{s$_2$} is applied to the term returned by the
 application of \oldtexttt{s$_1$}. Fails if either strategy fails.
@@ -183,124 +210,229 @@ of the original constructor to the transformed sub-terms.
 sub-terms of a term from left to right, applying \oldtexttt{s} until it
 succeeds, returning the original term with the first sub-term for which
 \oldtexttt{s} succeeds replaced.
+\item[\oldtexttt{crush(n,c,s)}] Apply strategy \oldtexttt{s} to the direct
+sub-terms of a term and fold the resulting list using the nil and cons
+operations \oldtexttt{n} and \oldtexttt{c}.
 \end{description}
 
 \Figure{traversals.str} shows the application of these combinators in the
 definition of several strategies from the standard Stratego library.
-\Figure{desugar.str} uses the \texttt{innermost} strategy to define several
-desugaring transformations using the desugaring rules from
-\Figure{desugar-rules.str}.
 
-\begin{figure}[t]
-\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/desugar.str}
-\caption{Strategies for desugaring expressions.}
-\figurelabel{desugar.str}
-\end{figure}
-
-
-\section{Conditional and Parameterized Rules}
+\section{Parameterized and Conditional Rules}
 
 In \Figure{traversals.str} we saw that strategy definitions can be parameterized
-with strategy arguments. The strategy \texttt{bottomup(s)} takes a strategy
+with strategy arguments. The strategy \strcode{bottomup(s)} takes a strategy
 parameter \texttt{s} that is instantiated with some transformation to apply to
 each node of a term. Rules can be parameterized in the same way.
 \Figure{list-strategies.str} gives examples of such parameterized rules. For
-example, the \texttt{map(s)} rule applies a transformation \texttt{s} to all the
-elements of a list, and \texttt{filter(s)} filters the elements of a list using
-(the success/failure behaviour of) the transformation parameter \texttt{s}. 
+example, the \texttt{map(s)} rule applies a transformation \strcode{s} to all the
+elements of a list, and \strcode{filter(s)} filters the elements of a list using
+(the success/failure behaviour of) the transformation parameter \strcode{s}. 
+Note that \texttt{<s>x} denotes the application of the strategy (parameter)
+\strcode{s} to term (variable) \strcode{x}.
 
-application of a strategy
+Rules and strategies have two parameter lists, one for by-name parameters, and
+one for by-value parameters, which are separated by a bar \texttt{|}. Thus, in
+general a strategy call has the form
+\oldtexttt{f(s$_1$,..,s$_n$|t$_1$,..,t$_m$)}, where the \oldtexttt{s$_i$} are
+strategy (by-name) parameters, and the \oldtexttt{t$_i$} are term (by-value)
+parameters. The bar can be left out if there are no by-value parameters.
+For example, in the \texttt{inc(|n)} strategy takes a term parameter \texttt{n}
+and calls the \texttt{map} strategy with a strategy parameter
+\texttt{\\ x -> <add>(x, n) \\}, which will be applied to each element of the
+list to which \texttt{inc(|n)} is applied.
 
-
-rule with side conditions
-
-where
-
-with
+Rules can have side conditions prefixed with \strcode{where} or \strcode{with}
+followed by a strategy expression. Both kinds can compute an intermediate result
+needed by the next condition or the right-hand side of the rule. (A pattern
+matching assignment \strcode{p := t} matches the result of the \strcode{t}
+against the pattern \strcode{p}.) In addition, a \strcode{where s} condition
+tests whether its strategy argument succeeds or fails; in the latter case, the
+rule fails. For example, the
+\strcode{collect-all(s)} strategy in \Figure{list-strategies.str} uses the
+condition \strcode{where t' := <s>t} to test whether the application
+\strcode{<s>t} succeeds; if it does not, the next rule is tried. On the other
+hand, a \strcode{with s} condition expects its strategy argument \strcode{s} to
+succeed; if it does not, the program throws an exception. For example, the
+\strcode{collect-all(s)} strategy uses the condition \strcode{with ts :=
+<crush(![], union, collect-all(s))>t} to compute the collection from the
+sub-terms of \strcode{t} and expects this to always succeed.
 
 \begin{figure}[t]
-\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/list-strategies.str}
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/stratego-lib/list-strategies.str}
 \caption{Parameterized rules.}
 \figurelabel{list-strategies.str}
 \end{figure}
 
 \section{String Interpolation}
 
-generating strings
+The proper way to define a translation from one language to another is through
+'code generation by model transformation'. That is, transform
+the abstract syntax terms from the source language to abstract syntax terms of
+the target language and then pretty-print the resulting term. This separates
+program composition from pretty-printing and allows transformations to be
+applied to the generated target code.
+Since I'm in a hurry to get to the next chapters, I will only discuss a
+quick-and-dirty approach to code generation using \emph{string interpolation}
+(for now), and refer to the further reading section for references to code
+generation by model transformation.
 
-\texttt{$[.. [] ..]}
+Code generation by string composition has a bad reputation. Among its many
+short-comings, the most mundane one is quotation hell. The characters of a
+string are enclosed in double quotes. Any double quotes to be included in the
+string need to be escaped. When the language does not support multi-line
+strings, newlines have to be included as escaped characters.
+Splicing in strings resulting from a sub-computation, such as a recursive
+invocation of the translation function, requires breaking the string into
+sub-strings and composing those with a string concatenation operator. The result
+is typically quite unreadable.
 
+String interpolation (or string templates) addresses these problems (and is
+supported by more and more programming languages). In Stratego a string
+interpolation expression has the form \strcode{$[..[..]..]}, where the
+(multi-line) text between \strcode{$[} and \strcode{]} is taken as literal
+characters, while the embedded \strcode{[..]} expressions are escapes to splice
+in the values of variables or the results of sub-computations. (To avoid
+quotation conflicts one can choose different quotation symbols such as
+\strcode{$<..<>..>}.) For example, \Figure{to-xml.str} defines the translation
+of programs in our example language to XML documents. The body of the string
+template for the \strcode{Program} rule consists of the literal XML pattern for
+a \strcode{<program>} document. Using escapes, the translations of the sub-terms
+(\strcode{name}, \strcode{cs}, and \strcode{e}) are inserted into the template.
+Note the difference between the literal \strcode{name} attribute and the
+splicing of the \strcode{name} variable in \strcode{name="[name]"}, and the
+application of strategy expressions in escapes such as as
+\strcode{[<map(to-xml)> cs]}.
+
+In addition to solving quotation hell, string templates take care of getting
+indentation right. The common prefix (caused by the indentation of the
+meta-program) is discarded. On the other hand, relevant indentation, such
+as the indentation of classes in \Figure{to-xml.str}, is applied uniformly to
+the lines in the text spliced into the template.
 
 \begin{figure}[t]
-\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/to-xml.str}
-\caption{Using string interpolation to translate programs to textual XML
-representation.}
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/to-xml/to-xml.str}
+\caption{Using string interpolation to translate programs to XML documents.}
 \figurelabel{to-xml.str}
 \end{figure}
 
+
+\section{Debugging}
+
+Unfortunately, Stratego lacks an interactive debugger that let's you step
+through the execution of your code. So, the usual approach to debugging Stratego
+programs is pretty classical. First, reduce the input to a transformation to the
+smallest term that exhibits the unexpected behavior. Second, use good old
+`println' debugging to inspect to where a program proceeds and inspect run-time
+values. The stratego library defines the \strcode{dbg(|msg)} strategy, which
+prints the current term prefixed with \strcode{msg}.
+
 \section{Spoofax Builders}
 
-builders are actions that can be applied to program from the editor
+We have defined two transformations on the abstract syntax trees of our example
+language, desugaring and generation of XML documents.
+Now we would like to apply these transformations in the editor for our language. 
+This requires the definition of \emph{builders}. 
+Builders are actions that can be applied to a program from the editor. 
+The definition of these actions consists of three ingredients. 
+We already took care of the first ingredient, the definition of the
+transformation to apply.
 
-definition of these actions consists of three ingredients
+Second, we need to define menu entries that let us invoke the transformations.
+To that end, we create a new editor services file
+\texttt{LangB-Menu-Transformation.esv} in the \texttt{editor/} directory and
+import it in the main \texttt{LangB-Menus.esv} module.
+In the module, we declare a menu with the name \texttt{Transformation} and
+containing three `actions' as show in \Figure{LangB-Menu-Transformation.esv}.
+These actions associate a menu entry with a name (e.g. \texttt{Desugar}) and a
+strategy to apply (e.g. \texttt{editor-desugar}).
 
-the definition of the transformation to apply
-
-the defnition of the menu entry
-
-the glue code that turns a regular AST transformation into a Spoofax builder
-that can be called from a menu
-
-interface wih editor
-
-
-\begin{figure}[p]
+\begin{figure}[t]
 \lstinputlisting[language=ESV]{../languages/LanguageB/editor/LangB-Menu-Transformation.esv}
-\caption{Configuration of Transformation menu.}
-\figurelabel{LangB-Menu-Transformation.esv}
-\bigskip
-\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/builders/desugar.str}
 \caption{Configuration of Transformation menu.}
 \figurelabel{LangB-Menu-Transformation.esv}
 \end{figure}
 
+\begin{figure}[t]
+\lstinputlisting[language=Stratego]{../languages/LanguageB/trans/builders/transformation.str}
+\caption{Implementation of builders for the Transformation menu.}
+\figurelabel{builders/transformation.str}
+\end{figure}
 
+Third, we need to define the glue code that implements the interface between a
+menu and the transformation strategy. \Figure{builders/transformation.str}
+defines the strategies that implement the builders for the three menu items in
+\Figure{LangB-Menu-Transformation.esv}. Each of these define a transformation
+from a tuple \strcode{(selected, position, ast, path, project-path)} ---
+consisting of the selected AST, the position of the cursor, the entire AST of
+the editor, the path name of the file, and the path name of the project
+directory --- to a pair \strcode{(filename, result)}, consisting of a file name
+to write the result to and the string representation of the result.
 
+Useful strategies from the Stratego library to use here include
+\strcode{get-extension} to get the file extension from a path, and
+\strcode{guarantee-extension(|ext)} to replace the extension of a file name with
+\texttt{ext}.
 
+%\section{Exercises}
 
 \section{Further Reading}
 
-\cite{Klint93,BrandDHJJKKMOSVVV01}: ASF+SDF MetaEnvironment
+Stratego emerged from my experience with term rewriting in the ASF+SDF
+MetaEnvironment \cite{Klint93,BrandDHJJKKMOSVVV01}. The ASF formalism uses
+equations to define algebraic equivalences of the terms induced by an algebraic
+signature. It was implemented using a rewriting engine based on innermost
+exhaustive reduction. The need to control the application of rules, prompted the
+introduction of auxiliary function symbols. 
 
-term rewriting, innermost rewriting strategy
+Inspired by the notion of strategies in ELAN
+\cite{BorovanskyKKMV96,BorovanskyKKMR98} and the modal operators of modal logic,
+Luttik and I introduced one-level traversal combinators (all, some, one) for
+generic term traversal \cite{LV97}.
+These provided the basis for the design of the Stratego transformation language
+\cite{VisserBT98} and System S as a core language for rewriting
+\cite{VisserB98}. The Stratego only appeared later in publication
+\cite{Visser01}, although it was used from 1998.
 
-strategies in ELAN \cite{BorovanskyKKMV96,BorovanskyKKMR98}
+Stratego was first implemented as an interpreter in ML. Using that interpreter a
+compiler from Stratego to C was defined in Stratego and then bootstrapped. 
+The compiler is organized in a front-end that reduces Stratego Sugar to Stratego
+Core (which may be stored in .ctree files), and a back-end that translates
+to a target language. After multiple iterations of the C translation scheme, the
+back-end of the compiler was ported to produce Java code around 2006, which is
+used by Spoofax. In addition to a compiler, Stratego is supported by an
+interpreter implemented in Java.
 
-\cite{VisserBT98}: first definition of Stratego
+Programming in the Stratego language is supported by a set of libraries that
+provide standard transformation utilities, such as parsing and pretty-printing.
+Originally these libraries were developed under the name of the XT
+transformation tools. Several iterations of these tools along with the
+development of the Stratego are described in publications: XT \cite{JongeVV01},
+Stratego/XT 0.9 \cite{Visser03}, Stratego/XT 0.17 \cite{BravenboerKVV08}. 
+After the 0.17 release of Stratego/XT, the language was ported to Java and
+Stratego/XT is now distributed as a JAR, including the compiler and several
+pre-compiled Stratego libraries.
+The Stratego/XT distribution is now included in the distribution of the Spoofax
+Language Workbench \cite{KatsV10}.
 
-\cite{JongeVV01}: XT
+Stratego supports meta-programming with concrete object syntax, which entails
+that terms in rewrite rules can be written using the concrete syntax of the
+object language \cite{Visser02}. 
+This approach is a key ingredient of the `code generation by model
+transformation' approach \cite{HemelKGV10}.
 
-\cite{Visser01}: Stratego RTA'01
-
-\cite{Visser03}: Stratego/XT 0.9
-
-\cite{BravenboerKVV08}: Stratego/XT 0.17
-
-\cite{HemelKGV10}: code generation by model transformation
-
-
-\cite{Visser02}: meta-programming with concrete object syntax
+%references to string interpolation
 
 \paragraph{Online Documentation}
 
-The
-online \href{http://releases.strategoxt.org/strategoxt-manual/strategoxt-manual-0.17pre18721-8c3vml4h/manual/
-}{StrategoXT manual} \cite{StrategoXTReferenceManual}
+The online
+\href{http://hydra.nixos.org/job/strategoxt-docs/strategoxt-manual/html/latest/download/1/manual/chunk-chapter/index.html}{StrategoXT
+Manual} provides a fairly complete overview of
+the Stratego language and the XT toolset \cite{StrategoXTReferenceManual}.
+While the tool aspects are not up-to-date with the current Java-based libraries,
+the \href{http://hydra.nixos.org/job/strategoxt-docs/strategoxt-manual/html/latest/download/1/manual/chunk-chapter/tutorial.html}{Stratego/XT Tutorial} 
+provides an extended introduction to the language.
 
-In particular, 
-\href{http://releases.strategoxt.org/strategoxt-manual/strategoxt-manual-0.17pre18721-8c3vml4h/manual/chunk-chapter/stratego-language.html}{Part
-III. The Stratego Language} provides an extended introduction to the language.
 
-
-\href{http://releases.strategoxt.org}{releases.strategoxt.org}
+%\href{http://releases.strategoxt.org}{releases.strategoxt.org}
 
