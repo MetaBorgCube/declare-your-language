@@ -5,9 +5,9 @@ imports check/names
 imports check/types.generated
 imports check/types-manual
 
-signature
-  constructors
-  	UnitT : Type
+// signature
+//   constructors
+//   	UnitT : Type
   	
 rules // Extensions for error/warning/note reporting
 	

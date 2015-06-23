@@ -64,6 +64,7 @@ context-free syntax // objects
  
   Type.NumT   = [Num]
   Type.BoolT  = [Bool]
+  Type.UnitT  = [Unit]
   Type.ClassT = ID
 
 context-free priorities

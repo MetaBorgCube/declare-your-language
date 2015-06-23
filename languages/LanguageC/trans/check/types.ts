@@ -47,7 +47,7 @@ type rules
   where e : t_e
     and t_e <sub: t else error $[[t] is not a sub-type of [t_e]] on e
  
-type rules
+type rules 
 
   Num(i) : NumT()
   
@@ -78,8 +78,10 @@ type rules
   Do([e1, e2]) : t2
   where e1 : t1 and e2 : t2
   
-  e@Skip() : UnitT()
-  where (NumT() == BoolT()) else error $[block should have at least one expression] on e
+  Skip() : UnitT()
+  
+  // e@Skip() : UnitT()
+  // where (NumT() == BoolT()) else error $[block should have at least one expression] on e
   
   Let(bs, e): t
   where e : t

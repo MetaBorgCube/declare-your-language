@@ -6,11 +6,12 @@ imports	lib/editor-common.generated
 imports	lib/runtime/analysis/-
 imports	lib/runtime/editor/-
 
-	// lib/runtime/index/-
-	// lib/runtime/nabl/-
-	// lib/runtime/properties/-
-	// lib/runtime/types/-
-	// lib/runtime/task/-
+imports lib/runtime/index/-
+imports lib/runtime/nabl/-
+imports lib/runtime/properties/-
+imports lib/runtime/types/-
+imports lib/runtime/task/-
+imports lib/runtime/editor/-
 	
 rules // Editor services
 	
