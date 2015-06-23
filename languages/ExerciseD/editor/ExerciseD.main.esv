@@ -1,0 +1,33 @@
+module ExerciseD.main
+
+imports
+  ExerciseD-Colorer
+  ExerciseD-Completions
+  ExerciseD-Folding
+  ExerciseD-Menus
+  ExerciseD-Refactorings
+  ExerciseD-References
+  ExerciseD-Syntax
+  ExerciseD-Views
+
+language General properties
+  
+  name:          ExerciseD
+  id:            ExerciseD
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the ExerciseD language"
+  url:           http://strategoxt.org
+  
+  extensions:    ed
+  table:         include/ExerciseD.tbl
+  start symbols: Program
+  
+  provider:      include/exercised.ctree
+  provider:      include/exercised-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

@@ -1,0 +1,74 @@
+module debugging
+
+imports	lib/editor-common.generated
+imports	lib/runtime/analysis/-
+
+imports lib/runtime/index/-
+imports lib/runtime/nabl/-
+imports lib/runtime/properties/-
+imports lib/runtime/types/-
+imports lib/runtime/task/-
+imports lib/runtime/editor/-
+	
+rules // Debugging
+	
+			
+	// Prints the analyzed annotated abstract syntax ATerm of a selection.
+	debug-show-analyzed:
+		(selected, position, ast, path, project-path) -> (filename, result)
+		with
+			filename := <guarantee-extension(|"analyzed.aterm")> path;
+			result	 := ast
+			
+	debug-index-project =
+		analysis-debug-index-project(|<language>)
+	debug-index-project-resolve = 
+		analysis-debug-index-project-resolve(|<language>)
+	debug-index-partition =
+		analysis-debug-index-partition(|<language>)
+
+	debug-task-project =
+		analysis-debug-task-project(|<language>)
+	debug-task-partition =
+		analysis-debug-task-partition(|<language>)
+	debug-task-selection =
+		analysis-debug-task-selection(|<language>)
+	debug-index-partition-resolve =
+		analysis-debug-index-partition-resolve(|<language>)
+		
+	debug-project =
+		analysis-debug-project(|<language>)
+	debug-partition =
+		analysis-debug-partition(|<language>)
+		
+	debug-reanalyze = 
+		analysis-debug-reanalyze(|<language>)
+		
+		
+//   analyze-ast-step: (ast, path, project-path) -> (analyzed-ast, error*)
+//     with
+// 	  (analyzed-ast, error*, warning*, note*) := <analysis-single-default-interface>(ast, path, project-path)
+// 
+//   debug-show-desugared :
+//     (selected, position, ast, path, project-path) -> (filename, result)
+//     with
+// 			index-setup(|<language>, project-path);
+// 			task-setup(|project-path);
+// 					
+// 		  (ast', error*) := <analyze-ast-step> (ast, path, project-path);
+// 			
+//       filename := <guarantee-extension(|"desugared.aterm")> path;
+//       result := <strip-annos> ast'
+//      
+//   debug-show-analyzed-resolved:
+// 		(selected, position, ast, path, project-path) -> (filename, result)
+// 			where
+// 	    	language := <language>;
+// 	    	index-setup(|language, project-path);
+// 	    	task-setup(|project-path)
+// 			with
+// 				filename := <guarantee-extension(|"analyzed.aterm")> path;
+// 				ast'		 := <bottomup(try(id{bottomup(try(give-task-results))}))>ast;
+// 				ast''		 := <bottomup(try(id{bottomup(try(rm-annotations);try(pp-uri;string-replace(|"\"","")))}))>ast';
+// 				result	 := ast''
+

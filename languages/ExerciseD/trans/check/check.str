@@ -1,0 +1,22 @@
+module check
+
+imports include/ExerciseD
+imports check/names
+imports check/types.generated
+imports check/types-manual
+
+// signature
+//   constructors
+//   	UnitT : Type
+  	
+rules // Extensions for error/warning/note reporting
+	
+	constraint-error:
+		_ -> <fail>
+ 
+	constraint-warning:
+		_ -> <fail>
+		
+	constraint-note:
+		_ -> <fail>
+

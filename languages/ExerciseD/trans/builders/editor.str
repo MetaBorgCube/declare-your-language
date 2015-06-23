@@ -1,0 +1,46 @@
+module builders/editor
+
+imports	editor/ExerciseD-Outliner
+imports pretty-print/pp
+
+imports	lib/editor-common.generated
+imports	lib/runtime/analysis/-
+imports lib/runtime/index/-
+imports lib/runtime/nabl/-
+imports lib/runtime/properties/-
+imports lib/runtime/types/-
+imports lib/runtime/task/-
+imports lib/runtime/editor/-
+
+	
+rules // Editor services
+	
+	// Resolves a reference when the user control-clicks or presses F3 in the editor.
+	editor-resolve:
+		(node, position, ast, path, project-path) -> definition
+		where
+			definition := <analysis-resolve(|<language>, project-path)> node
+
+	// Returns "hover help" information for a particular node in the editor.
+	// For references, this rule is invoked using the resolved term.
+	editor-hover:
+		(target, position, ast, path, project-path) ->
+			<get-editor-properties(pp-partial-lang-string |<language>, project-path);properties-to-html>target
+
+	// Gathers the outline nodes for the outline view.
+	editor-outline:
+		(node, position, ast, path, project-path) -> outline
+		where
+			outline := <simple-label-outline(to-outline-label)> ast
+
+	// Gathers the properties for the properties view.
+	editor-properties:
+		(target, position, ast, path, project-path) ->
+			<get-all-editor-properties(pp-partial-lang-string |<language>, project-path)>target
+
+	// Completes an identifier when the user presses control-space
+	// (the completion identifier in the AST provides additional context information)
+	editor-complete:
+		(node, position, ast, path, project-path) -> proposals
+		where
+			proposals := <analysis-propose-completions(|<language>, project-path)> ast
