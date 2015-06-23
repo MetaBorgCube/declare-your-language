@@ -17,9 +17,9 @@ signature // basic values
  
 signature // representation of Class at run-time 
   semantic components
-    C -> Map<ID, Class>
+    C -> Map<String, Class>
   constructors    
-    loadClass   : ID --> Class
+    loadClass   : String --> Class
     initClasses : List(Class) --> C
   variables
     C : C 
@@ -34,8 +34,8 @@ rules
 signature // object values
   sorts Obj Super FieldSet 
   semantic components
-    FM -> Map<ID, Int> 
-    MM -> Map<ID, Method>   
+    FM -> Map<String, Int> 
+    MM -> Map<String, Method>   
   variables
     FM : FM
     MM : MM
@@ -53,11 +53,11 @@ signature // object values
     
     defaultValue : Type --> V
         
-    readField    : Obj * ID * ID --> V
-    writeField   : Obj * ID * ID * V --> V
+    readField    : Obj * String * String --> V
+    writeField   : Obj * String * String * V --> V
           
-    lookupField  : Obj * ID * ID --> Int // lookup of field in object
-    lookupMethod : Obj * ID --> Method
+    lookupField  : Obj * String * String --> Int // lookup of field in object
+    lookupMethod : Obj * String --> Method
     
     // should we only share references to objects?
 

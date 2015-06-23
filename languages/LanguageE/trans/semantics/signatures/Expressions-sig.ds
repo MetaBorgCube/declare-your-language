@@ -6,7 +6,7 @@ signature
 
   sorts Expr
   constructors
-    Num : INT -> Expr
+    Num : String -> Expr
     Min : Expr -> Expr
     Add : Expr * Expr -> Expr
     Sub : Expr * Expr -> Expr
@@ -31,22 +31,22 @@ signature
 
   sorts Bind
   constructors
-    Var  : ID -> Expr
+    Var  : String -> Expr
     Let  : List(Bind) * Expr -> Expr
-    Bind : Type * ID * Expr -> Bind
+    Bind : Type * String * Expr -> Bind
 
   constructors
-    Get    : Expr * Type * ID -> Expr
-    Set    : Expr * Type * ID * Expr -> Expr
-    Call   : Expr * ID * List(Expr) -> Expr
-    New    : ID -> Expr
+    Get    : Expr * Type * String -> Expr
+    Set    : Expr * Type * String * Expr -> Expr
+    Call   : Expr * String * List(Expr) -> Expr
+    New    : String -> Expr
     This   : Expr
-    Null   : ID -> Expr
-    Cast   : ID * Expr -> Expr
+    Null   : String -> Expr
+    Cast   : String * Expr -> Expr
     
   sorts Type
   constructors
     NumT   : Type
     BoolT  : Type
     UnitT  : Type
-    ClassT : ID -> Type
+    ClassT : String -> Type

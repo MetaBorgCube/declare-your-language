@@ -11,4 +11,4 @@ signature
     Program
 
   constructors
-    Program : ID * List(Class) * Expr -> Program
+    Program : String * List(Class) * Expr -> Program

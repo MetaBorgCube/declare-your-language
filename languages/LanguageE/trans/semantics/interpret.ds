@@ -64,7 +64,7 @@ rules // variables
   where Env bindVar(x, v) |- Let(binds, e) --> v'.
   
 rules // objects
-
+ 
   New(c) --> initObject(loadClass(c)).
       
   Get(o, ClassT(c), f) --> readField(o, c, f).    

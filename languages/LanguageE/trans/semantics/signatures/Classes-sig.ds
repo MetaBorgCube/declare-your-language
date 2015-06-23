@@ -7,16 +7,16 @@ imports
 signature
   sorts Class Field Method Param Extends 
   constructors
-    Class     : ID * Extends * List(Field) * List(Method) -> Class
+    Class     : String * Extends * List(Field) * List(Method) -> Class
     NoExtends : Extends
-    Extends   : ID -> Extends
-    Field     : Type * ID -> Field
-    Method    : Type * ID * List(Param) * Block -> Method
-    Param     : Type * ID -> Param
+    Extends   : String -> Extends
+    Field     : Type * String -> Field
+    Method    : Type * String * List(Param) * Block -> Method
+    Param     : Type * String -> Param
     
 signature
   arrows
-    List(Param) --> List(ID)
+    List(Param) --> List(String)
     
 rules // bind parameters
   
