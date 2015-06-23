@@ -1,5 +1,6 @@
 module transformation
 imports desugar/desugar 
+imports desugar/resugar-rules
 imports pretty-print/pp 
 imports to-xml/to-xml
 rules
@@ -11,7 +12,7 @@ rules
       ext      := <get-extension> path;
       filename := 
       	<guarantee-extension(|$[desugared.[ext]])> path;
-      result   := <desugar-all; pp-debug> selected  
+      result   := <desugar-all; resugar; pp-debug> selected  
       
   editor-desugar-ast:
     (selected, position, ast, path, project-path) 
@@ -19,7 +20,7 @@ rules
     with
       filename := 
       	<guarantee-extension(|$[desugared.aterm])> path;
-      result   := <desugar-all> selected  	
+      result   := <desugar-all; resugar> selected  	
             
   editor-to-xml:
     (selected, position, ast, path, project-path) 
