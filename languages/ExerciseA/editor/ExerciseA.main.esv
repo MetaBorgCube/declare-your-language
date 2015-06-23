@@ -1,0 +1,33 @@
+module ExerciseA.main
+
+imports
+  ExerciseA-Colorer
+  ExerciseA-Completions
+  ExerciseA-Folding
+  ExerciseA-Menus
+  ExerciseA-Refactorings
+  ExerciseA-References
+  ExerciseA-Syntax
+  ExerciseA-Views
+
+language General properties
+  
+  name:          ExerciseA
+  id:            ExerciseA
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the ExerciseA language"
+  url:           http://strategoxt.org
+  
+  extensions:    ea
+  table:         include/ExerciseA.tbl
+  start symbols: Start
+  
+  provider:      include/exercisea.ctree
+  provider:      include/exercisea-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/ExerciseA
+	
+namespaces
+	
+binding rules
+
