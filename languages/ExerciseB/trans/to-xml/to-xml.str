@@ -1,0 +1,15 @@
+module to-xml
+imports src-gen/signatures/Programs-sig
+imports to-xml/classes-to-xml 
+imports to-xml/expressions-to-xml
+rules
+
+  to-xml : Program(name, cs, e) ->
+  	$[<program name="[name]">
+  	    <classes>
+  	      [<map(to-xml <+ dbg(|"class: "))> cs]
+  	    </classes>
+  	    <run>
+  	      [<to-xml <+ dbg(|"exp: ")>e]
+  	    </run>
+  	  </program>]

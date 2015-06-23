@@ -1,0 +1,11 @@
+module desugar
+imports src-gen/signatures/Expressions-sig
+imports desugar/desugar-rules
+
+strategies
+	
+  pre-desugar = id
+	
+  post-desugar = id
+    
+  desugar-all = id

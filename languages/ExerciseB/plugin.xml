@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="b"
+            description="ExerciseB"
+            language="ExerciseB"
+            derivedFrom="DynamicRoot"
+            validator="ExerciseB.ExerciseBValidator"
+            validatorClass="ExerciseB.ExerciseBValidator"
+      ></language>
+   </extension>
+   <extension
+         id="ExerciseB.parser"
+         name="ExerciseB Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="ExerciseB.ExerciseBParseController"
+            language="ExerciseB">
+      </parser>
+   </extension>    
+</plugin>

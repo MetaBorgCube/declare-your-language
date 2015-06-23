@@ -1,0 +1,51 @@
+<program name="class03">
+  <classes>
+    
+    <class name="A" extends="Object">
+      <fields>
+        <field name="x"><numt/></field><field name="y"><numt/></field>
+      </fields>
+      <methods>
+        
+      </methods>
+    </class>
+    
+    <class name="B" extends="A">
+      <fields>
+        <field name="x"><boolt/></field>
+      </fields>
+      <methods>
+        
+      </methods>
+    </class>
+    
+    <class name="C" extends="B">
+      <fields>
+        <field name="a"><classt name="A"/></field>
+      </fields>
+      <methods>
+        
+      </methods>
+    </class>
+    
+  </classes>
+  <run>
+    <let>
+      <bind name="c">
+        <type><classt name="C"/></type>
+        <new name="C"/>
+      </bind>
+      <do>
+          
+          <set name="a"><var>c</var><cast name="A"><var>c</var></cast></set>
+          <var>c</var>
+          <get name="x"><var>c</var></get>
+          <cast name="A"><var>c</var></cast>
+          <set name="x"><cast name="A"><var>c</var></cast><num>2</num></set>
+          
+          <get name="x"><cast name="A"><var>c</var></cast></get>
+          <var>c</var><skip/>
+      </do>
+    </let>
+  </run>
+</program>

@@ -1,0 +1,9 @@
+module builders/main
+
+imports builders/syntax
+imports builders/transformation
+
+rules
+  
+  editor-analyze = !([], [], [])
+  

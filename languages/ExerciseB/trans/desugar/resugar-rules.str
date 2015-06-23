@@ -1,0 +1,11 @@
+module resugar-rules
+imports src-gen/signatures/Expressions-sig
+imports src-gen/signatures/Classes-sig
+
+rules
+
+  resugar-method = fail
+  
+strategies
+	
+  resugar = id

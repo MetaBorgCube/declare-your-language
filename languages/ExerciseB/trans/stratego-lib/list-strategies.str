@@ -1,0 +1,28 @@
+module list-strategies
+rules
+
+  map(s) : [] -> []
+  map(s) : [x | xs] -> [<s>x | <map(s)>xs]
+  // apply s to elements of a list; fails if one fails
+  
+  filter(s) : [] -> []
+  filter(s) : [x | xs] -> [<s>x | <filter(s)>xs]
+  filter(s) : [x | xs] -> <filter(s)>xs
+  // apply s to elements of a list; 
+  // keep only successful ones
+  	
+  inc(|n) = map(\ x -> <add>(x, n) \)
+  // increment all numbers in a list with n
+  
+  subst(|x, e) = alltd((Var(x) -> e))
+  // substitute all occurrences of Var(x) by e
+  
+  collect-all(s) :
+    t -> [t' | ts]
+    where t' := <s>t
+    with ts := <crush(![], union, collect-all(s))>t
+  collect-all(s) :
+  	t -> <crush(![], union, collect-all(s))>t
+  // collect set of all sub-terms (transitive) for
+  // which s succeeds
+    

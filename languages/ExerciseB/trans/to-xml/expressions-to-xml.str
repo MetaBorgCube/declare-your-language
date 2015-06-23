@@ -1,0 +1,8 @@
+module expressions-to-xml
+imports src-gen/signatures/Expressions-sig
+rules
+
+  to-xml : Num(i)      -> $[<num>[i]</num>] 
+  to-xml : Min(e)      -> $[<min>[<to-xml>e]</min>] 
+  
+  
