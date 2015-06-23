@@ -1,4 +1,4 @@
-module LangD-Menu-Transformation
+module Menu-Transformation
 menus
   menu: "Transform" (openeditor) (realtime) 
     action: "Desugar"     = editor-desugar 

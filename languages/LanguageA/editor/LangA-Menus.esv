@@ -1,4 +1,4 @@
 module LangA-Menus
 
 imports 
-   LangA-Menu-Syntax
+   Menu-Syntax

@@ -1,7 +1,7 @@
 module LangC-Menus
 
 imports 
-   LangC-Menu-Syntax
-   LangC-Menu-Transformation
-   //LangC-Menu-Generation
-   LangC-Menu-Analysis
+   Menu-Syntax
+   Menu-Transformation
+   //Menu-Generation
+   Menu-Analysis

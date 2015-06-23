@@ -1,0 +1,4 @@
+module Menu-Run
+menus
+  menu: "Run"       (openeditor) 
+    action: "Run" = editor-run-program

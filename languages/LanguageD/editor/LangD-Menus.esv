@@ -1,7 +1,7 @@
 module LangD-Menus
 
 imports 
-   LangD-Menu-Syntax
-   LangD-Menu-Transformation
-   //LangD-Menu-Generation
-   LangD-Menu-Analysis
+   Menu-Syntax
+   Menu-Transformation
+   //Menu-Generation
+   Menu-Analysis

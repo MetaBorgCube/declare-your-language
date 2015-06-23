@@ -1,4 +1,4 @@
-module LangB-Menu-Syntax
+module Menu-Syntax
 menus
   menu: "Syntax"                       (openeditor)    
     action: "Format"                 = editor-format (realtime) (source)
