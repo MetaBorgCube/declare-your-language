@@ -1,5 +1,7 @@
 module LangC-Menus
 
+imports LangC-Menu-Transformation
+
 menus
   
   menu: "Syntax"                       (openeditor)

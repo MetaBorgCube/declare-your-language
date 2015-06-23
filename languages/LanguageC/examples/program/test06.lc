@@ -1,0 +1,6 @@
+program test06 // type error
+
+
+run
+  3 + (if(true) 6 else true)
+    

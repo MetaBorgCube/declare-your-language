@@ -4,6 +4,10 @@ lexical syntax
 
 	ID             = [a-zA-Z] [a-zA-Z0-9]* 
 	INT            = "-"? [0-9]+ 
+	NUMBER         = INT
+	NUMBER         = "." INT
+	NUMBER         = INT "."
+	NUMBER         = INT "." INT
 	STRING         = "\"" StringChar* "\"" 
 	StringChar     = ~[\"\n] 
 	StringChar     = "\\\"" 

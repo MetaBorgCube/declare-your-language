@@ -21,7 +21,7 @@ language General properties
   
   extensions:    lc
   table:         include/LangC.tbl
-  start symbols: Start
+  start symbols: Program
   
   provider:      include/langc.ctree
   provider:      include/langc-java.jar

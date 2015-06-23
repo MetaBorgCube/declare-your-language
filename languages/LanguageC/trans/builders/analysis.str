@@ -1,0 +1,24 @@
+module builders/analysis
+
+imports lib/editor-common.generated
+imports lib/runtime/analysis/-
+imports desugar/desugar
+imports check/check
+
+// imports lib/runtime/index/-
+// imports lib/runtime/nabl/-
+// imports lib/runtime/properties/-
+// imports lib/runtime/types/-
+// imports lib/runtime/task/-
+// imports lib/runtime/editor/-
+
+rules // Analysis
+	
+	editor-analyze = analysis-default-editor
+	
+	analysis-single-default-interface = 
+		analysis-single-default(pre-desugar, id, id|<language>)
+	analysis-multiple-default-interface = 
+		analysis-multiple-default(parse-file <+ !(), pre-desugar, id, id|<language>, <project-path>)
+	
+	editor-save = analysis-save-default(|<language>)
