@@ -1,0 +1,13 @@
+module editor/ExerciseE-Outliner
+
+imports
+  
+  include/ExerciseE
+  lib/runtime/editor/outline-library
+  lib/runtime/editor/origins
+  editor/ExerciseE-Outliner.generated
+
+rules
+  
+  to-outline-label = fail
+  

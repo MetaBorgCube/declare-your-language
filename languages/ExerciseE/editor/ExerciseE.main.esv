@@ -1,0 +1,33 @@
+module ExerciseE.main
+
+imports
+  ExerciseE-Colorer
+  ExerciseE-Completions
+  ExerciseE-Folding
+  ExerciseE-Menus
+  ExerciseE-Refactorings
+  ExerciseE-References
+  ExerciseE-Syntax
+  ExerciseE-Views
+
+language General properties
+  
+  name:          ExerciseE
+  id:            ExerciseE
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the ExerciseE language"
+  url:           http://strategoxt.org
+  
+  extensions:    ee
+  table:         include/ExerciseE.tbl
+  start symbols: Program
+  
+  provider:      include/exercisee.ctree
+  provider:      include/exercisee-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

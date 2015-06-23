@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="le"
+            description="ExerciseE"
+            language="ExerciseE"
+            derivedFrom="DynamicRoot"
+            validator="ExerciseE.ExerciseEValidator"
+            validatorClass="ExerciseE.ExerciseEValidator"
+      ></language>
+   </extension>
+   <extension
+         id="ExerciseE.parser"
+         name="ExerciseE Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="ExerciseE.ExerciseEParseController"
+            language="ExerciseE">
+      </parser>
+   </extension>    
+</plugin>

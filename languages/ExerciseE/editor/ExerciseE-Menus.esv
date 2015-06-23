@@ -1,0 +1,8 @@
+module ExerciseE-Menus
+
+imports 
+   Menu-Syntax
+   Menu-Transformation
+   //Menu-Generation
+   Menu-Analysis
+   Menu-Run

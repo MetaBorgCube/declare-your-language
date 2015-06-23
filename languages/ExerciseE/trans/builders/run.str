@@ -1,0 +1,32 @@
+module builders/run
+
+imports builders/analysis
+
+imports lib/editor-common.generated
+imports lib/runtime/analysis/-
+imports lib/runtime/index/-
+imports lib/runtime/nabl/-
+imports lib/runtime/properties/-
+imports lib/runtime/types/-
+imports lib/runtime/task/-
+imports lib/runtime/editor/-
+
+rules
+	
+  external runprogram(|)
+ 
+  editor-run-program :
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      index-setup(|<language>, project-path);
+	    task-setup(|project-path);
+					
+	    (ast', error*) := <analyze-ast-step> (ast, path, project-path);
+			
+      filename := <guarantee-extension(|"run.aterm")> path;
+      if not([] := error*) then
+        <debug(!"Fix errors before generating code. Exiting code generation. ")> error*;
+        result := None()
+      else
+        result := <strip-annos; debug(!"ast: "); runprogram> ast'
+      end

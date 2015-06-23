@@ -1,0 +1,18 @@
+module trans/semantics/environments3/interpret
+
+imports trans/semantics/values
+
+signature
+  arrows 
+    Program --> V
+    Expr --> V  
+    List(Expr) --> List(V)
+
+rules
+
+  Program(_, cs, e) --> v
+  where C initClasses(cs) |- e --> v.
+
+  Num(i) --> NumV(str2int(i)). 
+  
+  This o |- This() --> o.
