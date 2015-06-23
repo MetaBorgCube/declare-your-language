@@ -11,42 +11,37 @@ binding rules
   	scopes Class, Variable
 
   Class(c, _, _, _) :
-  	defines Class c of type ClassT(c)
+  	defines Class c 
   	scopes Field, Method, Variable
-  	implicitly defines Variable This() of type ClassT(c)
+  	implicitly defines Variable This()
   	
   Extends(c) : 
   	imports Field, Method from Class c
   	
   Field(t, f) :
-  	defines Field f of type t//'
-  	//where t has type t'
+  	defines Field f 
   	
   Method(t, m, ps, e) :
-  	defines Method m of type (t*, t)
-  	where ps has type t*
+  	defines Method m
   	scopes Variable
   	
   Param(t, x) :
-  	defines Variable x of type t
+  	defines Variable x
   	
   Let(bs, e) :
   	scopes Variable
   
   Bind(t, x, e) : 
-  	defines Variable x of type t
+  	defines Variable x
   	
-  Get(e, f) :
-  	refers to Field f in Class c
-  	where e has type ClassT(c) 
+  // Get(e, f) :
+  // 	refers to Field f 
   	
-  Set(e1, f, e2) :
-  	refers to Field f in Class c
-  	where e1 has type ClassT(c)
+  // Set(e1, f, e2) :
+  // 	refers to Field f 
   	
-  Call(e1, m, e*) :
-  	refers to Method m in Class c
-  	where e1 has type ClassT(c)
+  // Call(e1, m, e*) :
+  // 	refers to Method m 
   	
   New(c) : 
   	refers to Class c
