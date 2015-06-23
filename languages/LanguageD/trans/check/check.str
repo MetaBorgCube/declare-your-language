@@ -1,9 +1,14 @@
 module check
 
-imports
+imports include/LangD
+imports check/names
+imports check/types.generated
+imports check/types-manual
 
-	include/LangD
-
+// signature
+//   constructors
+//   	UnitT : Type
+  	
 rules // Extensions for error/warning/note reporting
 	
 	constraint-error:

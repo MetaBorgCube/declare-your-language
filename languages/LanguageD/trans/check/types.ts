@@ -6,7 +6,7 @@ relations
 
   define reflexive, transitive <sub: 
 
-type rules
+type rules 
 
   Class(c1, Extends(c2), _, _) :-
   where store ClassT(c1) <sub: ClassT(c2)
@@ -47,7 +47,7 @@ type rules
   where e : t_e
     and t_e <sub: t else error $[[t] is not a sub-type of [t_e]] on e
  
-type rules
+type rules 
 
   Num(i) : NumT()
   
@@ -78,10 +78,15 @@ type rules
   Do([e1, e2]) : t2
   where e1 : t1 and e2 : t2
   
+  // Skip() : UnitT()
+  
+  e@Skip() : UnitT()
+  where (NumT() == BoolT()) else error $[block should have at least one expression] on e
+  
   Let(bs, e): t
   where e : t
 
-  If(e1, e2, e3) : t
+  If(e1, e2, e3) : t 
   where e1 : BoolT() else error "boolean expected" on e1
     and e2 : t2
     and e3 : t3
@@ -90,13 +95,12 @@ type rules
     
 type functions
 
-	least-upper-bound: False() -> False() // implemented manually
+  least-upper-bound: False() -> False() // implemented manually
  
-  
 type rules
 
-  Stat(e) : t
-  where e : t
+  // Stat(e) : t
+  // where e : t
   
   Get(e, f) : t
   where e : ClassT(c) else error "class type expected" on e

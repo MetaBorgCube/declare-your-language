@@ -1,0 +1,15 @@
+module desugar
+imports src-gen/signatures/Expressions-sig
+imports desugar/desugar-rules
+
+strategies
+	
+  pre-desugar = 
+  	innermost(desugar-do)
+	
+  post-desugar =
+    innermost(desugar-or <+ desugar-and <+ desugar-do)
+    
+  desugar-all = 
+    innermost(desugar-or <+ desugar-and 
+              <+ desugar-do <+ desugar-let)
