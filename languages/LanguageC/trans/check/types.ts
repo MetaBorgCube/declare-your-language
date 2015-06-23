@@ -93,9 +93,8 @@ type rules
     
 type functions
 
-	least-upper-bound: False() -> False() // implemented manually
+  least-upper-bound: False() -> False() // implemented manually
  
-  
 type rules
 
   // Stat(e) : t
