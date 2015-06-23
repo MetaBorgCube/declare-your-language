@@ -1,0 +1,4 @@
+module LangC-Menu-Generation
+menus  
+  menu: "Generation"          (openeditor) (realtime)  
+    action: "Generate Java" = generate-java
