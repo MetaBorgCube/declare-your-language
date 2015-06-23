@@ -36,8 +36,8 @@ signature
     Bind : Type * ID * Expr -> Bind
 
   constructors
-    Get    : Expr * ID -> Expr
-    Set    : Expr * ID * Expr -> Expr
+    Get    : Expr * Type * ID -> Expr
+    Set    : Expr * Type * ID * Expr -> Expr
     Call   : Expr * ID * List(Expr) -> Expr
     New    : ID -> Expr
     This   : Expr

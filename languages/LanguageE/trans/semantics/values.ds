@@ -1,0 +1,101 @@
+module trans/semantics/environments3/values
+
+imports trans/semantics/signatures/LangE-sig
+imports trans/semantics/runtime/runtime
+
+signature // basic values
+  sorts This
+  constructors
+    NumV       : Int -> V 
+    BoolV      : Bool -> V
+    NullV      : V
+    ExceptionV : V
+    T          : Obj -> This {implicit}
+    
+// use separate scope for methods in order to have shared run-time instance 
+// of method table?
+ 
+signature // representation of Class at run-time 
+  semantic components
+    C -> Map<ID, Class>
+  constructors    
+    loadClass   : ID --> Class
+    initClasses : List(Class) --> C
+  variables
+    C : C 
+    
+rules
+
+  C |- loadClass(c) --> C[c].
+ 
+  initClasses([]) --> {}. 
+  initClasses([c@Class(name, _, _, _) | cs]) --> {name |--> c, initClasses(cs)}.
+
+signature // object values
+  sorts Obj Super FieldSet 
+  semantic components
+    FM -> Map<ID, Int> 
+    MM -> Map<ID, Method>   
+  variables
+    FM : FM
+    MM : MM
+    o  : Obj
+  constructors
+    ObjV         : String * Super * FM * MM -> Obj
+    Super        : Obj -> Super {implicit}
+    NoSuper      : Super
+    o2v          : Obj -> V {implicit}
+    
+    initObject   : Class --> Obj // initialization of all fields for an object
+    initSuper    : Extends --> Super
+    initFields   : List(Field) --> FM // initialization of fields for a class
+    initMethods  : List(Method) --> MM // map of methods in class 
+    
+    defaultValue : Type --> V
+        
+    readField    : Obj * ID * ID --> V
+    writeField   : Obj * ID * ID * V --> V
+          
+    lookupField  : Obj * ID * ID --> Int // lookup of field in object
+    lookupMethod : Obj * ID --> Method
+    
+    // should we only share references to objects?
+
+rules 
+
+  initObject(Class(c, ext, fs, ms)) --> ObjV(c, initSuper(ext), initFields(fs), initMethods(ms)).
+    
+  initSuper(NoExtends()) --> NoSuper(). // Super(ObjV("Object", NoSuper(), {}, {})).
+  
+  initSuper(Extends(c)) --> initObject(loadClass(c)).
+
+  initFields([]) --> {}.
+  initFields([Field(t, f) | fs]) --> {f |--> allocate(v), FM}
+  where defaultValue(t) --> v; initFields(fs) --> FM.
+  
+  defaultValue(NumT()) --> NumV(0).
+  defaultValue(BoolT()) --> BoolV(false).
+  defaultValue(ClassT(_)) --> NullV().
+
+  initMethods([]) --> {}.  
+  initMethods([m@Method(_, name, _, _) | ms]) --> {name |--> m, initMethods(ms)}.
+ 
+rules // lookup field 
+
+  lookupField(ObjV(c1, sup, fs, _), c2, f) --> fs[f]
+  where c1 == c2.
+  
+  lookupField(ObjV(c1, sup, fs, _), c2, f) --> lookupField(o, c2, f)
+  where c1 != c2; sup => Super(o).
+    
+  readField(o, c, f) --> read(lookupField(o, c, f)).
+  
+  writeField(o, c, f, v) --> write(lookupField(o, c, f), v).
+  
+rules // lookup method
+
+  lookupMethod(ObjV(c, sup, _, ms), name) --> m
+  where ms[name] => m.
+        
+  lookupMethod(ObjV(c, sup, _, ms), m) --> lookupMethod(o, m)
+  where all-fail; sup => Super(o).

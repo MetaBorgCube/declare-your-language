@@ -13,3 +13,13 @@ signature
     Field     : Type * ID -> Field
     Method    : Type * ID * List(Param) * Block -> Method
     Param     : Type * ID -> Param
+    
+signature
+  arrows
+    List(Param) --> List(ID)
+    
+rules // bind parameters
+  
+  []: List(Param) --> [].
+  [Param(_, x) | params] : List(Param) --> [x | xs] where params --> xs.
+  

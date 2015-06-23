@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.spoofax.jsglr,
  org.spoofax.interpreter.core,
  org.spoofax.terms,
- org.spoofax.interpreter.externaldeps
+ org.spoofax.interpreter.externaldeps,
+ org.metaborg.meta.interpreter.framework;bundle-version="1.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.metborgcube.dyl.languagee

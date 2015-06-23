@@ -3,6 +3,13 @@ module trans/semantics/signatures/Common-sig
 signature
   sorts ID INT STRING
   constructors
-    str2id     : String -> ID {implicit}
-    str2nt     : String -> INT {implicit}
-    str2string : String -> STRING {implicit}
+    str_to_id  : STRING -> ID {implicit}
+    str_to_int : STRING -> INT {implicit}
+  arrows 
+    ID --> String
+    INT --> String
+    
+rules
+
+  str_to_id(x) --> x.
+  str_to_int(x) --> x.
