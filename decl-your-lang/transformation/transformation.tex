@@ -394,6 +394,24 @@ These provided the basis for the design of the Stratego transformation language
 \cite{VisserB98}. The Stratego only appeared later in publication
 \cite{Visser01}, although it was used from 1998.
 
+\paragraph{Dynamic Rules}
+
+Term rewrite rules are \emph{context-free}, i.e. only have access to information
+contained in the term to which it is applied. That limits the kinds of
+transformations that it can be used to. For example, function inlining is a
+context-senstive transformation. Context-sensitive transformations can be
+expressed by passing information through strategy parameters. To avoid the
+resulting boilerplate, an extension of Stratego with \emph{dynamic rewrite
+rules} was developed to express context-sensitive transformations
+\cite{BravenboerDOV06}. The approach was extended to define data-flow
+transformations such as constant propagation and common-subexpression
+elimination. We have not introduced dynamic rules in this chapter, since it
+looks like such analyses will instead be expressed using specialized meta-DSLs.
+To start we have developed the name binding language NaBL (next chapter) define
+the name binding and scope rules of languages.
+
+\paragraph{Bootstrapping}
+
 Stratego was first implemented as an interpreter in ML. Using that interpreter a
 compiler from Stratego to C was defined in Stratego and then bootstrapped. 
 The compiler is organized in a front-end that reduces Stratego Sugar to Stratego
@@ -402,6 +420,8 @@ to a target language. After multiple iterations of the C translation scheme, the
 back-end of the compiler was ported to produce Java code around 2006, which is
 used by Spoofax. In addition to a compiler, Stratego is supported by an
 interpreter implemented in Java.
+
+\paragraph{XT Transformation Tools}
 
 Programming in the Stratego language is supported by a set of libraries that
 provide standard transformation utilities, such as parsing and pretty-printing.
@@ -414,6 +434,8 @@ Stratego/XT is now distributed as a JAR, including the compiler and several
 pre-compiled Stratego libraries.
 The Stratego/XT distribution is now included in the distribution of the Spoofax
 Language Workbench \cite{KatsV10}.
+
+\paragraph{Concrete Object Syntax}
 
 Stratego supports meta-programming with concrete object syntax, which entails
 that terms in rewrite rules can be written using the concrete syntax of the
@@ -435,4 +457,30 @@ provides an extended introduction to the language.
 
 
 %\href{http://releases.strategoxt.org}{releases.strategoxt.org}
+
+\paragraph{Coverage}
+
+The Stratego language can be used to define all necessary semantic
+transformations on abstract syntax terms since it is Turing complete and all
+that. However, such definitions may be less declarative than we might like.
+Stratego was designed to perform source-to-source transformations that can be
+formulated by means of rewrite rules.
+We also used it to define various forms of the semantic analyses
+\cite{BravenboerDOV06}.
+Encoding an adequate implementation may require boilerplate code that distracts
+from the essence of the language definition.
+For example, we developed a fairly elegant idiom for the specification of name
+resolution and type analysis \cite{KatsV10,HemelKGV10,HemelGKV11}.
+However, extending those definitions beyond single file units, making the
+analysis incremental, supporting type inference, or generics would stretch that
+idiom.
+
+In the next chapters we will study new domain-specific meta-languages addressing
+the specification of specialized areas of semantic analysis. 
+These DSLs support the direct expression of domain concepts (such as reference,
+declaration, and scope in NaBL), and abstract from the algorithmic details of
+implementations.
+
+
+
 
