@@ -1,0 +1,13 @@
+module editor/ExerciseC-Outliner
+
+imports
+  
+  include/ExerciseC
+  lib/runtime/editor/outline-library
+  lib/runtime/editor/origins
+  editor/ExerciseC-Outliner.generated
+
+rules
+  
+  to-outline-label = fail
+  

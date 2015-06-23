@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="ec"
+            description="ExerciseC"
+            language="ExerciseC"
+            derivedFrom="DynamicRoot"
+            validator="ExerciseC.ExerciseCValidator"
+            validatorClass="ExerciseC.ExerciseCValidator"
+      ></language>
+   </extension>
+   <extension
+         id="ExerciseC.parser"
+         name="ExerciseC Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="ExerciseC.ExerciseCParseController"
+            language="ExerciseC">
+      </parser>
+   </extension>    
+</plugin>

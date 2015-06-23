@@ -1,0 +1,11 @@
+module names
+
+imports include/ExerciseC
+
+namespaces Program Class Field Method Variable
+	
+binding rules
+
+  Program(name, _, _) :  
+  	defines Program name
+  	scopes Class, Variable

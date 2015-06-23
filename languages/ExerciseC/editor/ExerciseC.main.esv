@@ -1,0 +1,33 @@
+module ExerciseC.main
+
+imports
+  ExerciseC-Colorer
+  ExerciseC-Completions
+  ExerciseC-Folding
+  ExerciseC-Menus
+  ExerciseC-Refactorings
+  ExerciseC-References
+  ExerciseC-Syntax
+  ExerciseC-Views
+
+language General properties
+  
+  name:          ExerciseC
+  id:            ExerciseC
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the ExerciseC language"
+  url:           http://strategoxt.org
+  
+  extensions:    ec
+  table:         include/ExerciseC.tbl
+  start symbols: Program
+  
+  provider:      include/exercisec.ctree
+  provider:      include/exercisec-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m
