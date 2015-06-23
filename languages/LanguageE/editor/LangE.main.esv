@@ -1,0 +1,33 @@
+module LangE.main
+
+imports
+  LangE-Colorer
+  LangE-Completions
+  LangE-Folding
+  LangE-Menus
+  LangE-Refactorings
+  LangE-References
+  LangE-Syntax
+  LangE-Views
+
+language General properties
+  
+  name:          LangE
+  id:            org.metborgcube.dyl.languagee
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the LangE language"
+  url:           http://strategoxt.org
+  
+  extensions:    le
+  table:         include/LangE.tbl
+  start symbols: Program
+  
+  provider:      include/lange.ctree
+  provider:      include/lange-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

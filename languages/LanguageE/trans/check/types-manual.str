@@ -1,0 +1,49 @@
+module trans/check/types-manual
+
+imports include/LangE
+imports desugar/desugar
+
+imports lib/editor-common.generated
+imports lib/runtime/analysis/-
+imports lib/runtime/index/-
+imports lib/runtime/nabl/-
+// imports lib/runtime/properties/-
+imports lib/runtime/types/-
+imports lib/runtime/task/-
+// imports lib/runtime/editor/-
+imports lib/runtime/relations/tasks
+
+signature constructors
+	
+	SuperList : List(URI) * List(URI) -> SuperList
+
+rules
+	
+  type-func-least-upper-bound(|ctx) : x@(t1, t2) -> result
+  	with
+  		t1sups-task := <relation-create-lookup(|ctx, "<sub:")> t1;
+  		t2sups-task := <relation-create-lookup(|ctx, "<sub:")> t2;
+  		result      := <new-task(|ctx, <task-combinator-type>, <task-auto-storage>)> Rewrite("least-upper-bound", SuperList(t1sups-task, t2sups-task)) // requires <task-combinator-type> such that lists are passed to the rewrite instead of rewrite called with the cross-product of list elements
+    	
+  task-rewrite : ("least-upper-bound", t) -> <least-upper-bound>t
+  
+  least-upper-bound : SuperList([NumT(){^_}], [NumT(){^_}]) -> NumT(){(Type(), NumT())}
+  least-upper-bound : SuperList([BoolT(){^_}], [BoolT(){^_}]) -> BoolT(){(Type(), BoolT())}
+
+	least-upper-bound: SuperList(sup1*,sup2*) -> /*<debug(!"least-upper-bound: ")>*/ result
+		with
+			//<debug>(sup1*, sup2*);
+			sup1'*      := <move-last-elem-to-front>sup1*;  //reflexive relations add self at the end of list
+			sup2'*      := <move-last-elem-to-front>sup2*;  //reflexive relations add self at the end of list
+			common-sup* := <isect>(sup1*,sup2*)
+		where
+			least-com   := <Hd>common-sup*;
+			result      := <try(url-to-classt)>least-com    //transitive relations ignore all constructors and only store URLs
+
+	move-last-elem-to-front: list -> [last|rest]
+		with
+			<split-last>list => (rest,last)
+
+	url-to-classt: u@URI(_,[ID(_,name,_)|_]) -> ClassT(name{Def(u)})
+	
+	
