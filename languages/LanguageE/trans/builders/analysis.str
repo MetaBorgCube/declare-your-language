@@ -28,7 +28,7 @@ rules // Analysis
 	
 	pre-trans = pre-desugar
 	
-	post-trans = id
+	post-trans = post-desugar
 	
 	editor-analyze = analysis-default-editor
 	
@@ -39,6 +39,11 @@ rules // Analysis
 	
 	editor-save = analysis-save-default(|<language>)
 
+  analyze-ast-step: 
+    (ast, path, project-path) -> (analyzed-ast, error*)
+    with
+      (analyzed-ast, error*, warning*, note*) := <analysis-single-default-interface>(ast, path, project-path)
+ 
 rules	//@see http://yellowgrass.org/issue/Spoofax/823
 	
 	pp-message-top = origin-track-forced((id, strip-annos; pp-message))

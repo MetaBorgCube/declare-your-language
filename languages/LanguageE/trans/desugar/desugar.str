@@ -1,14 +1,15 @@
 module desugar
 imports src-gen/signatures/Expressions-sig
 imports desugar/desugar-rules
+imports desugar/desugar-types
 
 strategies
 	
   pre-desugar = 
-  	innermost(desugar-do)
+  	innermost(desugar-let <+ desugar-do)
 	
   post-desugar =
-    innermost(desugar-or <+ desugar-and <+ desugar-do)
+    innermost(desugar-do <+ desugar-get <+ desugar-set)
     
   desugar-all = 
     innermost(desugar-or <+ desugar-and 
