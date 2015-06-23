@@ -1,6 +1,6 @@
 module transformation
-imports desugar 
-imports pp 
+imports desugar/desugar 
+imports pretty-print/pp 
 imports to-xml/to-xml
 rules
 	

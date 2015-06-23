@@ -2,8 +2,4 @@ module langb
 
 imports builders/main
 
-// imports names
-// imports check
-// imports generate
-// imports pp
 

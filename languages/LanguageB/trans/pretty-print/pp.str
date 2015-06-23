@@ -1,21 +1,22 @@
 module pp
 
-imports
-
-	libstratego-gpp
-	lib/runtime/refactoring/-
-	include/LangB-parenthesize
-	src-gen/pp/LangB-pp
+imports libstratego-gpp
+imports lib/runtime/refactoring/-
+imports include/LangB-parenthesize
+imports src-gen/pp/LangB-pp
+imports src-gen/pp/Programs-pp
 
 rules
 	
-  pp-LangB-string =
+  pp-partial-lang-string = pp-partial-LangC-string
+	
+  pp-LangC-string =
     parenthesize-LangB
     ; prettyprint-SDF-start-symbols
     ; !V([], <id>)
     ; box2text-string(|120)
       
-  pp-partial-LangB-string =
+  pp-partial-LangC-string =
     parenthesize-LangB
     ; prettyprint-example
     ; !V([], <id>)
@@ -24,8 +25,8 @@ rules
   pp-debug :
     ast -> result
     with
-       result := <pp-LangB-string> ast
-    <+ <bottomup(try(not(is-string); not(is-list); not(pp-LangB-string); debug(!"cannot pp ")))> ast
+       result := <pp-LangC-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-LangC-string); debug(!"cannot pp ")))> ast
     ;  result := ""
 
 rules
@@ -37,5 +38,5 @@ rules
   * Example:
   *   new-text := <construct-textual-change> (old-ast, new-ast)
   */
-  construct-textual-change = construct-textual-change(pp-partial-LangB-string, parenthesize, override-reconstruction, resugar)
+  construct-textual-change = construct-textual-change(pp-partial-LangC-string, parenthesize, override-reconstruction, resugar)
 

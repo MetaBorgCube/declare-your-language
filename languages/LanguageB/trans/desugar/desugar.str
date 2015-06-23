@@ -1,6 +1,6 @@
 module desugar
 imports src-gen/signatures/Expressions-sig
-imports desugar-rules
+imports desugar/desugar-rules
 
 strategies
 	

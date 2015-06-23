@@ -1,6 +1,0 @@
-module generate
-
-imports include/LangB
-
-rules 
-

@@ -9,7 +9,7 @@ references
   // See the imported file for a brief introduction and examples.                                  
                                                                                                    
 
-references
-                
-  reference _ : editor-resolve
-  hover _     : editor-hover
+// references
+//                 
+//   reference _ : editor-resolve
+//   hover _     : editor-hover

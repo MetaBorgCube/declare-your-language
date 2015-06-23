@@ -26,8 +26,8 @@ language General properties
   provider:      include/langb.ctree
   provider:      include/langb-java.jar
   
-  observer:      editor-analyze (multifile)
+  //observer:      editor-analyze (multifile)
   
-  on save:       editor-save
+  //on save:       editor-save
   
   jvm opts:      -server -Xss8m -Xmx1024m
