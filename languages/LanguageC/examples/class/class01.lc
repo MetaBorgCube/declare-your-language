@@ -5,4 +5,4 @@ class Counter {
   	this.c = this.c + 1
   }
 }
-run new Counter().next()
+run new Counter().next() 

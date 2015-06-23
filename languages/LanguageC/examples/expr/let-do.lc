@@ -4,4 +4,4 @@ run
       Num y = x + 1
    in { o.x = x;
         o.y = y;
-        o.x + o.y; }
+        o.x + o.y; } 

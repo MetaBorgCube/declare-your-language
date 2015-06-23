@@ -13,4 +13,4 @@ class A {
 run
   
   new A().self().x()
-  
+   

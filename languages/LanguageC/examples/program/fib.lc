@@ -2,13 +2,13 @@ program fib
 
 class Fib {
    Num value
-   Fib next
+   Fib next 
    
    Fib initialize(Num n) {
      if (n == 0)
        this 
      else { 
-     	 this.next = new Fib();
+     	 this.next = new Fib(); 
        this.next.initialize(n - 1);
      }
    }

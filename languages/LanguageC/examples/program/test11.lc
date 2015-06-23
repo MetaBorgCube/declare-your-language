@@ -3,7 +3,7 @@ program test11
 class A {
 	 Num value
 	 
-   Num double(Num i) {
+   Num double(Num i) { 
      i * 2
    }
 

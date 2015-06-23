@@ -31,12 +31,10 @@ run
    in { 
      p1.child1 = p2;
      p1.child2 = l1;
-     p2.child1 = l2;
+     p2.child1 = l2; 
      p2.child2 = l3;
      l1.value = 3;
      l2.value = 42;
      l3.value = 1337;
      n.sum();
    }
-   
-   

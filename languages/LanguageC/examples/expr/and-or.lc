@@ -1,2 +1,2 @@
 program andor
-run x || false && y
+run x || false && y 

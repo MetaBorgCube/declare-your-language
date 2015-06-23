@@ -4,15 +4,17 @@ class Fib {
 	
    Num n
    Num fib
-   Fib fibn1
+   Fib fibn1 
    
-   Fib initialize() {
-     if(this.n == 0) {
-       this.fib = 0;
+   Fib initialize() { 
+     if(this.n == 0) { 
+       this.fib = 0; 
        this;
      } else {
-       if(this.n == 1)
-         this.fib = 1
+       if( 
+       	this.n == 1
+       )
+         this.fib = 1 
        else
          this.fib = - 1; 
        this.fibn1 = new Fib();
@@ -33,7 +35,7 @@ class Fib {
    } 
 } 
 
-run 
+run  
   let Fib fib = new Fib()
    in {
      fib.n = 10;

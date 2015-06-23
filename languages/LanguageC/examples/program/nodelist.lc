@@ -1,7 +1,8 @@
 program nodelist
 
 class Node {
-   Num id EdgeList edges
+   Num id 
+   //EdgeList edges
 }
 
 class NodeList {
@@ -39,7 +40,7 @@ class NodeList {
 }
 
 run
-  let Node n1 = new Node()
+  let Node n1 = new Node() 
       Node n2 = new Node()
       Node n3 = new Node()
       NodeList list = new NodeList()
