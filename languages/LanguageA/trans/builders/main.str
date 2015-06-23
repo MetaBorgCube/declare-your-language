@@ -1,3 +1,8 @@
 module builders/main
 
 imports builders/syntax
+
+rules
+	
+  editor-analyze = !([], [], [])
+  
