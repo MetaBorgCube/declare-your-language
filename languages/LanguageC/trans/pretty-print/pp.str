@@ -4,6 +4,7 @@ imports libstratego-gpp
 imports lib/runtime/refactoring/-
 imports include/LangC-parenthesize
 imports src-gen/pp/LangC-pp
+imports src-gen/pp/Programs-pp
 
 rules
 	
