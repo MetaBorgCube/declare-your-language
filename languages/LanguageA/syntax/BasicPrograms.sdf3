@@ -1,6 +1,6 @@
 module BasicPrograms
 
-imports Classes Expressions
+imports Common Classes Expressions
 
 sorts Program 
 
