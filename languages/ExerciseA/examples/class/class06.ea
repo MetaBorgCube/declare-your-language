@@ -1,0 +1,15 @@
+program class06
+
+// error: cyclic inheritance
+
+class Foo extends Bar {
+	Num x
+}
+
+class Bar extends Foo {
+	Num y
+}
+
+run
+
+  new Foo()

@@ -1,0 +1,36 @@
+module expr-arith
+language ExerciseA
+start symbol Expr
+
+test number [[
+  1
+]] parse to Num("1")
+
+test number [[
+  30128
+]] parse to Num("30128")
+
+test Add [[
+  16 + 21
+]] parse to Add(Num("16"), Num("21"))
+
+test Mul [[
+  1 * 2
+]] parse to Mul(Num("1"), Num("2"))
+
+test parentheses [[
+  (1 + 2)
+]] parse to Add(Num("1"), Num("2"))
+
+test Mul Add (1) [[
+  1 * (2 + 4)
+]] parse to Mul(Num("1"), Add(Num("2"), Num("4")))
+
+test Mul Add (2) [[
+  (1 * 2) + 4
+]] parse to Add(Mul(Num("1"), Num("2")), Num("4"))
+
+
+test Add [[
+  -16
+]] parse to Num("-16")

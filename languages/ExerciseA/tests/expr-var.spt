@@ -1,0 +1,28 @@
+module expr
+
+language ExerciseA
+
+start symbol Expr
+
+test identifier [[
+  symbol
+]] parse to Var("symbol")
+
+test let (1) [[
+  let Num x = 1 in x
+]] parse to 
+   Let([ Bind(NumT(), "x", Num("1")) ], Var("x"))
+
+test let [[
+  let 
+    Num x = 1
+    Num y = 2
+   in x + y
+]] parse to 
+   Let(
+      [ Bind(NumT(), "x", Num("1"))
+      , Bind(NumT(), "y", Num("2"))
+      ]
+    , Add(Var("x"), Var("y"))
+    )
+

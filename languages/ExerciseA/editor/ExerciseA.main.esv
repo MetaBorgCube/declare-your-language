@@ -21,7 +21,7 @@ language General properties
   
   extensions:    ea
   table:         include/ExerciseA.tbl
-  start symbols: Start
+  start symbols: Program
   
   provider:      include/exercisea.ctree
   provider:      include/exercisea-java.jar

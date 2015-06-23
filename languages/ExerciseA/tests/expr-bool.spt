@@ -1,0 +1,60 @@
+module expr
+
+language ExerciseA
+
+start symbol Expr
+
+test true [[
+  true
+]] parse to True()
+
+test false [[
+  false
+]] parse to False()
+
+test not [[
+  !false 
+]] parse to Not(False())
+
+test or [[
+  false || true
+]] parse to Or(False(), True())
+
+test and [[
+  false && true
+]] parse to And(False(), True())
+
+test and or [[
+  false && true || false
+]] parse to Or(And(False(), True()), False())
+
+test and or [[
+  false && true || false
+]] parse to [[ (false && true) || false]]
+
+test not and [[
+  !x && true
+]] parse to And(Not(Var("x")), True())
+
+test if [[
+   if (x) y else z
+]] parse to If(Var("x"), Var("y"), Var("z"))
+
+test not and [[
+   if (true) true || false else true
+]] parse to [[ if (true) (true || false) else true ]]
+
+test not and [[
+   if (true) true else true || false
+]] parse to [[ if (true) true else (true || false) ]]
+
+test or > if [[
+   false || if (true) true else true
+]] parse fails
+
+test or > if [[
+   false || (if (true) true else true)
+]] parse succeeds
+
+
+

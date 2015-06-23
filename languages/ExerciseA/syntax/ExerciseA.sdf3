@@ -1,14 +1,3 @@
 module ExerciseA
-
-imports
-	
-	Common
-
-context-free start-symbols
-  
-  Start
-
-context-free syntax
-  
-  Start.Dummy = <>
-
+imports Programs Classes Expressions 
+context-free start-symbols Program Expr

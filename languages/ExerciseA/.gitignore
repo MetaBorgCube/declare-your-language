@@ -27,3 +27,4 @@ lib/runtime
 lib/*.generated.str
 lib-refactoring/*.generated.str
 /src-gen
+/include/

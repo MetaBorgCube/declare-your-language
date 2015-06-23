@@ -1,0 +1,37 @@
+module class
+
+language ExerciseA
+
+start symbol Program
+
+test class [[
+  program counter	
+  class Counter {
+	Num count
+	Num next() { this.count = count + 1; count; }
+  }
+  run 1
+]] parse to Program(
+      "counter"
+    , [ Class(
+          "Counter"
+        , NoExtends()
+        , [Field(NumT(), "count")]
+        , [ Method(
+              NumT()
+            , "next"
+            , []
+            , Do(
+                [ Set(This(), "count", Add(Var("count"), 
+                 Num("1")))
+                , Var("count")
+                , Skip()
+                ]
+              )
+            )
+          ]
+        )
+      ]
+    , Num("1")
+    )
+

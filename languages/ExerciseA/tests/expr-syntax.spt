@@ -1,0 +1,17 @@
+module expr-syntax
+
+language ExerciseA
+
+start symbol Expr
+ 
+test integer constant [[
+  101
+]] parse succeeds
+ 
+test addition [[
+  1 + 2 
+]] parse succeeds 
+ 
+test double star [[
+  1 ** 2
+]] parse fails 

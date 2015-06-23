@@ -1,11 +1,14 @@
 module pp
 
-imports
+imports libstratego-gpp
+imports lib/runtime/refactoring/-
+imports include/ExerciseA-parenthesize
+imports src-gen/pp/ExerciseA-pp
+imports src-gen/pp/Programs-pp
 
-	libstratego-gpp
-	lib/runtime/refactoring/-
-	include/ExerciseA-parenthesize
-	src-gen/pp/ExerciseA-pp
+rules
+	
+  pp-partial-lang-string = pp-partial-ExerciseA-string
 
 rules
 	
