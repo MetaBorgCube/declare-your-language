@@ -29,3 +29,8 @@ test Mul Add (1) [[
 test Mul Add (2) [[
   (1 * 2) + 4
 ]] parse to Add(Mul(Num("1"), Num("2")), Num("4"))
+
+
+test Add [[
+  -16
+]] parse to Num("-16")
