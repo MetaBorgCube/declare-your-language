@@ -1,0 +1,6 @@
+module LangD-Menu-Transformation
+menus
+  menu: "Transform" (openeditor) (realtime) 
+    action: "Desugar"     = editor-desugar 
+    action: "Desugar AST" = editor-desugar-ast
+    action: "To XML"      = editor-to-xml
