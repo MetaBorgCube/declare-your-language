@@ -1,13 +1,13 @@
 module pp
 
-imports
-
-	libstratego-gpp
-	lib/runtime/refactoring/-
-	include/LangC-parenthesize
-	src-gen/pp/LangC-pp
+imports libstratego-gpp
+imports lib/runtime/refactoring/-
+imports include/LangC-parenthesize
+imports src-gen/pp/LangC-pp
 
 rules
+	
+  pp-partial-lang-string = pp-partial-LangC-string
 	
   pp-LangC-string =
     parenthesize-LangC

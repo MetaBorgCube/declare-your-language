@@ -12,12 +12,6 @@ imports lib/runtime/editor/-
 	
 rules // Debugging
 	
-	// Prints the abstract syntax ATerm of a selection.
-	debug-show-aterm:
-		(selected, position, ast, path, project-path) -> (filename, result)
-		with
-			filename := <guarantee-extension(|"aterm")> path;
-			result	 := selected
 			
 	// Prints the analyzed annotated abstract syntax ATerm of a selection.
 	debug-show-analyzed:

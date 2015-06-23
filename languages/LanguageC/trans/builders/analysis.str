@@ -2,7 +2,7 @@ module builders/analysis
 
 imports desugar/desugar
 imports check/check
-imports pp
+imports pretty-print/pp
 
 imports lib/editor-common.generated
 imports lib/runtime/analysis/-
