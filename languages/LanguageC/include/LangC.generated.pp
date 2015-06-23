@@ -34,6 +34,7 @@
    Cast                   -- KW["("] _1 KW[")"] _2,
    NumT                   -- KW["Num"],
    BoolT                  -- KW["Bool"],
+   UnitT                  -- KW["Unit"],
    ClassT                 -- _1,
    COMPLETION-Expr        -- _1,
    COMPLETION-Type        -- _1,
