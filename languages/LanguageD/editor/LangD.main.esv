@@ -1,0 +1,33 @@
+module LangD.main
+
+imports
+  LangD-Colorer
+  LangD-Completions
+  LangD-Folding
+  LangD-Menus
+  LangD-Refactorings
+  LangD-References
+  LangD-Syntax
+  LangD-Views
+
+language General properties
+  
+  name:          LangD
+  id:            org.metaborg.dyl.langd
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the LangD language"
+  url:           http://strategoxt.org
+  
+  extensions:    ld
+  table:         include/LangD.tbl
+  start symbols: Program
+  
+  provider:      include/langd.ctree
+  provider:      include/langd-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m
