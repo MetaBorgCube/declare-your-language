@@ -5,10 +5,7 @@ imports
   LangA-Completions
   LangA-Folding
   LangA-Menus
-  LangA-Refactorings
-  LangA-References
   LangA-Syntax
-  LangA-Views
 
 language General properties
   
@@ -27,7 +24,5 @@ language General properties
   provider:      include/langa-java.jar
   
   observer:      editor-analyze (multifile)
-  
-  on save:       editor-save
-  
+ 
   jvm opts:      -server -Xss8m -Xmx1024m
