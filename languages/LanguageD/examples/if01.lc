@@ -1,6 +1,0 @@
-program if01
-
-run 
-
-  let Num x = if (false) x else x
-    in x
