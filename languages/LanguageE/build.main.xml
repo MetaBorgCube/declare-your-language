@@ -26,6 +26,8 @@
 	<property name="include.rel" location="${include}" relative="yes"/>
 	<property name="lib-gen.rel" location="${lib-gen}" relative="yes"/>
     
+	<property name="javajar-includes" value="org/metborgcube/dyl/languagee/strategies/, ds/**" />
+	 
     <!-- Imports -->
     <property name="build.sdf.imports" value=""/>
     <property name="build.stratego.args" value="
