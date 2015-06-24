@@ -28,3 +28,6 @@ lib/*.generated.str
 lib-refactoring/*.generated.str
 /src-gen
 /include/
+trans/check/names.str
+trans/check/types.generated.str
+examples/*/*.run.aterm
