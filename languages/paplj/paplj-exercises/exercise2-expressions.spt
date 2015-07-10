@@ -1,0 +1,90 @@
+module syntax-expressions
+language PAPLJ
+start symbol Expr
+
+test not [[
+  !x
+]] parse to Not(Var("x"))
+
+test and [[
+	x && y
+]] parse to And(Var("x"), Var("y"))
+
+test or [[
+  x || y
+]] parse to Or(Var("x"), Var("y"))
+
+test integer literal [[
+  245 
+]] parse to Num("245")
+
+test greater than [[
+	v1 > v2
+]] parse to Gt(Var("v1"), Var("v2"))
+
+test greater than or equals [[
+	v1 >= v2
+]] parse to Geq(Var("v1"), Var("v2"))
+
+test less than [[
+	v1 < v2
+]] parse to Lt(Var("v1"), Var("v2"))
+
+test less than or equals [[
+	v1 <= v2
+]] parse to Leq(Var("v1"), Var("v2"))
+
+test equals [[
+	v1 == v2
+]] parse to Eq(Var("v1"), Var("v2"))
+
+test not and [[ 
+  !(x && y) 
+]] parse to Not(And(Var("x"), Var("y")))
+
+test or not [[ 
+  (!x) || y 
+]] parse to Or(Not(Var("x")), Var("y"))
+
+test and mul [[ 
+  x + (y * z) 
+ ]] parse to Add(Var("x"), Mul(Var("y"), Var("z")))
+ 
+test sub mul [[ 
+  x - (y * z) 
+]] parse to Sub(Var("x"), Mul(Var("y"), Var("z")))
+
+test add sub [[
+  (x + y) - z
+]] parse to Sub(Add(Var("x"), Var("y")), Var("z"))
+
+test sub add [[
+  x - (y + z)
+]] parse to Sub(Var("x"), Add(Var("y"), Var("z")))
+
+test lt add [[
+  x < (y + z)
+]] parse to Lt(Var("x"), Add(Var("y"), Var("z")))
+
+test lt and [[
+  (w < x) && (y < z)
+]] parse to  And(
+                Lt(Var("w"), Var("x"))
+              , Lt(Var("y"), Var("z"))
+             )
+             
+test or and [[ 
+  x || (y && z) 
+]] parse to Or(Var("x"), And(Var("y"), Var("z")))
+
+test operators combined  [[
+  ((v1 + v2) - (v3 * (v4 / v5))) == y
+]] parse to 
+   Eq(
+      Sub(
+        Add(Var("v1"), Var("v2"))
+      , Mul(Var("v3"), Div(Var("v4"), Var("v5")))
+      )
+    , Var("y")
+    )
+    

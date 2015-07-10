@@ -1,0 +1,11 @@
+module values
+
+signature 
+  sorts V
+  variables
+    v : V
+     
+  sorts Unit   
+  constructors
+    U : Unit
+    u2v : Unit -> V {implicit}

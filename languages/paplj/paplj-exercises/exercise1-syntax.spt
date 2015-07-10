@@ -1,0 +1,7 @@
+module syntax-forms
+language PAPLJ
+start symbol Program
+
+test empty form [[
+  form empty {}
+]] parse succeeds

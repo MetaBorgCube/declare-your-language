@@ -1,0 +1,16 @@
+module Programs
+
+imports Classes Expressions Common
+
+sorts Program 
+
+context-free syntax 
+   
+  Program.Program = [ 
+  	program [ID]
+  	
+  	[{Class "\n\n"}*] 
+  	
+  	run
+  	  [Expr]
+  ]
