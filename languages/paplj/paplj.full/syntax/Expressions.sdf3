@@ -19,6 +19,7 @@ context-free syntax // booleans
   Expr.Or    = [[Expr] || [Expr]] {assoc}
   Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
   Expr.Neq   = [[Expr] != [Expr]] {non-assoc} 
+  Expr.Lt    = [[Expr] <  [Expr]] {non-assoc} 
   
   Expr.If = [
   	if( [Expr] )
@@ -73,7 +74,7 @@ context-free priorities
   > {Expr.Not Expr.Min} 
   > Expr.Mul 
   > {left: Expr.Add Expr.Sub} 
-  > Expr.Eq 
+  > {non-assoc: Expr.Eq Expr.Neq Expr.Lt } 
   > Expr.And 
   > Expr.Or
   > Expr.Set
