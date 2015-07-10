@@ -7,7 +7,7 @@ sorts Program
 context-free syntax 
    
   Program.Program = [ 
-  	program [ID]
+  	program [ProgramName]
   	
   	[{Class "\n\n"}*] 
   	
