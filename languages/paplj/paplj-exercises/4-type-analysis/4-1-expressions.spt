@@ -1,0 +1,20 @@
+module ex4-1-expressions
+
+language PAPLJ
+
+start symbol Program
+
+setup program header[[ 
+  program tst run 
+]]
+
+
+test resolve new [[ 
+ [[1 + 2]]
+]] run get-type to NumT() 
+
+test foo [[
+  let Num x = this.double(i)
+   in x
+]] run id to True()
+

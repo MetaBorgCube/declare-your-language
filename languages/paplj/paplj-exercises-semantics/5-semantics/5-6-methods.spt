@@ -1,0 +1,73 @@
+module ex5-6-methods 
+
+language PAPLJ
+
+start symbol Program
+
+test method call [[ 
+  program test 
+    class A { 
+      Num const() { 78 }
+    }
+  run 
+    new A().const()
+]] run runprogram-value
+to NumV("78")
+
+test method that updates field [[ 
+  program test 
+    class A{ 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        this
+      }
+    }
+  run 
+    new A().init(8).x
+]] run runprogram-value
+to NumV("8")
+
+test method that updates field [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        this
+      }
+    }
+    class B {
+      
+    }
+  run 
+    new A().init(8).x
+]] run runprogram-value
+to NumV("8")
+
+
+test recursive class [[
+  program test
+    class Node { 
+      Num value  
+      Node left
+      Node right
+      Node init(Num v, Node l, Node r) {
+      	this.value = v;
+      	this.left = l;
+      	this.right = r;
+      }
+      Node insert(Num i) {
+      	if(i == value) this
+      	else if(i < value) 
+      	  new Node().init(value, left.insert(i), right)
+      	else 
+      	  new Node().init(value, left, right.insert)
+      }
+    }
+  run new Node().value
+]] run runprogram-value
+to NumV("8")
+
+
+

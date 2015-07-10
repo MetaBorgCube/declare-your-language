@@ -1,0 +1,74 @@
+module ex5-1-booleans 
+
+language PAPLJ
+
+start symbol Program
+
+setup program header [[
+	program tst run // ignore this error
+]]
+
+// boolean expressions
+
+test true [[ 
+  true 
+]] run runprogram-value 
+to BoolV(TrueV())
+
+test false [[ 
+  false 
+]] run runprogram-value 
+to BoolV(FalseV())
+
+test not [[ 
+  !false 
+]] run runprogram-value 
+to BoolV(TrueV())
+
+test and [[ 
+  false && true
+]] run runprogram-value 
+to BoolV(FalseV())
+
+test and [[ 
+  true && true
+]] run runprogram-value 
+to BoolV(TrueV())
+
+// etc.
+
+
+test if [[ 
+  if (true) 1 else 2
+]] run runprogram-value 
+to NumV(1)
+
+test if [[ 
+  if (false) 1 else 2
+]] run runprogram-value 
+to NumV(2)
+
+
+test eq [[ 
+  1 == 2
+]] run runprogram-value 
+to BoolV(FalseV())
+
+test eq [[ 
+  15 == 15
+]] run runprogram-value 
+to BoolV(TrueV())
+
+
+test neq [[ 
+  1 != 2
+]] run runprogram-value 
+to BoolV(TrueV())
+
+test neq [[ 
+  15 != 15
+]] run runprogram-value 
+to BoolV(FalseV())
+
+
+

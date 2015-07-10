@@ -1,0 +1,56 @@
+module ex5-3-variables 
+
+language PAPLJ
+
+start symbol Program
+
+setup program header [[
+  program tst run // ignore this error
+]]
+
+test let [[ 
+  let Num x = 2 in x
+]] run runprogram-value  
+to NumV("2")
+
+
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3
+   in x + y
+]] run runprogram-value  
+to NumV("5")
+
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in x + y
+]] run runprogram-value  
+to NumV("7")
+
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in let Num x = 6
+       in x + y
+]] run runprogram-value  
+to NumV("11")
+
+test let [[ 
+  let 
+     Num x = 2 
+     Num y = let Num x = 8 in 3 + x
+   in x + y
+]] run runprogram-value  
+to NumV("13")
+
+test let [[ 
+  let 
+     Num x = 2 
+     Num y = let Num x = 8 + x in 3 + x
+   in x + y
+]] run runprogram-value  
+to NumV("15")

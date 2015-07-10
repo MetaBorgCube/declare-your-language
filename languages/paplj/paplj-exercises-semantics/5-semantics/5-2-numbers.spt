@@ -1,54 +1,52 @@
-module exercise9-semantics
+module ex5-2-numbers 
+
 language PAPLJ
+
 start symbol Program
 
-test true [[ 
-  program test run true 
-]] run runprogram 
-to R_default_V(BoolV(_), _)
+setup program header [[
+	program tst run // ignore this error
+]]
 
-test false [[ 
-  program test run false 
-]] run runprogram 
-to R_default_V(BoolV(_), _)
+test number [[  
+  1 
+]] run runprogram-value 
+to NumV("1")
 
-test number1 [[ 
-  program test run 1 
-]] run runprogram 
-to R_default_V(NumV(1), _)
+test min [[  
+  - 889 
+]] run runprogram-value 
+to NumV("-889")
 
-test addition [[ 
-  program test run 1 + 2
-]] run runprogram 
-to R_default_V(NumV(3), _)
+test add [[  
+  1 + 2
+]] run runprogram-value 
+to NumV("3")
 
-test let [[ 
-  program test run 
-    let Num x = 2 in x + 2
-]] run runprogram 
-to R_default_V(NumV(4), _)
+test sub [[  
+  1 - 2
+]] run runprogram-value 
+to NumV("-1")
 
+test mul [[  
+  11 * 29
+]] run runprogram-value 
+to NumV("319")
 
-test let [[ 
-  program test 
-    class A{ }
-  run 
-    new A()
-]] run runprogram 
-to R_default_V(o2v(ObjV("A", NoSuper(), _, _)), _)
+// etc.
 
 
-test let [[ 
-  program test 
-    class A{ Num x }
-  run 
-    let A a = new A()
-     in {
-       a.x = 1;
-       a.x
-     }
-]] run runprogram 
-to R_default_V(NumV(1), _)
+test block [[
+  { 1 }
+]] run runprogram-value
+to NumV("1")
 
+test block [[
+  { 1; 2; 3; 5 }
+]] run runprogram-value
+to NumV("5")
 
-
+test block [[
+  { 1; 2; 3; 5; }
+]] run runprogram-value
+to NumV("5")
