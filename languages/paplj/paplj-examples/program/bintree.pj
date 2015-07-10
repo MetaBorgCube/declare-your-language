@@ -1,0 +1,26 @@
+program test
+
+class Node  {
+  Num value
+  Node left
+  Node right
+  Node init(Num v, Node l, Node r) {
+    this.value = v;
+    this.left = l;
+    this.right = r;   
+  }
+
+  Node insert(Num i) {
+    if( i == value )
+      this
+    else
+      if( i <  value )
+        new Node().init(value, left.insert(i), right)
+      else
+        new Node().init(value, left, right.insert)
+  }
+}
+
+run
+  new Node().value
+  

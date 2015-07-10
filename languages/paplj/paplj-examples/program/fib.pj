@@ -26,11 +26,11 @@ class Fib {
         }
     }
     
-    Num getValue(Num n) {
+    Num getValue(Num n) { 
      if (n == 0)
        this.value
      else
-       this.next.getValue(n - 1)
+       this.next.getValue(n - 1) 
     }
   }
 
@@ -40,8 +40,8 @@ run
    Num n = 5
   in {
     fib.initialize(n);
-    //fib.value = 0;    // default value
+    fib.value = 0;    // default value
     fib.next.value = 1;
     fib.calculate(n);
-    fib.getValue(n);
+    fib.getValue(n); 
   }

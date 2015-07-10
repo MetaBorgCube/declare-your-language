@@ -19,7 +19,7 @@ class Fib {
          this.fib = - 1; 
        this.fibn1 = new Fib();
        this.fibn1.n = (this.n - 1);
-       this.fibn1.initialize();
+       this.fibn1.initialize(); 
      }
    }
 

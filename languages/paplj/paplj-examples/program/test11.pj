@@ -27,4 +27,4 @@ class A {
 run
   new A().quadruple(6)
   
-  
+   
