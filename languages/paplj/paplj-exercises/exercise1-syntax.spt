@@ -3,5 +3,6 @@ language PAPLJ
 start symbol Program
 
 test empty form [[
-  form empty {}
+  program empty
+  run 3
 ]] parse succeeds
