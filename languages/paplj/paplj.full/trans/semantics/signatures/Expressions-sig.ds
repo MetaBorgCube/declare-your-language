@@ -20,6 +20,7 @@ signature
     Or    : Expr * Expr -> Expr
     Eq    : Expr * Expr -> Expr
     Neq   : Expr * Expr -> Expr
+    Lt   : Expr * Expr -> Expr
     If    : Expr * Expr * Expr -> Expr
 
   sorts Block Seq

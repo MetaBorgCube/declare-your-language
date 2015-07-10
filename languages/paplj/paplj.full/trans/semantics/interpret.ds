@@ -53,6 +53,8 @@ rules // arithmetic expressions
   Neq(e1, e2) --> Not(Eq(e1, e2)).
   
   Eq(NumV(i), NumV(j)) --> BoolV(eqI(i, j)).
+  
+  Lt(NumV(i), NumV(j)) --> BoolV(gtI(j, i)).
    
 rules // variables
 
@@ -79,7 +81,7 @@ rules // objects
 
   This o |- This() --> o.  
   
-  Cast(c, o) --> o.
+  //Cast(c, o) --> o.
   // check that ClassT(c') <sub: ClassT(c)
 
 // rules // exceptions
