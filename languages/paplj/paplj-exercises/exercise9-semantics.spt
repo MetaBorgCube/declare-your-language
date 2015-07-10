@@ -1,0 +1,54 @@
+module exercise9-semantics
+language PAPLJ
+start symbol Program
+
+test true [[ 
+  program test run true 
+]] run runprogram 
+to R_default_V(BoolV(_), _)
+
+test false [[ 
+  program test run false 
+]] run runprogram 
+to R_default_V(BoolV(_), _)
+
+test number1 [[ 
+  program test run 1 
+]] run runprogram 
+to R_default_V(NumV(1), _)
+
+test addition [[ 
+  program test run 1 + 2
+]] run runprogram 
+to R_default_V(NumV(3), _)
+
+test let [[ 
+  program test run 
+    let Num x = 2 in x + 2
+]] run runprogram 
+to R_default_V(NumV(4), _)
+
+
+test let [[ 
+  program test 
+    class A{ }
+  run 
+    new A()
+]] run runprogram 
+to R_default_V(o2v(ObjV("A", NoSuper(), _, _)), _)
+
+
+test let [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       a.x = 1;
+       a.x
+     }
+]] run runprogram 
+to R_default_V(NumV(1), _)
+
+
+
