@@ -71,5 +71,14 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
-  </pluginRepositories>
+  </pluginRepositories> 
+  <dependencies>
+    <dependency>
+      <groupId>org.metaborg</groupId>
+      <artifactId>
+        org.metaborg.meta.interpreter.framework
+      </artifactId>
+      <version>1.5.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package paplj.strategies;
+package paplj.full.strategies;
 
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;

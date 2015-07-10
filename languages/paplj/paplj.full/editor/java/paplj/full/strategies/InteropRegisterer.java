@@ -1,4 +1,4 @@
-package paplj.strategies;
+package paplj.full.strategies;
 
 import org.strategoxt.lang.JavaInteropRegisterer;
 import org.strategoxt.lang.Strategy;

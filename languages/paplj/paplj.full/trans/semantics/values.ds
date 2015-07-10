@@ -1,6 +1,6 @@
-module trans/semantics/environments3/values
+module trans/semantics/values
 
-imports trans/semantics/signatures/LangE-sig
+imports trans/semantics/signatures/PAPLJ-sig
 imports trans/semantics/runtime/runtime
 
 signature // basic values
@@ -11,6 +11,9 @@ signature // basic values
     NullV      : V
     ExceptionV : V
     T          : Obj -> This {implicit}
+    
+// use separate scope for methods in order to have shared run-time instance 
+// of method table?
  
 signature // representation of Class at run-time 
   semantic components

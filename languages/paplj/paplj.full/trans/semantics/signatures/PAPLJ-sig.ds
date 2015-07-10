@@ -1,4 +1,4 @@
-module trans/semantics/signatures/LangE-sig
+module trans/semantics/signatures/PAPLJ-sig
 
 imports
   trans/semantics/signatures/Programs-sig
