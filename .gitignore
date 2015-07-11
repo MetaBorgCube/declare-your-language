@@ -16,3 +16,4 @@ types.generated.str
 *.aterm
 languages/paplj/paplj-exercises-semantics/.cache
 languages/paplj/paplj-exercises-types/.cache
+languages/paplj/paplj-exercises-names/.cache
