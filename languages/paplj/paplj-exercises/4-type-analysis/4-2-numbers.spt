@@ -1,0 +1,52 @@
+module ex4-2-numbers 
+
+language PAPLJ
+
+start symbol Program
+
+setup program header [[
+	program tst run // ignore this error
+]]
+
+test number [[  
+  [[1]] 
+]] run get-type to NumT() 
+
+test min [[  
+  [[- 889]] 
+]] run get-type to NumT() 
+
+test add [[  
+  [[1 + 2]]
+]] run get-type to NumT() 
+
+test sub [[  
+  [[1 - 2]]
+]] run get-type to NumT() 
+
+test mul [[  
+  [[11 * 29]]
+]] run get-type to NumT() 
+
+// etc.
+
+
+test block [[
+  [[{ 1 }]] + 6 
+]] run get-type-na to NumT() 
+
+test block [[
+  [[{ 1; 2; 3; 5 }]]
+]] run get-type-na to NumT() 
+
+test block [[
+  [[{ 1; 2; 3; 5; }]]
+]] run get-type-na to NumT() 
+
+test block [[
+  [[{ false; 5; }]]
+]] run get-type-na to NumT() 
+
+test block [[
+  [[{ 5; false; }]]
+]] run get-type-na to BoolT() 

@@ -1,0 +1,60 @@
+module ex4-1-booleans 
+
+language PAPLJ
+
+start symbol Expr
+
+// boolean expressions
+
+test true [[ 
+  true
+]] parse to True()
+
+test false [[ 
+  [[false]] 
+]] parse to True()
+
+test not [[ 
+  [[!false]] 
+]]  parse to True()
+
+test and [[ 
+  [[false && true]]
+]] parse to True()
+
+test and [[ 
+  [[true && true]]
+]] parse to True()
+
+// etc.
+
+
+test if [[ 
+  [[if (true) 1 else 2]]
+]] parse to True()
+
+test if [[ 
+  [[(if (true) 1 else 2) + 4]]
+]] parse to True()
+
+test if [[ 
+  [[if (false) 1 else 2]]
+]] parse to True()
+
+
+test eq [[ 
+  [[1 == 2]]
+]] parse to True()
+
+test eq [[ 
+  [[15 == 15]]
+]] parse to True()
+
+
+test neq [[ 
+  [[1 != 2]]
+]]  run get-type to BoolT() 
+
+test neq [[ 
+  [[15 != 15]]
+]] run get-type to BoolT() 

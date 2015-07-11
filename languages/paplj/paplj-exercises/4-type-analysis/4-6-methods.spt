@@ -1,0 +1,85 @@
+module ex5-6-methods 
+
+language PAPLJ
+
+start symbol Program
+
+test method call [[ 
+  program test 
+    class A { 
+      Num const() { 78 }
+    }
+  run 
+    [[new A().const()]]
+]] run get-type-na to NumT()
+
+test method that updates field [[ 
+  program test 
+    class A{ 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        this
+      }
+    }
+  run 
+    [[new A().init(8)]].x
+]] run get-type-na to ClassT("A")
+
+test method that updates field [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        [[this]]
+      }
+    }
+    class B {
+      
+    }
+  run 
+    new A().init(8).x
+]] run get-type-na to ClassT("A")
+
+test method with multiple parameters [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num y, Bool z, A a) {
+        this.x = a.x;
+        this
+      }
+    }
+    class B {
+      
+    }
+  run 
+    new [[A().init(8, 89, new A()).x]] 
+]] run get-type-na to NumT()
+
+
+test recursive class [[
+  program test
+    class Node { 
+      Num value  
+      Node left
+      Node right
+      Node init(Num v, Node l, Node r) {
+      	this.value = v;
+      	this.left = l;
+      	this.right = r;
+      }
+      Node insert(Num i) {
+      	if(i == value) this
+      	else if(i < value) 
+      	  [[new Node().init(value, left.insert(i), right)]]
+      	else 
+      	  new Node().init(value, left, right.insert)
+      }
+    }
+  run new Node().value
+]] run get-type-na to ClassT("Node")
+
+
+
