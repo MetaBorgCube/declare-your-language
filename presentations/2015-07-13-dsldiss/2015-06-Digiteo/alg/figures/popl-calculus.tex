@@ -1,0 +1,155 @@
+\begin{figure}[p]
+\begin{boxedminipage}{\hsize}
+\textbf{Resolution paths}
+
+\vspace*{-.6\baselineskip}
+
+	$$p := D(d_x^S) |\ R(r_x)\ |\ I(r_x,d_x^S)\ |\ P\ |\ p\cdot p$$
+
+\smallskip
+
+\textbf{Edges in scope graph}
+\renewcommand{\scopea}[1]{\stackrel{#1}{\longrightarrow}}
+\smallskip
+
+	\infrule{R}{
+		r_x \in \R{S}
+	}{
+		\mathcal{I} \vdash {R(r_x)} : r_x \scopea{x} S
+	}
+	
+\medskip
+
+	\infrule{D}{
+		d_x^{S'} \in \D{S}
+	}{
+		\mathcal{I} \vdash {D(d_x^{S'})} : S \scopea{x} d_x^{S'}
+  }
+              
+\medskip
+
+	\infrule{P}{
+		\P{S_1} = S_2
+	}{
+		\mathcal{I} \vdash {P} : S_1 \scopea{x} S_2
+	}
+
+\medskip
+
+	\infrule{I}{
+		r_y \in \mathcal{I}(S_1)  
+		\tab 
+		r_y \notin \mathcal{I} 
+		\tab
+		\mathcal{I}(S_1)\cup\mathcal{I} \vdash {p} : r_y \resolveau d_y^{S_2}		
+	}{
+		\mathcal{I} \vdash {I(r_y,d_y^{S_2})} : S_1 \scopea{x} S_2 
+	}
+
+\medskip
+
+	\infrule{C}{
+		\mathcal{I} \vdash p_1 : A \scopea{x} B
+		\tab 
+		\mathcal{I} \vdash {p_2} : B \scopea{x} C
+	}{
+		\mathcal{I} \vdash {p_1\cdot p_2} : A \scopea{x} C
+	}
+
+\smallskip
+
+\textbf{Well formedness policy}\smallskip
+
+	\infrule{W}{
+		\mathcal{I} \vdash p : r_x \scopea{x} d_x
+		\tab 
+		WF(p)
+	}{
+		\mathcal{I} \vdash p : r_x \lra d_x
+	}
+
+\smallskip
+\textbf{Minimality (Shadowing)}\smallskip
+
+	\infrule{M}{
+ 	%	\begin{array}{c}
+    	\mathcal{I} \vdash p : r_x \lra d_x
+			\tab
+			\tab
+			% tab
+  		\forall d'_x,p' (
+  		   \mathcal{I} \vdash p' : r_x \lra d'_x \Rightarrow 
+  		   \neg (p' < p)
+  		)
+  	% \end{array}
+	}{
+		\mathcal{I} \vdash {p} : r_x \resolveau d_x
+	}
+\end{boxedminipage}\medskip
+\caption{Old Resolution calculus.}
+
+\begin{boxedminipage}{\hsize}
+
+\textbf{Well-formed paths}
+
+	\display{
+	  \labeled{WF}{
+	    R \cdot P^* \cdot I^* \cdot D
+	  }
+	}
+	
+\textbf{Specificity ordering on paths}
+
+\bigskip
+
+
+	\infrule{DI}{}{
+		D(d) < I(x,d')  
+	}
+
+\medskip
+
+	\infrule{IP}{}{
+		I(x,d') < P 
+	}
+
+\medskip
+
+	\infrule{DP}{}{
+		 D(d) < P 
+	}
+
+\medskip
+
+	\infrule{Lex1}{
+		p_1 < p_2
+	}{ 
+		p_1\cdot p_3 < p_2
+	}
+
+
+\medskip
+
+        \infrule{Lex1}{
+		p_1 < p_2
+	}{ 
+		p_1\cdot p_3 < p_2 \cdot p_4
+	}
+
+
+\medskip
+
+	\infrule{Lex2}{
+		p_2 < p_3
+	}{ 
+		p_1\cdot p_2 < p_1 \cdot p_3
+	}
+
+\smallskip
+
+\end{boxedminipage}
+\caption{Specificity ordering.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}
+

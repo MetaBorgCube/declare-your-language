@@ -1,0 +1,51 @@
+\newcommand{\sig}{\ensuremath{\Sigma}}
+\newcommand{\sort}{\ensuremath{\sigma}}%{\mathcal{S}}
+\newcommand{\sorts}{\ks{\sort}}
+\newcommand{\cons}{\w{cn}}%{\mathcal{C}}
+\newcommand{\term}{\ensuremath{t}}%{\mathcal{T}}
+\newcommand{\trms}{\ks{\term}}
+\newcommand{\trmsi}{\cns{\term_0}{\cns{\ldots}{\term_n}}}
+
+\newcommand{\pos}{\w{p}}
+%\newcommand{\Pos}{\w{P}}
+
+\newcommand{\idsort}{\kw{id}}
+\newcommand{\id}{\w{x}}
+\newcommand{\idp}{\iota}
+\newcommand{\Idp}{\w{I}}
+\newcommand{\Defs}{\mathcal{D}}
+
+\newcommand{\scope}{\w{s}}
+\newcommand{\Scopes}{\w{S}}
+\newcommand{\pscope}{\scope_\w{p}}
+\newcommand{\PosScope}{\w{P}}
+\newcommand{\DefScopes}{\Scopes_\w{def}}
+\newcommand{\Imports}{\Idp_\w{imp}}
+
+\newcommand{\brule}{\w{r}}
+\newcommand{\brules}{\w{R}}
+
+\newcommand{\env}{\ensuremath{E}}
+\newcommand{\defp}{\ensuremath{D}}
+\newcommand{\defn}{\env}
+\newcommand{\scopeenv}{\w{S}}
+
+\newcommand{\scopepos}{\w{s}}
+\newcommand{\termpos}[2]{\ensuremath{{#1|}_{#2}}}
+\newcommand{\emptylist}{[]}
+\newcommand{\cns}[2]{\concat{#1}{#2}}
+\newcommand{\concat}[2]{\ensuremath{#1 \cdot #2}}
+
+% Comments on notations in order to avoid confusion between metatheory relations and language relations
+% -- \mathcal command for metatheory element of type Type (set of constructors, set of identifiers, set of terms)
+% -- greek lowercase letters for sorts
+% -- \sf font for constructors
+% -- _s for variables of type list
+% -- \upepsilon for has sort (\hs)  
+% -- [r] to lift the relation r to lists (Forall r)
+% -- : as the type relation at metatheory level (coq typing relation)
+% -- :: as the type relation of the studied language (has type in ts/nabl)
+
+\newcommand{\psort}{\mathcal{S}}
+\newcommand{\pcons}{\mathcal{C}}
+\newcommand{\pterm}{\mathcal{T}}

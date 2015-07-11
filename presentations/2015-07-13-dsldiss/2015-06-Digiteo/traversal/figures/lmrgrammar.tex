@@ -1,0 +1,35 @@
+\begin{figure}
+\begin{boxedminipage}{0.495\hsize}
+\begin{grammar}
+\sdnn{\cod{program}}{\ks{\w{\cod{decl}}}}
+\\
+\sdnn{\cod{decl}}{\text{\cod{module}}\ \cod{Id \{}\ \ks{\cod{decl}}\ \cod{\}}}
+\altf{\text{\cod{import}}\ \cod{qid}}
+\altf{\text{\cod{def}}\ {\cod{id}\ \kw{=}\ \cod{exp}}}
+\altf{\text{\cod{record}}\ \cod{Id}\ \opt{(\cod{extends}\ \cod{qid})} \cod{\{}\ \ks{(\cod{Id : Typ})}\ \cod{\}}}
+\\
+\sdnn{\cod{exp}}{\w{\cod{qid}}}
+\altf{\kw{ifz}\ \w{exp}\ \kw{then}\ \w{exp}\ \kw{else}\ \w{exp}}
+\altf{\text{\cod{fun}}\ \w{\cod{id \{ exp \}}}}
+%\altf{\text{\cod{fix}}\ \w{\cod{id \{ exp \}}}}
+\altnn{\text{\cod{let}}\ \ks{\w{\cod{bind}}}\ \text{\cod{in}}\ \w{\cod{exp}}}
+\altf{\text{\cod{letrec}}\ \ks{\w{\cod{bind}}}\ \text{\cod{in}}\ \w{\cod{exp}}}
+\altf{\text{\cod{letpar}}\ \ks{\w{\cod{bind}}}\ \text{\cod{in}}\ \w{\cod{exp}}}
+\altnn{\w{\cod{exp}}\ \w{\cod{exp}}}
+\altf{\w{\cod{exp}}\ \kw{\oplus}\ \w{\cod{exp}}}
+\altf{\w{\cod{int}}}
+\altnn{\w{\cod{new}}\ \w{\cod{qid}}\ \w{\cod{\{}}\ \ks{(\cod{Id}\ \cod{=}\ \cod{exp})}\ \cod{\}}}
+\altf{\w{\cod{exp}}\ \kw{.} \w{\cod{id}}}
+\altf{\w{\cod{with}}\ \w{\cod{exp}}\ \w{\cod{do}} \w{\cod{exp}}}
+\\
+\sdnn{\pcfmcode{qid}}{\w{\pcfmcode{id}}}
+\altf{\w{\pcfmcode{Id}}\ \kw{.}\ \w{\pcfmcode{qid}}}
+\\
+\sdnn{\pcfmcode{bind}}{\w{\pcfmcode{id}}\ \opt{:\kw{=}\ \w{\pcfmcode{exp}}}
+\\
+
+
+\end{boxedminipage}
+\label{fig:LMRgrammar}
+\caption{Syntax of LMR}
+\end{figure}

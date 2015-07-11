@@ -1,0 +1,100 @@
+\documentclass{llncs}
+\input{commands/main}
+
+
+\title{A Theory of Name Resolution}
+
+\author{
+  Pierre Neron \inst{1}
+  \and
+  Andrew Tolmach\inst{2}
+  \and
+  Eelco Visser\inst{1}
+  \and
+  Guido Wachsmuth\inst{1}
+}
+
+\authorrunning{} % abbreviated author list (for running head)
+
+\institute{%
+	$^{1)}$ Delft University of Technology, The Netherlands,\\
+	\email{\{p.j.m.neron, e.visser, g.wachsmuth\}@tudelft.nl},\\
+	$^{2)}$ Portland State University, Portland, OR, USA\\
+	\email{tolmach@pdx.edu}
+}
+
+
+
+\begin{document}
+
+	\pagestyle{headings}
+	\mainmatter
+	\maketitle
+	
+	\begin{abstract}
+	\input{tex/00-abstract}
+	\end{abstract}
+	
+% 	\parindent0pt
+% 	\parskip0.5\baselineskip
+
+        \newcommand{\refcoverageappendix}{A}
+        \newcommand{\refproofappendix}{B}
+	
+	\input{tex/01-introduction}
+	%\newpage\clearpage	
+	\vspace*{-\baselineskip}
+	\input{tex/02-resolution-paths}
+	\input{tex/04-extensions}
+	%\newpage\clearpage		
+	\input{tex/03-coverage}
+	%\newpage\clearpage
+	%\newpage\clearpage
+        \input{tex/09-construction}
+	\input{tex/05-resolution-algorithm}
+	%\newpage\clearpage
+	\input{tex/06-applications}	
+	%\newpage\clearpage
+	\input{tex/07-related-work}
+	%\newpage\clearpage
+	\input{tex/08-conclusion}
+	\input{tex/ack}
+
+	%\bibliographystyle{splncs03}
+	\bibliographystyle{abbrv}
+	%\bibliography{bibliography-compact,localbib}
+	\bibliography{bibliography,localbib}
+	
+        \newcommand{\techrep}[1]{}
+        \techrep{
+	\newpage\clearpage
+	\appendix
+	% % \input{tex/glossary}
+	\input{tex/more-coverage}
+	\newpage
+	\input{tex/proofs}
+%	\newpage
+%	\input{tex/lmtoscopgraph}
+}
+\end{document}
+
+	
+\endinput
+	
+	
+	\input{tex/2-objectives}
+	\newpage\clearpage
+	\input{tex/3-scope-graphs}
+	\newpage\clearpage
+	\input{tex/5-theory-of-visibility}
+	\newpage\clearpage
+	\input{tex/6-resolution-automata}
+	\newpage\clearpage
+	\input{tex/9-evaluation}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

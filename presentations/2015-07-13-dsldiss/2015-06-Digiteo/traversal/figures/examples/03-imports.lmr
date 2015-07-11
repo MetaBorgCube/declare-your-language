@@ -1,0 +1,4 @@
+module A$_1$ { def a$_2$ = 4 }
+module B$_3$ { import A$_4$
+  def b$_5$ = a$_6$ + 56
+}

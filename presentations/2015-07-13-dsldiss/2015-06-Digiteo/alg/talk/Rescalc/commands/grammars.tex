@@ -1,0 +1,25 @@
+\newcommand{\cfg}{\ensuremath{G = (N, \Sigma, P, S)}}
+\newcommand{\symbols}{\ensuremath{\left(N \cup \Sigma\right)^*}}
+\newcommand{\derive}[1]{\ensuremath{\Rightarrow_{#1}}}
+\newcommand{\prule}[2]{\ensuremath{\left(#1,#2\right)}}
+
+\newcommand{\kw}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\w}[1]{\ensuremath{\mathit{#1}}}
+\newcommand{\te}[1]{\ensuremath{\mathrm{#1}}}
+
+\newcounter{grammarrule}
+\newenvironment{grammar}
+{\setcounter{grammarrule}{0}
+\begin{math}\begin{array}{rrcl}}
+{\end{array}\end{math}}
+
+\newcommand{\sdn}[3]{#1 & #2 & = & #3}
+\newcommand{\sdnn}[2]{\sdn{}{#1}{#2}}
+\newcommand{\sd}[2]{\stepcounter{grammarrule}\sdn{\pno{\arabic{grammarrule}}}{#1}{#2}}
+\newcommand{\mc}[2]{ & #1 &  & \mbox{#2}}
+
+\newcommand{\altf}{\ |\ }
+\newcommand{\altn}[1]{\\ #1 & & | &}
+\newcommand{\altnn}{\altn{}}
+\newcommand{\alt}{\stepcounter{grammarrule}\altn{\pno{\arabic{grammarrule}}}}
+\newcommand{\ks}[1]{\ensuremath{#1^*}}

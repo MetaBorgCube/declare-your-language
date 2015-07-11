@@ -1,0 +1,94 @@
+\begin{figure*}[!t]
+\begin{boxedminipage}[t]{\hsize}
+\small
+\centering
+$\begin{array}{rclr}
+\sema{\w{exp}}{n}{s,t} & 
+\sdefine &
+\CTeq{t}{\intty} 
+\\[1.5ex]
+\sema{\w{exp}}{\kw{true}}{s,t} & 
+\sdefine &
+\CTeq{t}{\boolty}  
+\hspace{3em}
+\begin{array}{rclr}
+\sema{\w{exp}}{\kw{false}}{s,t} &
+\sdefine &
+\CTeq{t}{\boolty} 
+\end{array}
+\\[1.5ex]
+\sema{\w{exp}}{e_1\ \oplus\ e_2}{s,t} & 
+\sdefine &
+\CType{\oplus}{\arrty{\tau_1}{\arrty{\tau_2}{\tau_3}}}
+\cand \CTeq{t}{\tau_3} 
+\cand \sema{\w{exp}}{e_1}{s,\tau_1} 
+\cand \sema{\w{exp}}{e_2}{s,\tau_2}
+& \fresh{\tau_1, \tau_2, \tau_3}
+\\[1.5ex]
+\sema{\w{exp}}{\kw{if}\ e_1\ \kw{then}\ e_2\ \kw{else}\ e_3}{s,t} &
+\sdefine &
+\CLub{t}{\tau_2}{\tau_3}
+\cand \sema{\w{exp}}{e_1}{s,\boolty}
+\cand
+\sema{\w{exp}}{e_2}{s,\tau_2}
+\cand \sema{\w{exp}}{e_3}{s,\tau_3}
+& \fresh{\tau_2,\tau_3}
+\\[1.5ex]
+\sema{\w{exp}}{\w{Xs}\sep{.} x_i}{s,t} & 
+\sdefine &
+\CResolve{\ri{x}{i}}{\delta} 
+\cand \CType{\delta}{t} 
+\cand \sema{\w{qid}}{\w{Xs}\sep{.} x_i}{s} 
+& \fresh{\delta}
+\\[1.5ex]
+\sema{\w{exp}}{e_1\ e_2}{s,t} & 
+\sdefine &
+\CSubtype{\tau_2}{\tau_1} 
+\cand \sema{\w{exp}}{e_1}{s,\arrtysub{\tau_1}{t}}
+\cand \sema{\w{exp}}{e_2}{s,\tau_2} 
+& \fresh{\tau_1,\tau_2} 
+\\[1.5ex]
+% % sequential let omitted
+\sema{\w{exp}}{e \sep{.} x_i}{s,t} & 
+\sdefine &
+\AParent{S'}{\undef} 
+\cand \ASImport{\varsigma}{S'}
+\cand \AScopeof{\ri{x}{i}}{S'}
+\cand \CAssoc{\delta_1}{\varsigma}
+\cand \CResolve{\ri{x}{i}}{\delta_2}
+& \new{S'}\fresh{\delta_1,\delta_2,\varsigma}
+\\
+& \cand & \CType{\delta_2}{t}
+\cand \sema{\w{exp}}{e}{s,\recty{\delta_1}} 
+\\[1.5ex]
+\sema{\w{exp}}{\kw{with}\ e_1\ \kw{do}\ e_2}{s,t} & 
+\sdefine &
+\AParent{S'}{s}
+\cand \ASImport{\varsigma}{S'}
+\cand \CAssoc{\delta}{\varsigma} 
+\cand \sema{\w{exp}}{e_1}{s,\recty{\delta}} 
+\cand \sema{\w{exp}}{e_2}{S',t}
+& \new{S'}\fresh{\delta,\varsigma}
+\\[1.5ex]
+\sema{\w{exp}}{\kw{new}\ \w{Xs}\sep{.} X_i\ \sep{\{} \w{bs} \sep{\}}}{s,t} & \sdefine &
+\AParent{S'}{s} 
+\cand \ARImport{\ri{X}{i}}{S'} 
+\cand \CResolve{\ri{X}{i}}{\delta} 
+\cand \CTeq{t}{\recty{\delta}} 
+   & \new{S'}\fresh{\delta}\\
+& \cand & \sema{\w{qid}}{\w{Xs} \sep{.} X_i}{s} 
+\cand \sema{\ks{\w{fbind}}}{bs}{s,s'}
+\\[1.5ex]
+\sema{\w{fbind}}{x_i\ \sep{=}\ e}{s_r,s_d} & 
+\sdefine &
+\AScopeof{\ri{x}{i}}{s_r}
+\cand \CResolve{\ri{x}{i}}{\delta} 
+\cand \CType{\delta}{\tau_1}
+\cand \CSubtype{\tau_2}{\tau_1} 
+\cand \sema{\w{exp}}{e}{s_r,\tau_2}
+& \fresh{\delta, \tau_1, \tau_2}
+\end{array}$
+\end{boxedminipage}
+  \caption{Constraint generation for LMR.}
+  \label{fig:consgen2}
+\end{figure*}

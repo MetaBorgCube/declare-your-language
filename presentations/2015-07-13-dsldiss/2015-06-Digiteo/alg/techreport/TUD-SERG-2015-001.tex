@@ -1,0 +1,43 @@
+\documentclass[letterpaper,twoside,10pt]{book}
+\usepackage{se-report}
+\usepackage{moreverb}
+
+%---------------------------------------------------------------------%
+% User definable options                                              %    
+%---------------------------------------------------------------------%
+
+\title{A Theory of Name Resolution with Extended Coverage and Proofs}
+\author{Pierre Neron, Andrew Tolmach, Eelco Visser, Guido Wachsmuth}
+\headertitle{A Theory of Name Resolution with Extended Coverage and Proofs}
+
+\year{2015}
+\report{001}
+
+\renewcommand{\preprintof}{ % should say "pre-print of"
+\noindent
+This technical report is an extended version of the paper:
+
+\bigskip
+
+\noindent Pierre Neron, Andrew Tolmach, Eelco Visser, Guido Wachsmuth.
+A Theory of Name Resolution.
+In Jan Vitek, editor, Programming Languages and Systems - 24th European
+Symposium on Programming, ESOP 2015, Held as Part of the European Joint
+Conferences on Theory and Practice of Software, ETAPS 2015, London, UK,
+April 11-18, 2015, Proceedings. Volume ? of Lecture Notes in Computer
+Science, pages ?-?, Springer, 2015.
+
+\bigskip
+
+\noindent
+The technical report adds appendices with further examples of coverage and
+proofs of the theorems in the papers.
+
+{\small \verbatiminput{doc.bib}}
+}
+
+\begin{document}
+\maketitle
+\includepdf[trim=0 0cm -0.5cm 0.5cm,clip]{../document.pdf}
+\makebackpage
+\end{document}

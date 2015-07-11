@@ -1,0 +1,35 @@
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\begin{grammar}
+\sdnn{\pcfmcode{program}}{\ks{\w{\pcfmcode{decl}}}}
+\\
+\sdnn{\pcfmcode{decl}}{\text{\pcfmcodemm{module}}\ \w{\pcfmcode{id \{}}\ \ks{\w{\pcfmcode{decl}}}\ \kw{\pcfmcode{\}}}}
+\altf{\text{\pcfmcodemm{import}}\ \w{\pcfmcode{qid}}}
+\altf{\text{\pcfmcodemm{def}}\ \w{\pcfmcode{id}}\ \kw{=}\ \w{\pcfmcode{exp}}}
+\\
+\sdnn{\pcfmcode{exp}}{\w{\pcfmcode{qid}}}
+%\altf{\kw{(}\ \w{exp}\ \w{)}}
+%\altf{\kw{ifz}\ \w{exp}\ \kw{then}\ \w{exp}\ \kw{else}\ \w{exp}}
+\altf{\text{\pcfmcodemm{fun}}\ \w{\pcfmcode{id \{ exp \}}}}
+\altf{\text{\pcfmcodemm{fix}}\ \w{\pcfmcode{id \{ exp \}}}}
+\altnn{\text{\pcfmcodemm{let}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altf{\text{\pcfmcodemm{letrec}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altf{\text{\pcfmcodemm{letpar}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altnn{\w{\pcfmcode{exp}}\ \w{\pcfmcode{exp}}}
+\altf{\w{\pcfmcode{exp}}\ \kw{\oplus}\ \w{\pcfmcode{exp}}}
+\altf{\w{\pcfmcode{int}}}
+\\
+\sdnn{\pcfmcode{qid}}{\w{\pcfmcode{id}}}
+\altf{\w{\pcfmcode{id}}\ \kw{.}\ \w{\pcfmcode{qid}}}
+\\
+\sdnn{\pcfmcode{bind}}{\w{\pcfmcode{id}}\ \kw{=}\ \w{\pcfmcode{exp}}}
+%\mc{id}{identifiers}
+%\\
+%\mc{int}{integer constants}
+\end{grammar}
+\end{boxedminipage}
+\vspace*{-\baselineskip}
+  \caption{Syntax of LM.}
+  \figurelabel{pcfm:grammar}
+\end{figure}
+  

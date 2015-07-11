@@ -1,0 +1,12 @@
+\lstdefinelanguage{TS} {
+	morekeywords={module, imports,type, rules, definition, of, where, has, else, error, on, and, or,function, functions, defines, relations},
+  morestring=[b]",
+	morecomment=[l]{//},
+	morecomment=[n]{/*}{*/},
+  sensitive=true,
+  mathescape=false
+}
+
+\newcommand{\tscode}[1]{\lstinline[language=TS,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\tscodebl}[1]{\lstinline[language=TS,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\TS}{\langname{TS}}

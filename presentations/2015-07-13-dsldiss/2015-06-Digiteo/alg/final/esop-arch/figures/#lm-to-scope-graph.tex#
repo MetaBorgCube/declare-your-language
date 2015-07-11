@@ -1,0 +1,223 @@
+
+%% \newcommand{\semop}[1]{[\![ #1 ]\!]}
+%% \newcommand{\sem}[2]{\semop{#1}(#2)}
+%% % PCFM code for math mode
+%% \newcommand{\semcode}[1]{\text{\pcfmcodefig{#1}}}
+%% % Formula for regular interpretation translation
+%% \newcommand{\semf}[4]{
+%%  $\semop{#1}(#2) = #3$\\
+%% \smallskip
+%% \qquad$\text{\textsf{where}} \ #4 $
+%% }
+%% \newcommand{\semfs}[4]{
+%% $\sems{#1}{#2} = #3$\\
+%% \smallskip
+%% \qquad$\text{\textsf{where}} \ #4 $
+%% }
+%% \newcommand{\semfp}[5]{
+%% $\semp{#1}{#2}{#3} = #4$\\
+%% \smallskip
+%% \qquad$\text{\textsf{where}} \ #5 $
+%% }
+
+%% \newcommand{\semfline}[4]{
+%%  $\semop{#1}(#2) = #3 \quad\text{\textsf{where}} \ #4 $
+%% }
+
+%% \newcommand{\semp}[3]{\semop{#1}^p(#2,#3)}
+%% \newcommand{\sems}[2]{\semop{#1}^s(#2)}
+
+%% \newcommand{\sappend}{\ \text{+=}\ }
+%% \newcommand{\sdefine}{\ \text{:=}\ }
+
+\semop{toto}
+\newcommand{\sema}[3]{
+\semop{#1}^{#2}_{#3}
+}
+
+\newcommand{\snew}[1]{\text{\textsf{newscope}}\{\text{\textsf{par=}}#1\}}
+\newcommand{\snew}[1]{\text{\textsf{new}}_{#1}}
+\newcommand{\sret}[1]{\text{\textsf{ret}}(#1)}
+
+\newcommand{\semeqn}[4]{
+$\sema{#1}{#2}{#3} \sdefine {#4}$}
+
+\newcommand{\slet}{\text{\textsf{let }}}
+% \renewcommand{\sin}{\text{\textsf{ in }}}
+
+% \begin{figure}[tb]
+% %\fbox{
+% \begin{boxedminipage}{\hsize}
+% \semeqn{\semcode{ds}}{prog}{}
+% {
+% \slet S \sdefine \snew{\emptyset} \sin
+% \sema{\semcode{ds}}{recd}{S}
+% }
+
+
+% \medskip
+% \semeqn{\semcode{d ds}}{recd}{S}{
+% \sema{\semcode{d}}{dec}{S}; 
+% \sema{\semcode{ds}}{recd}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{}{recd}{S}{
+% ()
+% }
+
+% \medskip
+% \semeqn{\semcode{module x}_i \semcode{ \{ds\}}}{dec}{S}
+% {
+% \slet S' \sdefine \snew{S} \sin 
+% \D{S} \sappend \dsi{x}{i}{S'}; 
+% \sema{\semcode{ds}}{recd}{S'}
+% }
+
+% \medskip
+% \semeqn{\semcode{import xs}}{dec}{S}
+% {
+% \sema{\semcode{xs}}{rqid}{S};
+% \sema{\semcode{xs}}{iqid}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{\semcode{def x}_i\semcode{ = e}}{dec}{S}
+% {
+% \D{S} \sappend \di{x}{i};
+% \sema{\semcode{e}}{exp}{S}
+% }
+
+
+% \medskip
+% \semeqn{\semcode{xs}}{exp}{S}
+% {
+% \sema{\semcode{xs}}{rqid}{S}
+% }
+
+% \medskip
+% \semeqn{\semcode{x}_i\semcode{.xs}}{rqid}{S}
+% {
+% \R{s} \sappend \ri{x}{i};
+% \slet S' \sdefine \snew{\emptyset} \sin 
+% \I{S'} \sappend \ri{x}{i};
+% \sema{xs}{rqid}{S'}
+% }
+
+% \medskip
+% \semeqn{\semcode{x}_i}{rqid}{S}
+% {
+% \R{s} \sappend \ri{x}{i}
+% }
+% \ \ \ \ \ 
+% \semeqn{\semcode{x}_i\semcode{.xs}}{iqid}{S}
+% {
+% \sema{xs}{iqid}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{\semcode{x}_i}{iqid}{S}
+% {
+% \I{S} \sappend \ri{x}{i}
+% }
+
+% \medskip
+% \semeqn{\semcode{\(fun | fix\) x}_i\semcode{ \{e\}}}{exp}{S}
+% {
+% \slet S' \sdefine \snew{S} \sin
+% \D{S'} \sappend \di{x}{i};
+% \sema{\semcode{e}}{exp}{S'}
+% }
+
+
+% \medskip
+% \semeqn{\semcode{letrec bs in e}}{exp}{S}
+% {
+% \slet S' \sdefine \snew{S} \sin 
+% \sema{\semcode{bs}}{recb}{S'};
+% \sema{\semcode{e}}{exp}{S'}
+% }
+
+% \medskip
+% \semeqn{\semcode{x}_i\semcode{ = e; bs}}{recb}{S}
+% {
+% \D{S} \sappend \di{x}{i};
+% \sema{\semcode{e}}{exp}{S};
+% \sema{\semcode{bs}}{recb}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{}{recb}{S}
+% {
+% ()
+% }
+
+% \medskip
+% \semeqn{\semcode{letpar bs in e}}{exp}{S}
+% {
+% \slet S' \sdefine \snew{S} \sin 
+% \sema{\semcode{bs}}{parb}{(S,S')};
+% \sema{\semcode{e}}{exp}{S'}
+% }
+
+% \medskip
+% \semeqn{\semcode{x}_i\semcode{ = e; bs}}{parb}{(S,S')}
+% {
+% \D{S'} \sappend \di{x}{i};
+% \sema{\semcode{e}}{exp}{S};
+% \sema{\semcode{bs}}{parb}{(S,S')}
+% }
+% \ \ \ \ \ 
+% \semeqn{}{parb}{(S,S')}
+% {
+% ()
+% }
+
+% \medskip
+% \semeqn{\semcode{let bs in e}}{exp}{S}
+% {
+% \slet S' \sdefine \sema{bs}{seqb}{S} \sin
+% \sema{\semcode{e}}{exp}{S'}
+% }
+
+% \medskip
+% \semeqn{\semcode{x}_i\semcode{ = e; bs}}{seqb}{S}
+% {
+% \sema{\semcode{e}}{exp}{S};
+% \slet S' \sdefine \snew{S} \sin
+% \D{S'} \sappend \di{x}{i};
+% \sret{S'}
+% }
+% \ \ \ \ \ 
+% \semeqn{}{seqb}{S}
+% {
+% \sret{S}
+% }
+
+% \medskip
+% \semeqn{\semcode{e}_1\ \semcode{e}_2}{exp}{S}
+% {
+% \sema{\semcode{e}_1}{exp}{S};
+% \sema{\semcode{e}_2}{exp}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{\semcode{e}_1 \oplus \semcode{e}_2}{exp}{S}
+% {
+% \sema{\semcode{e}_1}{exp}{S};
+% \sema{\semcode{e}_2}{exp}{S}
+% }
+% \ \ \ \ \ 
+% \semeqn{\semcode{n}}{exp}{S}
+% {
+% ()
+% }
+
+
+% \end{boxedminipage}
+% %}
+% % }}\smallskip
+% \caption{Scope graph construction for LM via syntax-directed AST traversal.
+% Each function body consists of a sequence of
+% operations separated by semicolons, optionally returning a value using $\sret{}$;
+% the empty sequence is written $()$.
+% The construct $\snew{P}$ creates a new scope $S$ with parent $P$ and initially
+% empty sets $\D{S}$, $\R{S}$, and $\I{S}$; the $\sappend$ operator extends a set 
+% imperatively.}
+% \label{fig:lm-scopegraph-construction}
+% \end{figure}

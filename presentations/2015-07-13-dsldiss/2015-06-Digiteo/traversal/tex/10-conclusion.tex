@@ -1,0 +1,21 @@
+\section{Conclusion}
+
+We have presented a theory that combines extended scope graphs with type
+constraints to support language-independent specification of the name binding
+and typing concerns of programming languages. We have implemented a proof of
+concept constraint generator and solver, and used it as analysis framework in
+the Spoofax Language Workbench, applying it to LMR, a model language with
+interesting interactions between name binding and typing.
+
+Further research directions include proving completeness of the constraint
+resolution algorithm; extending the theory with operators to express additional
+requirements on solutions, such as uniqueness of declarations; applying the
+approach with more advanced type-system features, such as parametric
+polymorphism; and exploring the application of constraints for other language
+processing operations such as constraint-based refactoring \cite{SteimannP12}.
+
+% \TODO{but it would be a good place to put something about future work re ALGO
+% completeness and this issue I mentioned before:  Another thing we need to do
+% somewhere is to admit that we know we need additional operators to fully
+% characterize correctly-typed programs (e.g. no duplicate field names in a
+% record, etc.)}

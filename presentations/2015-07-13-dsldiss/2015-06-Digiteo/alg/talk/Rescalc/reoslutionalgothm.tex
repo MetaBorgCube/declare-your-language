@@ -1,0 +1,23 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=9.5cm,paperheight=1.cm,hmargin=.1cm,vmargin=.1cm]{geometry}
+
+\input{semantics}
+\input{resolution-calculus}
+
+\begin{document}
+\pagestyle{empty}
+\noindent
+\renewcommand{\S}{\mathcal{S}}
+\begin{minipage}{12.3cm}%\begin{boxedminipage}{12.3cm}
+$\forall\ \seeni, \ri{x}{i}, j, (\di{x}{j}\in \Res{\seeni}{\ri{x}{i}}) 
+\iff (\exists p\ s.t.\ \seeni \vdash p : \ri{x}{i} \resolve \di{x}{j})$.
+
+\end{minipage}%\end{boxedminipage}
+
+
+
+
+\end{document}

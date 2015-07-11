@@ -1,0 +1,50 @@
+\section{Objectives}\label{objectives}
+
+high-level overview of the approach
+
+Definition and use points, additional edges ??
+
+usual name binding relies on 3 concepts:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Definition : introduction of a new variable
+\item
+  reference : use of a variable
+\item
+  resolution : the process of associating a definition to a reference
+\end{itemize}
+
+Resolution is a complicated concept, just as one does not want ot use
+the compiler as a semantics for a language, we do not want to use the
+resolution algorithm to describe the name binding of a language.
+
+Introduce an abstraction that only represent the name binding of a
+program. Reduce name binding to simple concepts :
+
+\begin{itemize}
+\item
+  Definition : introduction of a new variable
+\item
+  reference : use of a variable
+\item
+  Scope : sets of definition and references nodes or
+\item
+  scope hierarchy : the scope hierarchy of a program is a tree such
+  every point of the program is associated with a scope (a node in that
+  tree). This tree represents respresent the name binding structure of
+  the program according to the following statement:
+\end{itemize}
+
+reference nodes with same names associated to the same scope resolve to
+the same definition node
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  an abstract resolution specification operating on the scope hierarchy
+\end{itemize}
+
+Adding modules and imports - imports : virtual edges in the scope
+hierarchy - imports policies

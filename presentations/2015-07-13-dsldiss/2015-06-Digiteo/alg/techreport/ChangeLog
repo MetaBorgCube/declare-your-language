@@ -1,0 +1,13 @@
+Version 0.4 Arie van Deursen, 16 February 2007
+	* Adjusted copy right notice
+	* Added \note facility for giving additional info like place of
+	  publication.
+
+Version 0.3
+	* Integration of Alex' issues in zip/Makefile.
+
+Version 0.2
+	* Adjustments by Alex
+
+Version 0.1
+	* As originally created by Leon

@@ -1,0 +1,14 @@
+We describe a language-independent theory for name binding and resolution,
+suitable for programming languages with complex scoping rules including both
+lexical scoping and modules. We formulate name resolution as a two-stage
+problem. First a language-independent scope graph is constructed using
+language-specific rules from an abstract syntax tree. Then references in the
+scope graph are resolved to corresponding declarations using a
+language-independent resolution process. We introduce a resolution calculus as a
+concise, declarative, and language-independent specification of name resolution.
+We develop a resolution algorithm that is sound and complete with respect to the
+calculus. Based on the resolution calculus we develop language-independent
+definitions of $\alpha$-equivalence and rename refactoring. We illustrate the
+approach using a small example language with modules. In addition, we show how
+our approach provides a model for a range of name binding patterns in existing
+languages.

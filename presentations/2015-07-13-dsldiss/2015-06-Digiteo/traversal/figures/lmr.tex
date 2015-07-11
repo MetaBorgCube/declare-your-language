@@ -1,0 +1,53 @@
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\begin{grammar}
+\sdnn{prog}{$\ks{\w{decl}}$}
+\\
+\sdnn{decl}{\kw{module}\ \w{Id}\ \sep{\{} \ks{\w{decl}} \sep{\}}}
+\altf{\kw{import}\ \w{Qid}}
+\altf{\kw{def}\ \w{bind}}
+\altnn{\kw{record}\ \w{Id}\ \opt{\w{sup}}\ \sep{\{} \ks{\w{fdecl}} \sep{\}}}
+\\
+\sdnn{sup}{\kw{extends}\ \w{Qid}}
+\\
+\sdnn{fdecl}{\w{id}\ \sep{:}\ \w{ty}}
+\\
+\sdnn{ty}{\kw{Int}}
+\altf{\w{Qid}}
+\altf{\w{ty}\ \sep{->}\ \w{ty}}
+\\
+\sdnn{exp}{\w{int}}
+\altf{\kw{true}}
+\altf{\kw{false}}
+\altf{\w{qid}}
+\altf{\w{exp} \oplus \w{exp}}
+\altnn{\kw{if}\ \w{exp}\ \kw{then}\ \w{exp}\ \kw{else}\ \w{exp}}
+\altnn{\kw{fun}\ \sep{(}\ \w{id}\ \sep{:}\ \w{ty}\ \sep{)}\ \sep{\{} \w{exp} \sep{\}}}
+\altf{\w{exp}\ \w{exp}}
+\altnn{\kw{let}\ \ks{\w{bind}}\ \kw{in}\ \w{exp}}
+\altf{\kw{letpar}\ \ks{\w{bind}}\ \kw{in}\ \w{exp}}
+\altnn{\kw{letrec}\ \ks{\w{tbind}}\ \kw{in}\ \w{exp}}
+\altnn{\kw{new}\ \w{Qid}\ \sep{\{} \ks{\w{fbind}} \sep{\}}}
+\altf{\kw{with}\ \w{exp}\ \kw{do}\ \w{exp}}
+\altnn{\w{exp}\ \sep{.}\ \w{id}}
+\\
+\sdnn{Qid}{\w{Id}}
+\altf{\w{Qid}\ \sep{.}\ \w{Id}}
+\\
+\sdnn{qid}{\w{id}}
+\altf{\w{Qid}\ \sep{.}\ \w{id}}
+\\
+\sdnn{bind}{\w{id}\ \sep{=}\ \w{exp}}
+\altf{\w{tbind}}
+\\
+\sdnn{tbind}{\w{id}\ \sep{:}\ \w{ty}\ \sep{=}\ \w{exp}}
+\\
+\sdnn{fbind}{\w{id}\ \sep{=}\ \w{exp}}
+%\mc{id}{identifiers}
+%\\
+%\mc{int}{integer constants}
+\end{grammar}
+\end{boxedminipage}
+  \caption{Syntax of LMR.}
+  \figurelabel{lmr:grammar}
+\end{figure}

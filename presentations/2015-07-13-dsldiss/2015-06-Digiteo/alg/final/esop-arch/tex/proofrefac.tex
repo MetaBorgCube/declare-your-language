@@ -1,0 +1,18 @@
+\section{Proof refactoring}
+
+\paragraph{the existing proof is bogus} the end of the proof of lemma 17 (lemma 5) says that the conclusion is trivial for L and V. However in order to use lemma 3, one needs to use the induction hypothesis on P and L for V, and on D and I for L, which is not possible. The induction should be done on an order also taking into account the function ID such that {D I P} < L < V, if not it does not work exactly.
+
+\paragraph{New Proof} Thus the refactoring of the proof using this new induction is OK, the definitions for P$_L$ and P$_V$ should be the equivalence given by lemma 15 and 16. Thus the proof of these lemmas takes the place of the ``trivial'' case ant the end of lemma 17 and call to lemma 15 and 16 are only uses of definitions. This avoids the ``detour'' using ``visible'' definition and union.
+
+Another solution would be to simply get rid of the visible and replace it with (extended) deltas operators on  path sets.
+
+Idea of the actual proof 
+
+\begin{tabular}{c|llr}
+  & Algorithm & & Calculus\\
+  D & & & $\mathbb{P}_D$\\
+  I & & & $\mathbb{P}_I$ \\
+  P & & & $\mathbb{P}_P$ \\
+  L & $\mathbb{P}_L$ & ~~~ Lemma 16 ($\Leftrightarrow$) ~~~~ & resolve + $\in I^*$ \\ 
+  V & $\mathbb{P}_V$ & ~~~ Lemma 15 ($\Leftrightarrow$) & resolve\\
+\end{tabular}

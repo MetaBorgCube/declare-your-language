@@ -1,0 +1,210 @@
+\section{A Theory of Visibility}
+
+naming conflict: multiple resolution paths for same identifier
+
+some naming conflicts are resolved by policies for visibility 
+
+thesis: shadowing / visibility is independent / orthogonal to resolution paths
+
+systematic analysis of the design space of shadowing as expressed in terms of path well-formedness and specificity ordering
+\begin{itemize}
+ \item  model different kinds of imports through flags on imports
+\item transitive vs non-transitive vs non-transitive+export
+\item include vs import vs prefer-imported: maybe use a precedence value in the imports
+\item imports with inherited lexical scope (handled by well-formedness)
+\end{itemize}
+
+Add flags to imports to describe the different policies, should be handled by well-formedness of the resolution path
+
+\newcommand{\flag}[1]{\overline{#1}}
+
+\paragraph{Import Policies}
+To reflect the different imports policies, we add boolean flags to the imports,
+when no flag is specified the default behavior is used.
+Assume some \emph{import B} is declared in a module {\it A},
+\begin{itemize}
+ \item If the Import/Export flag $e$ of this import is $0$ then the definition in {\it B} are visible in $A$ and if it is $1$ the definitions
+  in {\it B} are also visible from every scope importing \emph{A}.
+ \item If the transitivity flag $t$ is $0$ then the resolution can only use the definitions or exports of the imported module else
+  the resolution can use all the import clauses in the imported scopes
+ \item If the parent (recursive) flag $r$ is $0$ then the resolution process can only continue through possible imports else it 
+  can also look into the parent scope
+\end{itemize}
+The flag of an import is thus a triple of booleans and denoted $\flag{etr}$, for example a non-transitive export that do not allow recursive call
+to parent has flag $\flag{100}$.
+
+
+% The precedence flag $pr^{F}$ can be either set to:
+%   \begin{itemize}
+%    \item Usual import $u$ whose precedence is lower than the definition, thus a resolution using directly a definition is preferred
+%     over an usual import
+%    \item Include import $i$ whose precedence is the same than a definition
+%    \item Pref import $p$ whose precedence is higher than a definition, such an import is preferred over a direct definition
+%   \end{itemize}
+
+??? what if we want priority of import over parents ? for example import with same precedence as parent, parent preferred over imports ??? 
+Back to the idea of giving a precedence to imports in algorithm: try to resolve with precedence n, if you find something then done else try with
+prec (n+1), parent and definition are only one of these way.
+
+Automata in Figure \ref{fig:algoterm} for the correctness of the path, the states corresponds to different authorization first component is the transitivity flag, i.e. are you allowed to 
+use simple imports, second component is the parent flag, i.e. can you look inside the parent scope. Transitions are either parent rule $P$, or imports flags 
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[shorten >=1pt,auto]
+
+\tikzset{>=stealth',
+    every edge/.append style={->}
+  }
+      \node[circle,draw] (TR) at (0,2.6) {\it 11};
+      \node[circle,draw] (TX) at (4.5,5.2) {\it 10};
+      \node[circle,draw] (NX) at (3,2.6) {\it 00};
+      \node[circle,draw] (NR) at (4.5,0) {\it 01};
+      \node (ri) at (4.5,2) {};
+      
+     \path 
+
+     (TR) edge[loop left] node[left] {\small $\flag{x11} + P$} (TR)
+     (TR.90) edge[bend left=35] node[above left] {\small $\flag{x10}$} (TX.175)
+     (TR) edge[bend left=10] node[above] {\small $\flag{x00}$} (NX)
+     (TR.280) edge[bend right=35] node[above right] {\small $\flag{x01}$} (NR.175)
+
+     (TX) edge[loop above] node[above] {\small $\flag{x10}$} (TX)
+          edge[bend left=10] node[right] {\small $\flag{x00}$} (NX)
+     (TX.185) edge[bend right=35] node[below right] {\small $\flag{x11}$} (TR.80)
+     (TX.340) edge[bend left=50] node[right] {\small $\flag{x01}$} (NR.20)
+
+     (NX) edge[loop right] node[right] {\small $\flag{100}$} (NX)
+          edge[bend left=10] node[left] {\small $\flag{110}$} (TX)
+          edge[bend left=10] node[right] {\small $\flag{101}$} (NR)
+     (NX) edge[bend left=10]  node[below] {\small $\flag{111}$} (TR)
+
+     (NR) edge[loop below] node[below] {\small $\flag{101} + P$} (NR)
+     (NR.30) edge[bend right=50] node[left] {\small $\flag{110}$} (TX.330)
+     (NR) edge[bend left=10] node[left] {\small $\flag{100}$} (NX)
+     (NR.185) edge[bend left=35] node[below left] {\small $\flag{111}$} (TR.270);
+
+\end{tikzpicture}
+%\rule{\textwidth}{.1pt}
+\caption{Path Well Formedness Automata}
+\label{fig:algoterm}
+\end{figure}
+
+
+\begin{figure}
+\begin{boxedminipage}{\hsize}
+
+\textbf{Edges in scope graph}
+
+\smallskip
+
+	\infrule{R}{
+		x^p \in \R{S}
+	}{
+		\mathcal{I} \vdash x^p \scopea{x}{R(x^p)} S
+	}
+	
+\smallskip
+
+	\infrule{D}{
+		d_x \in \D{S}
+	}{
+		\mathcal{I} \vdash S \scopea{x}{D(d_x)} d_x
+  }
+
+\smallskip
+
+% 	\infrule{T}{}{
+% 		\mathcal{I} \vdash S_1\cdot S_2\cdot S^* \scopea{x}{T} S_2 \cdot S^*
+% 	}
+
+% \smallskip
+
+	\infrule{Par}{
+		\P{S} = S'
+	}{
+		\mathcal{I} \vdash S \scopea{x}{Par} S'
+	}
+
+\smallskip
+
+	\infrule{I}{
+		y^p \in \mathcal{I}(S_1)  
+		\tab 
+		y^p \notin \mathcal{I} 
+		\tab
+		y^p\!,\mathcal{I} \vdash y^p \resolvea{P^*}\!\!\!d_y^{S_2}		
+	}{
+		\mathcal{I} \vdash S_1 \scopea{x}{I^t(y^p,P^*)} S_2 
+	}
+
+\smallskip
+
+% 	\infrule{I}{
+% 		y^p \in \I{S_1}  
+% 		\tab 
+% 		y^p \notin \mathcal{I} 
+% 		\tab
+% 		y^p\!,\mathcal{I} \vdash y^p \resolvea{P^*}\!\!\!d_y^{S_2^*}	
+% 	}{
+% 		\mathcal{I} \vdash S_1\cdot S_1^* \scopea{x}{I(y^p\!,P^*)} S_2^* 
+% 	}
+
+% \smallskip
+
+\textbf{Path composition}
+
+	\infrule{C1}{}{
+		\mathcal{I} \vdash d_x \lra{[]}{x} d_x
+	}
+
+\smallskip
+
+	\infrule{C2}{
+		\mathcal{I} \vdash A \scopea{x}{P} B
+		\tab 
+		\mathcal{I} \vdash B \lra{P^*}{x} C
+	}{
+		\mathcal{I} \vdash A \lra{P\cdot P^*}{x} C
+	}
+
+\smallskip
+\textbf{Resolution}
+
+	\infrule{Res}{
+ 		\begin{array}{c}
+    	\mathcal{I} \vdash x^p \lra{P^*_1}{x} d_x
+			\tab
+			\tab
+			\tab
+			P^*_1 : WFP
+    	\\
+  		\forall d'_x,P^*_2(\mathcal{I} \vdash x^p \lra{P^*_2}{x} d'_x\Rightarrow\neg
+  	P^*_2 < P^*_1)
+  	\end{array}
+	}{
+		\mathcal{I} \vdash x^p \resolvea{P^*_1} d_x
+	}
+
+\bigskip
+
+
+\end{boxedminipage}
+\caption{Resolution Calculus}
+\label{fig:calculus}
+\end{figure}
+
+
+%\input{figures/fullcalculus}
+
+
+Set of \emph{seen-imports} : 
+\begin{itemize}
+ \item how do we introduce it ?
+ \item in which cases is it really necessary ?
+\end{itemize}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 

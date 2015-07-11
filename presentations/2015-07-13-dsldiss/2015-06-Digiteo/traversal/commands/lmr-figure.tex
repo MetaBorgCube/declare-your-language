@@ -1,0 +1,96 @@
+\newsavebox\constraintbox
+\newdimen\heightdiff
+
+\newcommand{\exampleBoxes}[3]{
+  \begin{boxedminipage}[t]{\hsize}
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle,
+  frame=none]{figures/examples/#1.lmr}
+  \end{boxedminipage}
+% {\dimexpr.5\linewidth-2\tabcolsep}
+  \begin{lrbox}{\constraintbox}
+    \parbox{0.39\hsize}{
+    \arraycolsep=1.5pt
+          \small
+          \centering
+          declarations
+          %\vspace{-.5\abovedisplayskip}
+          \[\begin{array}[t]{rcl}\input{figures/examples/#2/#1.analysis.decl.tex}\end{array}\]
+          %\vspace{-.5\belowdisplayskip}
+          references 
+          \[\begin{array}[t]{rcl@{\hspace{1em}}rcl}\input{figures/examples/generated/#1.analysis.ref.tex}\end{array}\]
+          types
+          \[\begin{array}[t]{rcl}\input{figures/examples/generated/#1.analysis.type.tex}\end{array}\]
+          solutions
+          \[\begin{array}[t]{rcl}\input{figures/examples/generated/#1.analysis.solution.tex}\end{array}\]
+          \vspace{-\belowdisplayskip}}
+  \end{lrbox}
+  \setbox0=\vbox{\usebox\constraintbox}
+  \heightdiff=\ht0 \advance\heightdiff by \dp0
+  \setbox0=\vbox{\includegraphics{figures/examples/#2/#1}}
+  \advance\heightdiff by -\ht0
+  \advance\heightdiff by -\dp0
+  % 
+  \begin{boxedminipage}[t]{0.39\hsize}
+    \usebox{\constraintbox}%
+  \end{boxedminipage}
+  \hfill
+  \begin{boxedminipage}[t]{0.6\hsize}
+        \vspace{0.5\heightdiff}
+        \centering
+        \includegraphics[scale=0.5]{figures/examples/#2/#1}
+        \vspace{0.5\heightdiff}
+  \end{boxedminipage}
+  \caption{#3}
+}
+
+
+
+\newcommand{\LmrExampleBody}[2]{
+  \begin{boxedminipage}[t]{\hsize}
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle,
+  frame=none]{../../trunk/LMR/test/#1.lmr}
+  \end{boxedminipage}
+% {\dimexpr.5\linewidth-2\tabcolsep}
+  \begin{lrbox}{\constraintbox}
+    \parbox{0.39\hsize}{
+    \arraycolsep=1.5pt
+          \small
+          \centering
+          declarations
+          %\vspace{-.5\abovedisplayskip}
+          \[\begin{array}[t]{rcl}\input{../../trunk/LMR/test/#1.analysis.decl.tex}\end{array}\]
+          %\vspace{-.5\belowdisplayskip}
+          references 
+          \[\begin{array}[t]{rcl@{\hspace{1em}}rcl}\input{../../trunk/LMR/test/#1.analysis.ref.tex}\end{array}\]
+          types
+          \[\begin{array}[t]{rcl}\input{../../trunk/LMR/test/#1.analysis.type.tex}\end{array}\]
+          \vspace{-\belowdisplayskip}}
+  \end{lrbox}
+  \setbox0=\vbox{\usebox\constraintbox}
+  \heightdiff=\ht0 \advance\heightdiff by \dp0
+  \setbox0=\vbox{\includegraphics[scale=0.35]{../../trunk/LMR/test/#1}}
+  \advance\heightdiff by -\ht0
+  \advance\heightdiff by -\dp0
+  % 
+  \begin{boxedminipage}[t]{0.39\hsize}
+    \usebox{\constraintbox}%
+  \end{boxedminipage}
+  \hfill
+  \begin{boxedminipage}[t]{0.6\hsize}
+        \vspace{0.5\heightdiff}
+        \centering
+        \includegraphics[scale=0.35]{../../trunk/LMR/test/#1}
+        \vspace{0.5\heightdiff}
+  \end{boxedminipage}
+  \caption{#2}
+}
+
+\newcommand{\LmrExampleCaption}[2]{
+  \begin{figure}[t]
+    \LmrExampleBody{#1}{#2}
+  \end{figure}
+}
+
+\newcommand{\LmrExample}[1]{
+   \LmrExampleCaption{#1}{#1}
+}

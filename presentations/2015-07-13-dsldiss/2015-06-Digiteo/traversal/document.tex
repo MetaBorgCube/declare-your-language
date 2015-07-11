@@ -1,0 +1,149 @@
+%-----------------------------------------------------------------------------
+%
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+
+
+\documentclass[nocopyrightspace,preprint,nonatbib,caprule=false,10pt]{sigplanconf}
+
+% The following \documentclass options may be useful:
+
+% preprint      Remove this option only once the paper is in final form.
+% 10pt          To set in 10-point type instead of 9-point.
+% 11pt          To set in 11-point type instead of 9-point.
+% authoryear    To obtain author/year citation style instead of numeric.
+
+\input{commands/main}
+\nocaptionrule
+\begin{document}
+
+\special{papersize=8.5in,11in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\conferenceinfo{OOPSLA 2015}{October 25--30, 2015, Pittsburg, PA, USA} 
+\copyrightyear{2015} 
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+\doi{nnnnnnn.nnnnnnn}
+
+% Uncomment one of the following two, if you are not going for the 
+% traditional copyright transfer agreement.
+
+%\exclusivelicense                % ACM gets exclusive license to publish, 
+                                  % you retain copyright
+
+%\permissiontopublish             % ACM gets nonexclusive license to publish
+                                  % (paid open-access papers, 
+                                  % short abstracts)
+
+\titlebanner{Submitted to OOPSLA 2015 | March 25, 2015 | Do Not Distribute}        % These are ignored unless
+\preprintfooter{
+\begin{minipage}{\hsize}
+Authors: Hendrik van Antwerpen, Pierre Neron, Andrew Tolmach, Eelco Visser, Guido Wachsmuth
+\end{minipage}
+}   % 'preprint' option specified.
+
+\title{Language-Independent Type-Dependent Name Resolution}
+%\subtitle{Subtitle Text, if any}
+
+\authorinfo{}{}
+
+% \authorinfo{Hendrik van Antwerpen}
+%        {Delft University of Technology}
+%        {h.vanantwerpen@student.tudelft.nl}
+% \authorinfo{Pierre Neron}
+%        {Delft University of Technology}
+%        {p.j.m.neron@tudelft.nl}
+% \authorinfo{Andrew Tolmach}
+%        {Portland State University}
+%        {apt@cs.pdx.edu}
+% \authorinfo{Eelco Visser}
+%        {Delft University of Technology}
+%        {visser@acm.org}
+% \authorinfo{Guido Wachsmuth}
+%        {Delft University of Technology}
+%        {guwac@acm.org}
+
+\maketitle
+
+\vspace*{-3cm}
+
+\begin{abstract}
+\input{tex/00-abstract}
+\end{abstract}
+
+%\category{CR-number}{subcategory}{third-level}
+% \newcommand{\completecategory}[1]{}%{--- #1}
+% \category{D.3.1}{Programming Languages}{Formal Definitions and Theory\completecategory{semantics, syntax}}
+% \category{D.3.2}{Programming Languages}{Language classifications\completecategory{specialized application languages, very high-level languages}}
+% \category{F.3.1}{Logics and Meanings of Programs}{Specifying and Verifying and Reasoning about Programs\completecategory{mechanical verification, specification techniques}}
+% \category{D.3.4}{Programming Languages}{Processors\completecategory{code generation, interpreters}}
+% \category{F.3.2}{Logics and Meanings of Programs}{Semantics of Programming Languages\completecategory{operational semantics}}
+% \category{D.2.6}{Software Engineering}{Programming Environments\completecategory{programmer workbench}}
+
+% general terms are not compulsory anymore, 
+% you may leave them out
+% \terms
+% term1, term2
+
+% \keywords Language Specification; Name Binding; Types; Domain Specific Languages; Meta-Theory 
+
+\newcommand{\kind}[1]{\footnotesize{\mbox{\it{#1}}}}
+
+\newcommand{\sema}[3]{
+\semop{#2}^{\mathit{#1}}_{#3}
+}
+
+\newcommand{\fresh}[1]{\mbox{\it(fresh ${#1}$)}} 
+\newcommand{\new}[1]{\assumpcolor{\mbox{\it(new ${#1}$)}}} 
+
+\newcommand{\cand}{\ \wedge\ }  % was comma
+
+\newcommand{\inttysub}{\footnotesize \intty}
+\newcommand{\arrtysub}[2]{\footnotesize {\arrty{#1}{#2}}}
+\newcommand{\rectysub}[1]{\footnotesize {\recty{#1}}}
+
+\include{figures/collection}
+
+%\input{tex/ack}
+
+% We recommend abbrvnat bibliography style.
+
+
+\newpage\clearpage
+% \section{Resolution Calculus}
+% \appendixlabel{rescalc}
+% \input{figures/rescalc}
+% \clearpage
+
+
+%\newpage
+%\section{Examples}
+
+%\input{../../trunk/LMR/test/lmr-tests.tex}
+
+\end{document}
+
+%                       Revision History
+%                       -------- -------
+%  Date         Person  Ver.    Change
+%  ----         ------  ----    ------
+
+%  2013.06.29   TU      0.1--4  comments on permission/copyright notices
+

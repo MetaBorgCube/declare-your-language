@@ -1,0 +1,53 @@
+
+\begin{figure*}[t]
+\begin{boxedminipage}{\hsize}
+\small
+  \begin{minipage}{.4\linewidth}
+    \begin{align*}
+      \Res{\seeni}{\r{x}} :=&\ \Resx{V}{\{\r{x}\} \cup \seeni}{\{\}}{{x},\scopeof(\r{x})} \\
+      \Resx{V}{\seeni}{\seens}{x,S}
+      := & \ \Resx{L}{\seeni}{\seens}{{x},S} \lhd \Resx{P}{\seeni}{\seens}{{x},S}  \\  
+      % \begin{cases}
+      %   \Resx{L}{\seeni}{\seens}{\r{x},S} \mbox{ if non-empty} \\
+      %   \Resx{P}{\seeni}{\seens}{\r{x},S} \\
+      % \end{cases} \\
+      \Resx{L}{\seeni}{\seens}{{x},S} 
+      :=&\ \Resx{D}{\seeni}{\seens}{{x},S} \lhd \Resx{I}{\seeni}{\seens}{{x},S} \\
+      % \begin{cases}
+      %   \Resx{D}{\seeni}{\seens}{\r{x},S} \mbox{ if non-empty} \\
+      %   \Resx{I}{\seeni}{\seens}{\r{x},S} \\
+      % \end{cases} \\
+      \Resx{D}{\seeni}{\seens}{{x},S}
+      :=&\ \begin{cases}
+        \emptyset \mbox{ if } S \in \seens \\
+        \{ \di{x}{i} | \di{x}{i} \in \D{S} \}
+      \end{cases} \\
+    \end{align*}
+  \end{minipage}
+  \begin{minipage}{.6\linewidth}
+  \begin{align*}
+    \Resx{I}{\seeni}{\seens}{{x},S}
+    :=&\ \begin{cases}
+      \emptyset \mbox{ if } S \in \seens \\
+      \exception \mbox{ if $\IS{S}$ contains a variable} \\
+      \bigcup 
+      \left\{ 
+        \Resx{L}{\seeni}{\{S\} \cup \seens}{{x},S'}
+        \left| 
+          \begin{array}{ll}
+            S' \in IS[\seeni](S) \cup \IS{S}
+          \end{array}
+        \right\} \right.
+    \end{cases} \\
+    IS[\seeni](S) :=&\ \{ \defscope(\d{y}) \mid \r{y} \in \I{S} \backslash \seeni \wedge \d{y} \in \Res{\seeni}{\r{y}} \} \\
+    \Resx{P}{\seeni}{\seens}{{x},S}
+    :=&\ \begin{cases}
+      \emptyset \mbox{ if } S \in \seens \\
+      \Resx{V}{\seeni}{\{S\} \cup \seens}{{x},\P{S}}
+    \end{cases} \\
+  \end{align*}
+  \end{minipage}
+  \end{boxedminipage}
+  \caption{Name resolution algorithm}
+  \figurelabel{name-resolution}
+\end{figure*}

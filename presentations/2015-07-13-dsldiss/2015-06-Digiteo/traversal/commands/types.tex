@@ -1,0 +1,15 @@
+% type constructors
+\newcommand{\intcon}{\mathit{Int}}
+\newcommand{\boolcon}{\mathit{Bool}}
+\newcommand{\arrcon}{\mathit{Fun}}
+\newcommand{\reccon}[1]{\mathit{Rec(}{#1}\mathit{)}}
+
+% applied types
+\newcommand{\intty}{\intcon}
+\newcommand{\boolty}{\boolcon}
+\newcommand{\recty}[1]{\reccon{#1}}
+\newcommand{\arrty}[2]{{\arrcon}{\mathit [}{#1}{\mathit ,}{#2}{\mathit]}}
+
+% type operations
+\newcommand{\lub}[2]{{(#1 \sqcup #2)}}
+\newcommand{\glb}[2]{{(#1 \sqcap #2)}}

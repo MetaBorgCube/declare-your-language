@@ -1,0 +1,404 @@
+\section{Constraint Collection}
+\sectionlabel{collection}
+
+\newcommand{\kind}[1]{\footnotesize{\mbox{\it{#1}}}}
+
+\newcommand{\sema}[3]{
+\semop{#2}^{\mathit{#1}}_{#3}
+}
+
+\newcommand{\fresh}[1]{\mbox{\it(fresh ${#1}$)}} 
+\newcommand{\new}[1]{\mbox{\it(new ${#1}$)}} 
+
+\newcommand{\cand}{\ \wedge\ }  % was comma
+
+\newcommand{\inttysub}{\footnotesize \intty}
+\newcommand{\arrtysub}[2]{\footnotesize {\arrty{#1}{#2}}}
+\newcommand{\rectysub}[1]{\footnotesize {\recty{#1}}}
+
+In this section, we show how to collect constraints for name resolution and
+typechecking from programs in the LMR language, whose concrete syntax was
+given in \Figure{lmr:grammar}.
+The full collection algorithm is shown in Figures~\ref{fig:consgen} and \ref{fig:consgen2}.  
+\input{figures/collection}
+\input{figures/collection2}
+Collection is performed by a single traversal over 
+the program that collects scope and subtyping assumptions, name resolution 
+constraints, and typing constraints all in one pass. (The color codings 
+should help in distinguishing these different kinds of constraints.)
+
+To simplify and compress the presentation, we describe the algorithm as operating over LMR's
+concrete syntax. (Our actual implementation operates over the abstract
+syntax of LMR, and is written in \DynSem{}, a declarative domain-specific 
+language for expressing semantics; although readable, it is relatively verbose.)
+The algorithm is defined by a family of functions indexed by
+syntactic category ({\it decl}, {\it exp}, etc.). Each function takes a syntactic item and
+possibly one or more auxiliary parameters, and (usually) 
+returns a constraint, possibly involving one or more fresh variables or new
+scope identifiers.  Functions are defined by a set of rules, one for each possible syntactic form
+in the category. For example, $\sema{decl}{-}{s}$ has four rules (for \cod{module}, \cod{import}, \cod{def}
+and \cod{record} declarations, respectively), and is parameterized by
+the scope $s$ into which declared identifiers are to be installed; it returns the 
+conjunction of constraints that enforces correct name and type resolution for the declaration, 
+some of which are derived by invoking generation functions on syntactic sub-components.
+
+To further streamline the presentation, we use the notation 
+$\sema{c^*}{-}{}$ on sequences of items of syntactic category $c$ 
+to mean the result of applying $\sema{c}{-}{}$ to each item and returning
+the conjunction of the resulting constraints, or $\CTrue$ for the empty sequence.
+Similarly, $\sema{c?}{-}{}$ works on a optional $c$ item; it applies 
+$\sema{c}{-}{}$ to the item if it is present and returns $\CTrue$ otherwise.
+Throughout, we use metavariable $x_i$ for a (lower case) term variable at position $i$
+and $X_i$ for an (upper case)  module or record name at position $i$, with
+one exception: for compactness, we give just one rule for both $qid$ and $Qid$, in which  
+$x_i$ can be either kind of identifier.
+We write $Xs$ for a dot-separated sequence of
+module or record names, which can be empty (in which case, by convention, $Xs.x$ 
+doesn't have a leading dot). 
+
+Let us trace how the constraint generator works on some of the different syntactic forms of LMR.
+A complete program is a sequence of mutually-recursive top-level declarations, 
+so $\sema{prog}{-}{}$ creates a new root scope $S$
+in which they are to be installed,  generates an assumption constraint
+that $S$ is parentless, and then conjoins the constraints for each declaration, 
+passing $S$ as a parameter to the declaration generator for {\it decl}. 
+$\sema{decl}{-}{s}$ generates an assumption that installs any declared identifier into scope $s$;
+the rest of its behavior depends on the kind of declaration:
+
+A \cod{module} builds a new lexical child scope for its declarations, so the generator
+function creates a new scope $S'$ and generates assumptions that $s$ is the parent of $S'$ and
+that the module name declaration is associated with $S'$. It then conjoins the constraints obtained
+by recursively invoking $\sema{decl}{-}{S'}$ on its member declarations.
+
+An \cod{import} doesn't declare an identifier, but instead generates constraints forcing
+the imported module name into the import set and reference set for $s$. The $\sema{qid}{-}{s}$ 
+invocation generates additional constraints needed to describe references to potentially qualified names.
+(We omit discussion of the details, which are slightly complex.)
+
+A \cod{def} invokes an auxiliary generating function $\sema{bind}{-}{s_r,s_d}$ to process the
+definition; $s_d$ is the scope into which the defined identifier's declaration should be installed, and $s_r$
+is the scope into which any identifier references in the definining expression should go. (In this invocation,
+the two scope parameters are the same, but the {\it bind} generator is invoked at other places, e.g.
+for the \cod{letpar} expression, where they are not.)  For bindings without explicit type annotation,
+a constraint is generated giving the defined identifier a fresh type $\tau$, and function $\sema{exp}{-}{s,t}$
+is invoked to generate constraints for the defining expression with the expected type $t=\tau$.
+(We discuss generation of expression constraints below.)
+For bindings with an explicit concrete type annotation, we also generate a constraint that $\tau$ be a subtype
+of the declared type, after it is translated into an internal type constructor
+using auxiliary function $\sema{ty}{-}{s}$. This function, unlike all the others, returns a pair of things:
+the internalized type constructor, and any constraints generated by references to record names (which are
+installed into the scope given by parameter $s$).
+
+A \cod{record} is handled similarly to a \cod{module}, but the details are more complicated. If the
+record has a super-type (non-empty \cod{extends} clause), an auxiliary function $\sema{sup}{-}{s_r,s_d,t}$ 
+is invoked to generate constraints to describe the inheritance.
+Parameter $s_r=s$ is the scope in which the super-type name is to be resolved,
+$s_d=S'$ is the scope into which the super-type's scope is to be imported, and $t=\recty{\di{X}{i}}$ 
+is the new record type. The {\it sup} generator builds a subtyping assumption (the only
+source of such assumptions in LMR) that relates the new record type to the result of resolving the
+super-type name, via a fresh declaration variable $\delta$. The fields of the new record are
+declared and given type constraints by another auxiliary function.
+
+
+Constraint generation for expressions is largely straightforward. The {\it expr} 
+generator is parameterized by the scope $s$ into which references should be installed
+and the expected type $t$ of the expression (often a type variable). Expressions 
+introducing local bindings re-use the {\it bind} generator. (There is
+function for sequential \cod{let}, which is desugared into nested \cod{letpar}
+expressions before constraint generation is performed.)
+Note that generated constraints always force an expression to have a precise type, which is
+designed to be minimal in the subtyping hierarchy. Subtyping is allowed only at
+function applications, at bindings to explicitly annotated identifiers, and in
+the conditional expressions, for which a least-upper-bound constraint is generated.
+Scope variables $\varsigma$ are introduced only for field dereference and \cod{with}
+expressions. 
+
+%% \begin{figure*}
+
+%% \centering
+%% \renewcommand{\arraystretch}{1.4}
+%% $
+%% \begin{array}{rclr}
+
+%% \sema{\kind{prog}}{\semcode{$ds$}}{} & \sdefine &
+%%   \AParent{S}{\perp} \cand \sema{\kind{decl}^*}{\semcode{$ds$}}{S} & 
+%%   \new{S} \\[0.3cm]
+%% %% \sema{decls}{\semcode{$d\ ds$}}{s} & \sdefine &
+%% %%   \sema{decl}{\semcode{$d$}}{s} \cand \sema{decls}{\semcode{$ds$}}{s} \\
+%% %% \sema{decls}{}{s} & \sdefine &
+%% %%   \CTrue \\
+%% %\\
+%% \sema{\kind{decl}}{\semcode{module\ $X_i$\ \{ $ds$ \}}}{s} & \sdefine &  %
+%%   \AScopeof{\di{X}{i}}{s} \cand
+%%   \AParent{S'}{s} \cand
+%%   \AAssoc{\di{X}{i}}{S'} \cand
+%%   \sema{\kind{decl}^*}{\semcode{$ds$}}{S'}  &
+%%   \new{S'} \\
+%% \sema{\kind{decl}}{\semcode{import\ $Xs$.$X_i$}}{s} & \sdefine &
+%%   \sema{\kind{qid}}{\semcode{$Xs$.$X_i$}}{s} \cand
+%%   \ARImport{\ri{X}{i}}{s}  \\
+%% \sema{\kind{decl}}{\semcode{def $\ b$}}{s} & \sdefine &
+%%    \sema{\kind{defbind}}{\semcode{$b$}}{s,s}  \\
+%% \sema{\kind{decl}}{\semcode{record\ $X_i\ sup\ $ \{$\mbox{\it fs}$\}}}{s} & \sdefine &
+%%   \AScopeof{\di{X}{i}}{s} \cand
+%%   \AParent{S'}{s} \cand
+%%   \AAssoc{\di{X}{i}}{S'} \cand \\
+%%   & & % \CType{\di{X}{i}}{Rec(\di{X}{i})} \cand 
+%%   \sema{\kind{super?}}{\semcode{$sup$}}{s,S',\rectysub{\di{X}{i}}} \cand 
+%%   \sema{\kind{flddecl}^*}{\semcode{$\mbox{\it fs}$}}{s,S'} & 
+%%   \new{S'} \\[0.3cm]
+%% %\\
+%% \sema{\kind{super}}{\semcode{extends\ $Xs$.$X_i$}}{s_r,s_d,t} & \sdefine &
+%%   \sema{\kind{qid}}{\semcode{$Xs$.$X_i$}}{s_r} \cand
+%%   \CResolve{\ri{X}{i}}{\delta} \cand
+%%   \ARImport{\ri{X}{i}}{s_d} \cand
+%%   \ASubtype{t}{\recty{\delta}} 
+%% & \fresh{\delta} \\[0.3cm]
+%% %% \sema{super}{}{s,s',t} & \sdefine &
+%% %%  \CTrue \\
+%% % APT: differs in DS
+%% %\\
+%% %% \sema{flddecls}{\semcode{$x_i$:$t$,$fs$}}{s_r,s_d} & \sdefine &
+%% %%   C \cand 
+%% %%   \sema{flddecls}{\semcode{$fs$}}{s_r,s_d} \\
+%% %%   && \mbox{\it where } \sema{argdecl}{\semcode{$x_i$:$t$}}{s_r,s_d} = (\_,C) \\
+%% %% \sema{flddecls}{}{s_r,s_d} &\sdefine &
+%% %%   \CTrue \\
+%% %% \\
+%% \sema{\kind{flddecl}}{\semcode{$x_i$:$t$}}{s_r,s_d} & \sdefine &
+%%   \AScopeof{\di{x}{i}}{s_d} \cand \CType{\di{x}{i}}{t'} \cand C \ \ \ \ \ \mbox{\it where } \sema{\kind{ty}}{t}{s_r} = (t',C) \\[0.3cm]
+%% %\\
+%% %% \sema{qid}{\semcode{$x_i$}}{s} & \sdefine &
+%% %%  \AScopeof{\ri{x}{i}}{s} \\
+%% %%\sema{qid}{\semcode{$xs$.$x_i$}}{s} & \sdefine &
+%% %%  \sema{qid}{\semcode{$xs$}}{s} \cand
+%% %%  \AParent{S'}{\undef} \cand
+%% %%  \ARImport{\r{last(\semcode{$xs$})}}{S'} \cand
+%% %%  \AScopeof{\ri{x}{i}}{S'} & \new{S'} \\
+%% %%% \mbox{\rm (or, arguably better:)} \\
+%% %% \sema{\kind{qid}}{\semcode{$x_i$}}{s} & \sdefine &
+%% %%   \AScopeof{\ri{x}{i}}{s} \\
+%% %% \sema{\kind{qid}}{\semcode{$X_i$.$xs$}}{s} & \sdefine &
+%% %%   \AScopeof{\ri{X}{i}}{s} \cand
+%% %%   \AParent{S'}{\undef} \cand
+%% %%   \sema{\kind{qid}}{\semcode{$xs$}}{S'} \cand
+%% %%   \ARImport{\ri{X}{i}}{S'}
+%% %%   & \new{S'} \\[0.3cm]
+%% % or, the latest:
+%% \sema{\kind{qid}}{\semcode{$x_i$}}{s} & \sdefine &
+%%   \AScopeof{\ri{x}{i}}{s} \\
+%% \sema{\kind{qid}}{\semcode{$Xs$.$X_j$.$x_i$}}{s} & \sdefine &
+%%   \AParent{S'}{\undef} \cand
+%%   \AScopeof{\ri{x}{i}}{S'} \cand
+%%   \ARImport{\ri{X}{j}}{S'} \cand
+%%   \sema{\kind{qid}}{\semcode{$Xs$.$X_j$}}{s} 
+%%   & \new{S'} \\[0.3cm]
+%% %\\
+%% %%\sema{defbinds}{\semcode{$b\ bs$}}{s_r,s_d} & \sdefine &
+%% %%   \sema{defbind}{\semcode{$b$}}{s_r,s_d} \cand \sema{defbinds}{\semcode{$bs$}}{s_r,s_d} \\
+%% %%\sema{defbinds}{}{s_r,s_d} & \sdefine & \CTrue \\
+%% %% \\
+%% \sema{\kind{defbind}}{\semcode{$x_i\ $=$\ e$}}{s_r,s_d} & \sdefine &
+%%    \AScopeof{\di{x}{i}}{s_d} \cand
+%%    \CType{\di{x}{i}}{\tau} \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{s_r,\tau}   & \fresh{\tau} \\
+%% \sema{\kind{defbind}}{\semcode{$x_i$:$t\ $=$\ e$}}{s_r,s_d} & \sdefine &
+%%    \AScopeof{\di{x}{i}}{s_d}\cand
+%%    \CType{\di{x}{i}}{t'} \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{s_r,\tau} \cand
+%%    \CSubtype{\tau}{t'} \cand
+%%    C \\
+%%     & & \mbox{\it where } \sema{\kind{ty}}{t}{s_r} = (t',C) & \fresh{\tau} \\[0.3cm]
+%% %\\
+%% \sema{\kind{exp}}{\semcode{$n$}}{s,t} & \sdefine &
+%%   \CTeq{t}{\intty} \\
+%% \sema{\kind{exp}}{\semcode{$e_1\ \oplus\ e_2$}}{s,t} & \sdefine &
+%%   \sema{\kind{exp}}{\semcode{$e_1$}}{s,\inttysub} \cand \sema{\kind{exp}}{\semcode{$e_2$}}{s,\inttysub} \cand \CTeq{t}{\intty} \\
+%% \sema{\kind{exp}}{\semcode{ifz $\ e_1\ $ then $\ e_2\ $ else $\ e_3$}}{s,t} & \sdefine &
+%%   \sema{\kind{exp}}{\semcode{$e_1$}}{s,\inttysub} \cand \sema{\kind{exp}}{\semcode{$e_2$}}{s,\tau_2}  \cand \sema{\kind{exp}}{\semcode{$e_3$}}{s,\tau_3}  \cand
+%%   \CLub{t}{\tau_2}{\tau_3} & \fresh{\tau_2,\tau_3} \\ 
+%% \sema{\kind{exp}}{\semcode{$Xs$.$x_i$}}{s,t} & \sdefine &
+%%   \sema{\kind{qid}}{\semcode{$Xs$.$x_i$}}{s} \cand \CResolve{\ri{x}{i}}{\delta} \cand \CType{\delta}{t} & \fresh{\delta} \\
+%% \sema{\kind{exp}}{\semcode{fun $\ f$ ( $x_i$:$t$ ) \{$e$\}}}{s,t} & \sdefine &
+%%    \AParent{S'}{s} \cand 
+%%    \AScopeof{\di{x}{i}}{S'}  \cand
+%%    \CType{\di{x}{i}}{t'}  \cand \\
+%%    && 
+%%    C \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{S',\tau_2} \cand
+%%    \CTeq{t}{\arrty{t'}{\tau_2}} 
+%%    \ \ \ \ \ \mbox{\it where } \sema{\kind{ty}}{t}{s} = (t',C)
+%%     & \new{S'}\fresh{\tau_2} \\
+%% \sema{\kind{exp}}{\semcode{$e_1\ e_2$}}{s,t} & \sdefine &
+%%    \sema{\kind{exp}}{\semcode{$e_1$}}{s,{\arrtysub{\tau_1}{t}}} \cand \sema{\kind{exp}}{\semcode{$e_2$}}{s,\tau_2} \cand \CSubtype{\tau_2}{\tau_1} &
+%%    \fresh{\tau_1,\tau_2} \\
+%% % sequential let omitted
+%% \sema{\kind{exp}}{\semcode{letrec $\ bs\ $ in $\ e$}}{s,t} & \sdefine &
+%%    \AParent{S'}{s} \cand
+%%    \sema{\kind{defbind}^*}{\semcode{$bs$}}{S',S'} \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{S',t} & \new{S'} \\
+%% \sema{\kind{exp}}{\semcode{letpar $\ bs\ $ in $\ e$}}{s,t} & \sdefine &
+%%    \AParent{S'}{s} \cand
+%%    \sema{\kind{defbind}^*}{\semcode{$bs$}}{S,S'} \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{S',t} & \new{S'} \\
+%% \sema{\kind{exp}}{\semcode{new $\ Xs$.$X_i\ $\{ $bs$\}}}{s,t} & \sdefine &
+%%    \sema{\kind{qid}}{\semcode{$Xs$.$X_i$}}{s} \cand 
+%%    \CResolve{\ri{X}{i}}{\delta} \cand
+%%    \CTeq{t}{\recty{\delta}} \cand \\
+%%     & & \AParent{S'}{s} \cand
+%%    \ARImport{\ri{X}{i}}{S'} \cand
+%%    \sema{\kind{fldbind}^*}{bs}{s,s'}    
+%%    & \new{S'}\fresh{\delta} \\
+%% \sema{\kind{exp}}{\semcode{$e$.$x_i$}}{s,t} & \sdefine &
+%%    \sema{\kind{exp}}{\semcode{$e$}}{s,\rectysub{\delta_1}} \cand
+%%    \CAssoc{\delta_1}{\sigma} \cand
+%%    \AParent{S'}{\undef} \cand
+%%    \ASImport{\sigma}{S'} \cand \\
+%%    & & \AScopeof{\ri{x}{i}}{S'} \cand 
+%%    \CResolve{\ri{x}{i}}{\delta_2} \cand
+%%    \CType{\delta_2}{t}
+%%    & \new{S'}\fresh{\delta_1,\delta_2,\sigma}\\
+%% \sema{\kind{exp}}{\semcode{with $\ e_1\ $ do $\ e_2$}}{s,t} & \sdefine &
+%%    \sema{\kind{exp}}{\semcode{$e_1$}}{s,\rectysub{\delta}} \cand
+%%    \CAssoc{\delta}{\sigma} \cand 
+%%    \AParent{S'}{s} \cand
+%%    \ASImport{\sigma}{S'} \cand 
+%%    \sema{\kind{exp}}{\semcode{$e_2$}}{S',t} 
+%%    & \new{S'}\fresh{\delta,\sigma} \\[0.3cm]
+%% %\\
+%% %\\
+%% %%\sema{fldbinds}{\semcode{$b\ bs$}}{s_r,s_d} & \sdefine &
+%% %%   \sema{fldbind}{\semcode{$b$}}{s_r,s_d} \cand \sema{fldbinds}{\semcode{$bs$}}{s_r,s_d}\\
+%% %%\sema{fldbinds}{}{s_r,s_d} & \sdefine & \CTrue \\
+%% %%\\
+%% \sema{\kind{fldbind}}{\semcode{$x_i\ $=$\ e$}}{s_r,s_d} & \sdefine &
+%%    \AScopeof{\ri{x}{i}}{s_r} \cand
+%%    \CResolve{\ri{x}{i}}{\delta} \cand
+%%    \CType{\delta}{\tau_1} \cand
+%%    \CSubtype{\tau_2}{\tau_1} \cand
+%%    \sema{\kind{exp}}{\semcode{$e$}}{s_r,\tau_2} 
+%%    & \fresh{\delta,\tau_1,\tau_2} \\[0.3cm]
+%% %\\
+%% \sema{\kind{ty}}{\semcode{Int}}{s} & \sdefine &
+%%   (\intty, \CTrue) \\
+%% \sema{\kind{ty}}{\semcode{$t_1$ -> $t_2$}}{s} & \sdefine &
+%%   (\arrty{t'_1}{t'_2}, \CAnd{C_1}{C_2}) \ \ \ \ \ \ \mbox{\it where } \sema{\kind{ty}}{t_1}{s} = (t'_1,C_1) \mbox{\it\ and } \sema{\kind{ty}}{t_2}{s} = (t'_2,C_2) \\
+%% \sema{\kind{ty}}{\semcode{$Xs$.$X_i$}}{s} & \sdefine &
+%%   (\recty{\delta}, \CAnd{\sema{\kind{qid}}{\semcode{$Xs$.$X_i$}}{s}}{\CResolve{\ri{X}{i}}{\delta}})  & \fresh{\delta} \\ 
+%% %% APT: or, another way, that passes a type down and returns just a constraint instead of a tuple:
+%% %%\sema{ty}{\semcode{Int}}{s,t} & \sdefine &
+%% %%   \CTeq{t}{\intty} \\
+%% %% \sema{ty}{\semcode{$t_1$ -> $t_2$}}{s,t} & \sdefine &
+%% %%   \CTeq{t}{\arrty{t'_1}{t'_2}} \cand
+%% %%   \sema{ty}{t_1}{s,t'_1} \cand
+%% %%   \sema{ty}{t_2}{s,t'_2} & \fresh{t'_1,t'_2} \\
+%% %% \sema{ty}{\semcode{$xs$.$x_i$}}{s,t} & \sdefine &
+%% %%   \CTeq{t}{\recty{\delta}} \cand
+%% %%   \sema{qid}{\semcode{$xs$.$x_i$}}{s} \cand
+%% %%    \CResolve{\ri{x}{i}}{\delta}   & \fresh{\delta} \\ 
+%% \end{array}
+%% $
+%%   \caption{Constraint generation for LMR.}
+%%   \label{fig:consgen}
+%% \end{figure*}
+
+
+%% \newcommand{\cg}[2]{\vdash #1 \longrightarrow #2}
+%% \newcommand{\cgi}[3]{\vdash #1_{#2} \longrightarrow #3}
+%% %\newcommand{\f}[1]{fresh(#1)}
+%% \newcommand{\pa}[2]{P(#1,#2)}
+%% \renewcommand{\w}{\wedge}
+%% \newcommand{\getx}[3]{#1 \stackrel{#2}{\longrightarrow} #3}
+%% \newcommand{\DS}[1]{#1^D}
+%% \newcommand{\TD}[1]{#1^T}
+
+%% \begin{figure*}
+
+%% \centering
+
+
+%% \infrulenl{S \cg{sts}{c}}{\cg{Prog(sts)}{\pa{S}{\bot} \wedge c}}
+
+%% \medskip
+
+%% \infrulenl{S \cg{s}{c_1}\tab S \cg{sts}{c_2}}{\cg{s :: sts}{c_1 \w c_2}}
+
+%% \medskip
+
+%% \infrulenl{S' \cg{sts}{c}}{S \cg{Mod(x_i,sts)}{\dsi{x}{i}{S'} \in \D{S} \wedge \pa{S'}{S} \w c}}
+
+%% \medskip
+
+%% \infrulenl{\cg{qid}{c} \tab \getx{qid}{\textsf{R}}{\ri{id}{i}} }{S \cg{Imp(qid)}{\ri{id}{i} \in \I{S} \w c}}
+
+%% \medskip
+
+%% \infrulenl{\DS{S} \cg{b}{c}}{S \cg{Def(b)}{c}}
+
+%% \medskip
+
+%% \infrulenl{\DS{S} \cg{decls}{fc} \tab \DS{S'}\ \TD{\recty{\di{x}{i}}} \cg{sup}{sc} }
+%% {S 
+%%   \cg{Rec(x,sup,dec)_i}
+%%   {\dsi{x}{i}{S'} \in \D{S} \w 
+%%     \recty{\di{x}{i}} \Aassoc S' \w 
+%%     \pa{S'}{S} \w 
+%%     i : \recty{\di{x}{i}} \w
+%%     fc \w 
+%%     sc}}
+
+%% \medskip
+
+%% \infrulenl{\cg{qtid}{tc} \tab \getx{qtid}{\textsf{R}}{\ri{x}{i}}}
+%% {\DS{S}\ \TD{T} 
+%%   \cg{Super(qid)}{
+%%     \ri{x}{i} \in \I{S} \w
+%%     \ri{x}{i} \resolve \delta \w
+%%     ty <: \recty{\delta} \w
+%%     tc}}
+
+%% \medskip
+
+%% \infrulenl{}{\TD{T} \cg{NoSuper}{T <: \bot}} (is it necessary ?)
+
+%% \medskip
+
+%% \infrulenl{}{\TD{T} \cg{Int(n)}{i : T \w Int <: T}} (Why Ftypeof ?)
+
+%% \medskip
+
+%% \infrulenl{op :: T_1 * T_2 \rightarrow T3 \tab \TD{T_1} \cg{e_1}{c_1} \tab \TD{T_2} \cg{e_2}{c_2}}
+%% {\TD{ty} \cg{Bop(op,e_1,e_2)_i}{i : ty \w T_3 \leq ty \w c_1 \w c_2 }}
+
+%% \medskip
+
+%% \infrulenl{\TD{\mathbb{B}} \cg{e_1}{c_1} \tab \TD{T} \cg{e_2}{c_2} \tab  \TD{T} \cg{e_3}{c_3}}
+%% {\TD{T} \cg{Ift(e_1,e_2,e_3)_i}{i : T \w c_1 \w c_2 \w c_3}}
+  
+%% \medskip
+
+%% \infrulenl{\cg{qid}{c} \tab \getx{qid}{\textsf{R}}{\ri{x}{i'}}}
+%%    {\TD{T} \cg{Ref(qid)_i}{i : T \w \ri{x}{i'} \resolve \delta \w \pos{\delta} : \tau \w i' : \tau \w \tau \leq T \w c}}
+
+%% \medskip
+
+%% \infrulenl{\DS{S'}\ \TD{\tau} \cg{b}{c_b} \tab S'\ \TD{\tau} \cg{e}{c_e} }{S\ \TD{T} \cg{Fix(b,e)_i}{i : T \w \pa{S'}{S} \w \tau \leq T \w c_b \w c_e}} (This rule is wrong in DS)
+
+%% \medskip
+
+%% \infrulenl{\DS{S'}\ \TD{\tau_1} \cg{b}{c_b} \tab S'\ \TD{\tau_2} \cg{e}{c_e} }{S\ \TD{T} \cg{Fun(b,e)_i}{i : T \w \pa{S'}{S} \w \TArrow{\tau_1}{\tau_2} \leq T \w  c_b \w c_e}}
+
+%% \medskip
+
+%% \infrulenl{\TD{(\TArrow{\tau_1}{T})} \cg{e_1}{c_1} \tab \TD{\tau_1} \cg{e_2}{c_2} }{\TD{T} \cg{App(e_1,e_2)_i}{i : T \w  c_1 \w c_2}}
+
+
+%%   \caption{Constraint generation}
+%%   \label{fig:consgen}
+%% \end{figure*}
+
+
+
+
+%\lstinputlisting[language=DynSem,basicstyle=\tiny]%
+%  {../../trunk/LMR/trans/extraction/extraction-equal.ds}

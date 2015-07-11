@@ -1,0 +1,23 @@
+\begin{figure}[t]
+\renewcommand{\S}{\mathcal{S}}
+\renewcommand{\Env}[4]{\mbox{\it{E}}_{#1}[#2](#4)}
+$$
+\begin{array}{ll}
+ \Env{D}{\seeni}{\seens}{S} &:= 
+      \D{S} \\
+ \\
+ \Env{P}{\seeni}{\seens}{S} & := 
+      \Env{V}{\seeni}{\{S\}\cup\seens}{\P{S}} \\
+ \\
+ \Env{I}{\seeni}{\seens}{S} & := 
+      \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \mid \ri{y}{i} \in \I{S} \setminus 
+\seeni \wedge \dsi{y}{j}{S_y} \in \Res{\seeni}{\ri{y}{i}}\right\}\\
+ \\
+ \Env{L}{\seeni}{\seens}{S} & := \Env{D}{\seeni}{\seens}{S} \triangleleft \Env{I}{\seeni}{\seens}{S} \\
+ \\
+  \Env{V}{\seeni}{\seens}{S}  & := \Env{L}{\seeni}{\seens}{S} \triangleleft \Env{P}{\seeni}{\seens}{S} \\
+  \\
+  \Res{\seeni}{\ri{x}{i}} & := \{ \di{x}{j} \mid \exists S\ s.t.\ \ri{x}{i} \in \R{S} \wedge \di{x}{j} \in \Env{V}{\{\ri{x}{i}\} \cup \seeni}{\emptyset}{S} \} \\
+\end{array}\medskip
+$$
+\end{figure}

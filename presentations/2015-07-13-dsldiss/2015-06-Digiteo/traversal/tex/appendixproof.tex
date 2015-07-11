@@ -1,0 +1,185 @@
+\section{Proofs}
+\newcommand{\sepa}{
+\medskip
+}
+\subsection{Proof of property \ref{eq:solvsoundstep} in Section \ref{ssec:verification}}\label{app:proof}
+
+\newcommand{\tomod}{^{\mathcal{M}}}
+In this proof, given a triple $(\G,\leqa,\psi)$, we denote  $(\G,\leqa,\psi)^{\mathcal{M}}$ the triple 
+$(\G,\leq_{\overline{\leqa}},\psi)$. 
+
+
+We want to prove the following property about the constraint resolution system presented in Figure \ref{fig:csolver}:
+\begin{multline}\tag{$\dagger$}
+ \forall (C_1,\G_1,\leqa_1,\psi_1), (C_2,\G_2,\leqa_2,\psi_2),\\
+     (C_1,\G_1,\leqa_1,\psi_1) \longrightarrow (C_2,\G_2,\leqa_2,\psi_2) \Rightarrow\\
+     \forall \sigma, \sigma(\G_2,\leqa_2,\psi_2)\tomod \models \sigma(C_2) \Rightarrow\\
+     \exists \sigma', \sigma'(\G_1,\leqa_1,\psi_2)\tomod \models \sigma'(C_1)
+\end{multline}  
+%\begin{proof}
+{\it Proof. }We prove this property by case analysis on the reduction:
+$$(C_1,\G_1,\leqa_1,\psi_1) \longrightarrow (C_2,\G_2,\leqa_2,\psi_2)$$
+\input{figures/solver-functions-LMR}
+\paragraph{- \sc S-Resolve} Assume:
+$$(\CAnd{\CResolve{\r{x}}{\delta}}{C},\G,\leqa,\psi) \longrightarrow [\delta \mapsto \d{x}](C,\G,\leqa,\psi) $$
+where $\d{x} \in \ResG{\G}{\r{x}}$ and let $\sigma'$ be $[\delta \mapsto \d{x}]$.\\
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\sigma'(\G,\leqa,\psi))\tomod\models \sigma(\sigma'C)
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\sigma'\psi)\tomod\models \sigma_1(\CAnd{\CResolve{\r{x}}{\delta}}{C})
+\end{equation*}
+We have:  
+\begin{enumerate}
+ \item $\vdash_\G \r{x} \resolve \d{x}$ by correctness of the name resolution algorithm $\ResG{\G}{}$,
+ \item $\vdash_{\sigma\sigma'\G} \r{x} \resolve \d{x}$ by definition,
+ \item $\sigma\sigma'(\G,\leqa,\sigma'\psi)\tomod\models \sigma\sigma'\CResolve{\r{x}}{\delta}$
+ \item $ (\sigma\sigma')(\G,\leqa,\psi)\tomod\models (\sigma\sigma')C$ using \ref{eq:hyp1}  
+ \item $ (\sigma\sigma')(\G,\leqa,\sigma'\psi))\tomod\models (\sigma\sigma')C$ since $\sigma'\sigma'=\sigma'$
+ \item we conclude with $\sigma_1=(\sigma\sigma')$ by {\sc C-And} rule of the constraint interpretation with 3. and 5.
+\end{enumerate}
+\sepa
+ \paragraph{- \sc S-Assoc}Assume:
+$$(\CAnd{\CAssoc{\d{x}}{\varsigma}}{C},\G,\leqa,\psi) \longrightarrow [\varsigma \mapsto S](C,\G,\leqa,\psi) $$
+where $\defscope(\d{x}) = S$ and let $\sigma'$ be $[\varsigma \mapsto S]$.\\
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\sigma'(\G,\leqa,\psi))\tomod\models \sigma(\sigma'C)
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\sigma'\psi)\tomod\models \sigma_1(\CAnd{\CAssoc{\d{x}}{\varsigma}}{C})
+\end{equation*}
+We have:  
+\begin{enumerate}
+ \item $\defscope(\d{x}) = S$ by the rewriting rule condition
+ \item $\sigma\sigma'(\G,\leqa,\sigma'\psi)\tomod\models \sigma\sigma'\CAssoc{\d{x}}{\varsigma}$
+ \item $ (\sigma\sigma')(\G,\leqa,\psi)\tomod\models (\sigma\sigma')C$ using \ref{eq:hyp1}   
+ \item $ (\sigma\sigma')(\G,\leqa,\sigma'\psi)\tomod\models (\sigma\sigma')C$ since $\sigma'\sigma'=\sigma'$
+ \item we conclude with $\sigma_1=(\sigma\sigma')$ by {\sc C-And} rule of the constraint interpretation with 2. and 4.
+\end{enumerate}
+\sepa
+ \paragraph{- \sc S-Equal} Assume:
+$$(\CAnd{\CEqtype{T_1}{T_2}}{C},\G,\leqa,\psi) \longrightarrow \sigma' (C, \G, \leqa, \psi) $$
+where $\sigma' = \unify{T_1}{T_2}$.\\
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\sigma'(\G,\leqa,\psi))\tomod\models \sigma(\sigma'C)
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\sigma'\psi)\tomod\models \sigma_1(\CAnd{\CEqtype{T_1}{T_2}}{C})
+\end{equation*}
+We have:    
+\begin{enumerate}
+ \item $\sigma' t_1 = \sigma' t_2$ by unification property
+ \item $\sigma\sigma'(\G,\leqa,\sigma'\psi)\tomod\models \sigma\sigma'\CTeq{T_1}{T_2}$ by {\sc C-Equal} rule and 1.
+ \item $ (\sigma\sigma')(\G,\leqa,\psi)\tomod\models (\sigma\sigma')C$ using \ref{eq:hyp1}   
+ \item $ (\sigma\sigma')(\G,\leqa,\sigma'\psi)\tomod\models (\sigma\sigma')C$ since $\sigma'\sigma'=\sigma'$ by unification property
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 2. and 4.
+\end{enumerate}
+\sepa
+\paragraph{- \sc S-Lub}
+Assume:
+$$(\CAnd{\CLub{T}{t_1}{t_2}}{C},\G,\leqa,\psi) \longrightarrow (\CAnd{\CEqtype{T}{t}}{C}, \G, \leqa, \psi) $$
+where $\lub{t_1}{t_2} \lubred{\leqa} t$.\\
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\G,\leqa,\psi)\tomod\models \sigma(\CAnd{\CTeq{t}{T}}{C})
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\psi)\tomod\models \sigma_1(\CAnd{\CLub{T}{t_1}{t_2}}{C})
+\end{equation*}
+We have:    
+\begin{enumerate}
+ \item $\sigma t = \sigma T$ by inversion of {\sc C-And} and {\sc C-Equal} semantics rules on \ref{eq:hyp1}
+ \item $ t = \sqcup_{\leqa}\{t_1,t_2\}$ by correctness of $\lub{}{}$ reduction
+ \item $\sigma t = t \wedge \sigma t_1 = t_1 \wedge \sigma t_2 = t_2$  since these are ground terms
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma(\CLub{T}{t_1}{t_2})$
+  since $\leqa$ is ground
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma(C)$ using \ref{eq:hyp1}   
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 4. and 5.
+\end{enumerate}
+\sepa
+\paragraph{- \sc S-Subtype}
+Assume:
+$$(\CAnd{\CSubtype{t_1}{t_2}}{C},\G,\leqa,\psi) \longrightarrow ({C}, \G, \leqa, \psi) $$
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\G,\leqa,\psi)\tomod\models \sigma({C})
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\psi)\tomod\models \sigma_1(\CAnd{\CSubtype{t_1}{t_2}}{C})
+\end{equation*}
+We have:    
+\begin{enumerate}
+ \item $ t_1 \leq_{\overline{\leqa}} t_2$ by reduction rule hypothesis
+ \item $ \sigma t_1 \leq_{\sigma(\leqa)} \sigma t_2 $ by $\leq_x$ monotonicity and since $t_1$ and $t_2$ are ground 
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma(\CSubtype{t_1}{t_2}$ by {\sf C-Subtype} semantics rule
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 3. and \ref{eq:hyp1}
+\end{enumerate}
+\sepa
+\paragraph{- \sc S-DeclTypeFirst}
+Assume:
+$$(\CAnd{\CType{\d{x}}{T}}{C},\G,\leqa,\psi) \longrightarrow ({C}, \G, \leqa, \{\d{x} \mapsto T\}\cup\psi) $$
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\G,\leqa,\{\d{x} \mapsto T\}\cup\psi)\tomod\models \sigma({C})
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\{\d{x} \mapsto T\}\cup\psi)\tomod\models \sigma_1(\CAnd{\CType{\d{x}}{T}}{C})
+\end{equation*}
+We have:  
+\begin{enumerate}
+ \item $\sigma(\G,\leqa,\{\d{x} \mapsto T\}\cup\psi)\tomod\models \sigma(\CType{\d{x}}{T})$ by {\sf C-TypeOf} semantics rule
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 1. and \ref{eq:hyp1}
+\end{enumerate}
+\sepa
+\paragraph{- \sc S-DeclTypeNext}
+Assume:
+$$(\CAnd{\CType{\d{x}}{T}}{C},\G,\leqa,\psi) \longrightarrow (\CAnd{\CTeq{\psi(\d{x})}{T}}{C}, \G, \leqa, \psi) $$
+Assume there is $\sigma$ such that 
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\G,\leqa,\psi)\tomod\models \sigma(\CAnd{\CTeq{\psi(\d{x})}{T}}{C})
+\end{equation}
+then we want to prove:
+\begin{equation*}
+\exists \sigma_1, \sigma_1(\G,\leqa,\psi)\tomod\models \sigma_1(\CAnd{\CType{\d{x}}{T}}{C})
+\end{equation*}
+We have:    
+\begin{enumerate}
+ \item $\sigma \psi(\d{x}) = \sigma T$ by inversion of {\sc C-And} and {\sf C-Equal} semantics rules
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma(\CType{\d{x}}{T})$ by {\sf C-TypeOf} rule 
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma(C)$ using \ref{eq:hyp1}   
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 2. and 3.
+\end{enumerate}
+\sepa
+\paragraph{- \sc S-True}
+Assume:
+$$(\CAnd{\CTrue}{C},\G,\leqa,\psi) \longrightarrow ({C}, \G, \leqa, \psi) $$
+Assume there is $\sigma$ such that:
+\begin{equation}\tag{H}
+  \label{eq:hyp1}
+\sigma(\G,\leqa,\psi)\tomod\models \sigma({C})
+\end{equation}
+then we have:  
+\begin{enumerate}
+ \item $\sigma(\G,\leqa,\psi)\tomod\models \sigma\CTrue$ by {\sf C-True} rule 
+ \item we conclude by {\sc C-And} rule of the constraint interpretation with 1. and \ref{eq:hyp1}.
+\end{enumerate}
+% \end{proof}
+\qed
+
+

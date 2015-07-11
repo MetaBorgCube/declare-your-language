@@ -1,0 +1,113 @@
+\begin{figure}[p]
+\fbox{
+\begin{minipage}{\columnwidth}
+\semf{\semcode{module x}^p\semcode{ \{ds\}}}{s_1}{s_3}
+{
+\P{s_2} \sdefine s_1;
+\P{s_3} \sdefine s_2;
+\D{s_1} \sappend d_{\semcode{x}^p}^{s_2.s_3};
+\sem{\semcode{ds}}{s_3}
+}
+
+\medskip
+\semf{\semcode{import x}^p}{s}{s}
+{
+s_{par} \sdefine \P{s};
+\R{s} \sappend \semcode{x}^p;
+\I{s_{par}} \sappend \semcode{x}^p;
+\sem{\semcode{x}^p}{s}
+}
+
+\medskip
+\semf{\semcode{include x}^p}{s}{s}
+{
+\R{s} \sappend \semcode{x}^p;
+\I{s} \sappend \semcode{x}^p;
+\sem{\semcode{x}^p}{s}
+}
+
+\medskip
+\semf{\semcode{def x}^p\semcode{ = e}}{s}{s}
+{
+\R{s} \sappend \semcode{x}^p;
+\sem{\semcode{e}}{s}
+}
+
+\medskip
+\semf{\semcode{\(fun | fix\) param}^p\semcode{ \{e\}}}{s_1}{s_2}
+{
+\P{s_2} \sdefine s_1;
+\sem{\semcode{param}^p}{s_2};
+\sem{\semcode{e}}{s_2}
+}
+
+\medskip
+\semf{\semcode{param}^p}{s}{s}
+{
+\D{s} \sappend d_{\semcode{param}^p}^{s}
+}
+
+\medskip
+\semf{\semcode{x}^p}{s}{s}
+{
+\R{s} \sappend \semcode{x}^p
+}
+%
+%\medskip
+%\semf{\semcode{e.x}^p}{s}{s}
+%{
+%\R{s} \sappend \semcode{x}^p;
+%\sem{\semcode{e}}{s}
+%}
+
+\medskip
+\semf{\semcode{letrec bs in e}^p}{s_1}{s_2}
+{
+\P{s_2} \sdefine s_1;
+\sem{\semcode{bs}}{s_2};
+\sem{\semcode{e}}{s_2}
+}
+
+\medskip
+\semf{\semcode{x}^p\semcode{ = e}}{s}{s}
+{
+\D{s} \sappend d_{\semcode{x}^p}^{s};
+\sem{\semcode{x}^p}{s};
+\sem{\semcode{e}}{s}
+}
+
+\medskip
+\semf{\semcode{letpar bs in e}^p}{s_1}{s_2}
+{
+\P{s_2} \sdefine s_1;
+\semp{\semcode{bs}}{s_1}{s_2};
+\sem{\semcode{e}}{s_2}
+}
+
+\medskip
+\semfp{\semcode{x}^p\semcode{ = e}}{s_1}{s_2}{s_2}
+{
+\D{s_2} \sappend d_{\semcode{x}^p}^{s_1};
+\sem{\semcode{x}^p}{s_1};
+\sem{\semcode{e}}{s_1}
+}
+
+\medskip
+\semf{\semcode{let bs in e}^p}{s_1}{s_2}
+{
+s_2 \sdefine \sems{\semcode{bs}}{s_1};
+\sem{\semcode{e}}{s_2}
+}
+
+\medskip
+\semfs{\semcode{x}^p\semcode{ = e}}{s_1}{s_2}
+{
+\P{s_2} \sdefine s_1;
+\D{s_2} \sappend d_{\semcode{x}^p}^{s_1};
+\sem{\semcode{e}}{s_1}
+}
+\end{minipage}}
+% }}\smallskip
+\caption{Scope graph construction for LM \TODO{check, fix, complete}.}
+\label{fig:nabl-pcfm-semantics}
+\end{figure}

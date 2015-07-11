@@ -1,0 +1,5 @@
+def n$_1$ = 
+  letrec fac$_2$ : Int -> Int = fun (n$_3$: Int) {
+           if (n$_4$ == 0) then 1 
+           else n$_5$ * fac$_6$(n$_7$ - 1) }
+      in fac$_8$(5)

@@ -1,0 +1,48 @@
+\section{Scope Graph Construction}
+\sectionlabel{construction}
+
+\input{figures/lm-to-scope-graph}
+
+The preceding sections have illustrated scope graph construction
+by means of examples corresponding to various language features. 
+Of course, to apply our formalism in practice, one must be able
+to construct scope graphs systematically. Ultimately, we would
+like to be able to specify this process for arbitrary 
+languages using a generic binding specification language such
+as NaBL~\cite{KonatKWV12}, but that remains future work.
+Here we illustrate systematic scope graph construction for arbitrary
+programs in a \emph{specific} language, LM (\Figure{pcfm:grammar}), 
+via straightforward syntax-directed traversal.  
+
+Figure~\ref{fig:lm-scopegraph-construction} describes the
+construction algorithm.
+For clarity of presentation, the algorithm traverses the 
+program's concrete syntax; a real implementation would
+traverse the program's AST.
+The algorithm is presented in an {\it ad hoc} imperative language, 
+explained here.  The traversal is specified as a collection of 
+(potentially) mutually recursive functions, one or more for
+each syntactic class of LM. Each function $f$ is
+defined by a set of clauses $\sema{\mbox{\it{pattern}}}{f}{args}$.
+When $f$ is invoked on a term, the clause whose {\it{pattern}} matches
+the term is executed.  Functions may also take additional arguments $args$. 
+Each clause body consists of a sequence of
+statements separated by semicolons. Functions can optionally return a value
+using $\sret{}$.
+The $\slet$ \hspace*{-0.6em} statement binds 
+a metavariable in the remainder of the clause body.
+An empty clause body is written $()$.
+
+The algorithm is initiated by invoking $\sema{\_}{prog}{}$ on an entire LM
+program. Its net effect is to produce a scope graph via a sequence of
+imperative operations. 
+The construct $\snew{P}$ creates a new scope $S$ with parent $P$ 
+(or no parent if  $p = \perp$) and
+empty sets $\D{S}$, $\R{S}$, and $\I{S}$. 
+These sets are subsequently populated using the
+$\sappend$ operator, which extends a set imperatively.
+The program scope graph is simply the set of scopes that have been created
+and populated when the traversal terminates.
+
+
+

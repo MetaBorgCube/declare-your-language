@@ -1,0 +1,29 @@
+\section{Conclusion and Future Work}\label{conclusion}
+
+We have introduced a generic, language-independent framework for describing name
+binding in programming languages.
+Its theoretical basis is the notion of a scope graph, which abstracts away from
+syntax, together with a calculus for deriving resolution paths in the graph. 
+Scope graphs are expressive enough to describe a wide range of binding patterns
+found in real languages, in particular those involving modules or classes.  We
+have presented a practical resolution algorithm, which is provably correct with
+respect to the resolution calculus. We can use the framework to define generic
+notions of \a-equivalence and renaming.
+
+As future work, we plan to explore and extend the theory of scope graphs, in
+particular to find ways to rule out anomalous examples and to give precise
+characterizations of variable capture and substitution.
+On the practical side, we will use our formalism to give a precise semantics to
+the NaBL DSL, and verify (using proof and/or testing) that the current NaBL
+implementation conforms to this semantics.
+
+Our broader vision is that of a complete language designer's workbench that
+includes NaBL as the domain-specific language for name binding specification and
+also includes languages for type systems and dynamic semantics specifications.
+In this setting, we also plan to study the interaction of name resolution and
+types, including issues of dependent types and name disambiguation based on
+types. Eventually we aim to derive a complete mechanized meta-theory for the
+languages defined in this workbench and to prove the correspondence between static
+name binding and name binding in dynamics semantics as outlined
+in~\cite{VisserOnward14}.
+

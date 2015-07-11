@@ -1,0 +1,49 @@
+\twoboxes{.495\hsize}{.495\hsize}{%
+\small
+Scope graph\\
+
+\begin{center}
+\includegraphics[scale=.5]{figures/examples/manual/01-variable-reference}
+\end{center}
+%
+\begin{mconstraints}{Declarations}
+\EqCType{\dic{x}{1}}{\tau_{1}} & 
+\EqCType{\dic{y}{2}}{\tau_{2}} 
+\end{mconstraints}
+%
+\begin{mconstraints}{Reference constraints}
+\EqCResolve{\ric{x}{3}}{\delta_{1}} & 
+\EqCType{\delta_{1}}{\intty{}}\\
+\EqCResolve{\ric{x}{4}}{\delta_{2}} & 
+\EqCType{\delta_{2}}{\tau_{4}}
+\end{mconstraints}}{\small%
+\begin{mconstraints}{Type constraints}
+\EqCTeq{\tau_{1}}{\intty{}} \\ 
+\EqCTeq{\boolty{}}{\boolty{}}\\
+\EqCTeq{\intty{}}{\intty{}} \\ 
+\EqCTeq{\tau_{3}}{\intty{}}\\
+\EqCLub{\tau_{2}}{\tau_{3}}{\tau_{4}}
+\end{mconstraints}%
+\begin{mconstraints}{Solution}
+\RCSubst{\delta_{1}}{\dic{x}{1}} & 
+\RCSubst{\delta_{2}}{\dic{x}{1}}\\
+\TCSubst{\tau_{1}}{\intty{}} & 
+\TCSubst{\tau_{2}}{\intty{}}\\
+\TCSubst{\tau_{3}}{\intty{}} & 
+\TCSubst{\tau_{4}}{\intty{}}
+\end{mconstraints}%
+}
+
+\begin{boxedminipage}[t]{\hsize}
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle, frame=none]{figures/examples/01-variable-reference.lmr}
+\end{boxedminipage}
+\begin{boxedminipage}[t]{.495\hsize}
+\usebox{\boxone}
+\end{boxedminipage}
+\hfill
+\begin{boxedminipage}[t]{.495\hsize}
+  \usebox{\boxtwo}%
+  \vspace{\vdiff}
+\end{boxedminipage}
+
+\caption{Declarations and references in global scope with example program, scope graph, and constraints.}

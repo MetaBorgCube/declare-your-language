@@ -1,0 +1,112 @@
+\section{Extended Scope Graphs}\sectionlabel{extscopegraph}
+
+In this section we recall the formal theory of name resolution of Neron et al.
+\cite{NeronTVW-ESOP-2015} consisting of a scope graph model and resolution
+calculus, and extend the model with direct imports to model type-dependent name
+resolution as introduced in the previous section. 
+% For ease of reference, we have
+% included the formal rules of the resolution calculus in \Appendix{rescalc}.
+
+\input{figures/rescalc}
+
+\subsection{Scope Graphs}
+
+A \emph{scope graph} is a language-independent model for representing the name
+binding structure of programs. A scope graph $\G$ is built around three basic
+types of nodes derived from the program abstract syntax tree (AST),
+\emph{declarations, references, and scopes}:
+\begin{itemize}
+ \item A \emph{declaration} is an occurrence of an identifier that introduces a
+ name. $\di{x}{i}$ denotes the definition of name $x$ at position $i$ in the
+ program. 
+ We omit the position $i$ when this can be inferred from context.
+ $\D{\G}$ denotes the set of references of $\G$.
+ \item A \emph{reference} is an occurrence of an identifier referring to a
+ declaration. We write $\ri{x}{i}$ for a reference with name $x$ at position
+ $i$. 
+ Again, the position $i$ may be omitted when it can be inferred from
+ context. 
+ $\R{\G}$ denotes the set of references of $\G$.
+ \item A \emph{scope} is an abstraction over a set of nodes in the AST that
+ behave uniformly with respect to name binding. $\S{\G}$ denotes the set of
+ scopes of $\G$.
+\end{itemize}
+Given these sets, a scope graph is defined by the following functions:
+\begin{itemize}
+ \item Each declaration $d$ in $\DG$ is declared within a scope denoted
+ $\scopeof(d)$.
+ \item Each declaration $d$ has an optional \emph{associated scope},
+ $\defscope(d)$ that is the scope corresponding to the body of the
+ declaration. For example, the declarations in a module are elements of its
+ associated scope.
+ \item Each reference $r$ in $\RG$ is declared within a scope denoted
+ $\scopeof(r)$.
+ \item Each scope $S$ in $\SG$ has an optional \emph{parent scope} $\P{S}$ that 
+ corresponds to its \emph{lexically enclosing scope}. The parent relation has
+ to be well-founded, i.e. there is no infinite sequence $S_n$ such that 
+ $S_{n+1} = \P{S_n}$.
+ \item Each scope $S$ has an associated set of references $\I{S}$, that 
+ represents the \emph{imports} in this scope
+\end{itemize}
+We define by comprehension the set of declarations enclosed in a scope
+$S$, as $\D{S} = \{ d \mid \rscopeof{d}{S}\}$.
+
+\subsection{Resolution Calculus}
+
+Given this model, the \emph{resolution calculus} defines the \emph{resolution}
+of a reference to a declaration in a scope graph \cite{NeronTVW-ESOP-2015} as
+the minimal path from reference to declaration through parent and import edges.
+A path $p$ is a list of steps representing the atomic scope transitions in the
+graph. A step is either a parent step $\pstep$, an import step
+$\istep{\r{y}}{\ds{y}{S}}$ where $\r{y}$ is the imports used and $\ds{y}{S}$ its
+corresponding declaration or a declaration step $\dstep{\d{x}}$ leading to a
+declaration $\d{x}$.
+Given a seen import set $\seeni$, a path $p$ is a valid resolution in the graph
+from reference $\ri{x}{i}$ to declaration $\di{x}{i}$ when the following
+statement holds:\vspace*{-2mm}
+$$\seeni \vdash p : \ri{x}{i} \resolve \di{x}{i}\vspace*{-2mm}$$ 
+The calculus in
+\Figure{rescalc} defines the resolution relation in terms of edges in the scope
+graph, reachable declarations, and visible declarations.
+
+The resolution calculus is parametrized by two predicates on paths, a
+\emph{well-formedness predicate} $WF(p)$ and an \emph{ordering relation} $<$
+that allows the formalization of different name-binding policies such as
+transitive vs non-transitive imports. A typical definition of the
+well-formedness predicate is \emph{no-parents-after-imports}, which entails that
+a resolution can not proceed to a lexical parent after an import transition.
+\Figure{order} presents the definition of paths ($p$) consisting of steps ($s$)
+and an example of a path well-formedness predicate and path ordering relation.
+This configuration supports arbitrary levels of lexical scope ($\pstep^*$),
+transitive imports ($\sistep{\_}^*$), no-parents-after-imports (an $\sistep{\_}$
+step cannot be followed by a $\pstep$), prefer local declarations over imported
+declarations ($DI$), prefer local declarations over declarations in parents
+($DP$), and prefer imported declarations over declarations in parents ($IP$).
+
+
+\subsection{Direct Imports}
+
+% The scope graph model and resolution calculus provide a large coverage of
+% binding constructors in existing programming languages. However, it does not
+% support the dependence of resolution of a reference on the \emph{type} of an
+% expression. For example, in an object-oriented language, the name \cod{x} in
+% \cod{e.x} has to be resolved to the declaration of the field \cod{x} that
+% appears in some class definition \cod{A} that is the type of the
+% receiver expression \cod{e}.
+
+In order to model type-depdendent name resolution we extend the scope graph with
+\emph{direct imports}. A direct import defines a direct link between two scopes
+without the use of a reference. In addition to its set of associated imports
+(references of the form $\r{x}$), a scope is extended with an associated set of
+direct imports $\IS{S}$ consisting of other scopes in the graph. For these
+imports we introduce the $(D)$ scope transition rule, which is similar to the
+$(I)$ rule of the original calculus, except that this transition does not
+require the intermediate resolution of a reference:
+\smallskip
+
+\infrule{D}{\si{S_2} \in \IS{S_1}}{\seeni \vdash \sistep{S_2} : S_1 \edge S_2}  
+
+\smallskip\noindent
+The complete resolution calculus with this new rule is presented in Figure \ref{fig:rescalc}. 
+
+

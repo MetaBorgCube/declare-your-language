@@ -1,0 +1,133 @@
+===========================================================================
+                            ESOP15 Review #51A
+                     Updated 11 Nov 2014 1:27:10pm EST
+---------------------------------------------------------------------------
+                  Paper #51: A Theory of Name Resolution
+---------------------------------------------------------------------------
+
+                      Overall merit: 4. Strong accept -- I will champion
+                                        this paper
+                 Reviewer expertise: 4. Expert
+
+                      ===== Comments for author =====
+
+A general theory of how variable references in programs refer to declarations, including the complications of modules and imports.  A particular graph formalism is presented, and the idea is that particular languages should have elaborators from their syntax into these graphs.  Then general inference rules, algorithms, etc., apply, to map each variable reference to the set of declarations it might point to.  (A reference is intentionally allowed to be ambiguous, e.g. for use in IDEs to explain erroneous programs.)  The authors present their formalism as the theoretical basis for a toolchain for language implementation, though the connection to their actual tools has not yet been worked out fully; but eventually this basis is meant to underly automatic generation of interpreters, compilers, IDEs, mechanized semantics, etc., from single source files.  The generality of the approach is supported by working through examples in the contexts of toy languages.
+
+The big idea of the paper strikes me as compelling.  A variety of general formalizations of name binding have been proposed, but they tend to punt on module import, even though that pattern is important in most full-scale programming languages.  I like the idea of, once and for all, fixing the general structure of binding in this class of languages, supporting automatic tool generation after writing some language-specific elaboration code.  The theory doesn't quite have the elegance of, say, the lambda calculus, but it grew on me while reading through the paper.  The presentation is very good, with an appropriate mix of examples and formal definitions.  Thus, I recommend acceptance.
+
+What can we find to complain about in the paper?  I see two issues of roughly equal importance.
+
+> First, the theory has not yet been connected fully to any implementation of a meta-level tool or any full-scale object language.  The design of the formalism is fairly subtle, so in some sense we should have more realistic "test cases" showing that it was done right.
+
+**********
+We certainly agree that this is an initial design that may require validation and refinement. Our previous experiments with applying NaBL give us some confidence in the design of the framework in the paper. But we will indeed need to validate the theory through a re-implementation of NaBL based on the resolution calculus in this paper.
+**********
+
+Second, this is a fairly "opinionated" design, in that sense that one particular regime of binding, imports, etc. is hardcoded into the formalism.  The authors certainly acknowledge as much, arguing that their paradigm matches many widely used languages, and I think they're probably right.  Still, especially in concert with the last objection, it's hard not to worry about just how broad this formalism turns out to be.
+
+**********
+While the lexical scoping regime is indeed hardcoded into the formalism, some parametrization is also introduced through the well-formedness predicate and specificity ordering on paths. These parameters allows to tune the formalism to represent different policies (e.g. transitive or non transitive imports)
+**********
+
+Even with those concerns, I believe the paper is a good match for ESOP.  It should stimulate thought and discussion on an important aspect of PL implementation, which is far too often reimplemented from scratch for each new language, unbacked by any general theory.
+
+My next two comments are phrased as questions, but I don't actually view them as essential for the authors to address in their response.
+
+On page 4, you write that the binding pattern of classic lambdas is simple, but the patterns for ML-style "let" and Java-style local variable definitions are not.  You write that, in the latter cases, the scope of a binder is not just subtrees of the node introducing the binder, or a "contiguous region."  However, isn't it easy to represent "let" with nodes like Let(x1, value1, Let(x2, value2, body)) instead of [Let(x1, value1), Let(x2, value2), body]?  In that case, I see no deep difference from simple lambdas.  (And it is already standard to represent "let" that way in mechanized semantics.)
+
+<use Cheney’s terminology here>
+We only meant that in non recursive let, e.g. let(x,value,body), the “x” variable that is defined is only bound in the “body” and not in the “value” subterm thus is defined in a non-continuous region. It is indeed possible to reaarange the AST as Let(value,<x>body) (see for example Cheney: Toward a General Theory of Names, Binding and Scope) but we want to avoid modifying the AST structure only for name binding concerns.
+**********
+
+Do you imagine a future NaBL exposing a way to tweak the definitions of the well-formed-path and path-specifity relations, in the style you demonstrate in the paper to shape the semantics of name resolution?  There would be interesting questions there in details of meta-language syntax and semantics, plus how to optimize the name resolution process when starting from declarative descriptions of those relations.
+
+**********
+Yes, this model is supposed to be a step towards a new NaBL that will not only encode the generation of the scope graph from the AST but also allow to parametrize the resolution through the well-formedness and path ordering predicates.
+
+Or perhaps including more variation in the framework by means of flags on, for example, import to 
+**********
+
+I can't claim to have checked the proof sketches from this paper in detail.  It would be nice to have a mechanized proof.
+
+Negation slashes over "exists" seem off-center throughout the paper.
+
+Figure 1, definition of "G": I'm not sure this is quite the right way to phrase it formally.  You seem just to be defining "G" as a synonym for the set of all scopes that could exist platonically, and the use of a set comprehension seems roundabout.
+
+Page 8, "OCAML" is properly capitalized as "OCaml".
+
+Page 14, "Reachability policies defines" should be "define".
+
+Page 20, "Then using definition" missing "the"?
+
+Page 21, "can not contain" should be "cannot contain".
+
+Page 23, "modulo with respect to the alpha-equivalence": "modulo" and "with respect to" seem redundant.
+
+Page 24, "and prove the correspondence" should use "proving".
+
+===========================================================================
+                            ESOP15 Review #51B
+                     Updated 1 Dec 2014 10:13:14am EST
+---------------------------------------------------------------------------
+                  Paper #51: A Theory of Name Resolution
+---------------------------------------------------------------------------
+
+                      Overall merit: 4. Strong accept -- I will champion
+                                        this paper
+                 Reviewer expertise: 3. Knowledgeable
+
+                      ===== Comments for author =====
+
+This paper presents a language independent theory of scoping based on a notion of scope graphs, and resolution paths. The formalism allows to express a wide variety of scoping constructs (including module imports) with different semantics, and is amenable to a nice abstract representation. A strong point in favor of the proposed calculus is that is can describe ill-formed programs and ambiguous resolutions, which are fundamental for the calculus to be a proper foundation for language engineering workbenches and IDEs. The work is in fact a post-hoc attempt to formalize the underlying mechanisms of a working DSL to describe name bindings in Spoofax.
+
+I find this paper very interesting and I can see how the formalism supports the objectives of the authors. The illustration of semantic variations, and how to develop alpha-equivalence and renaming based on the calculus are convincing. On the practical side, the calculus has a natural feel, the diagrams are clear and intuitive, so it seems appropriate from many perspectives. The calculus makes it possible to enlighten various semantic issues, such as the different strategies to deal with module imports. 
+Another strong point is that the variants discussed in the paper do not affect the calculus itself, but only require to tweak some parameters (the WF predicate, and ordering on paths). The presentation of a deterministic and terminating algorithm for computing resolutions paves the way to practical implementations (even though the focus on this paper is definitely on the theoretical side of things).
+
+To improve the paper, it would be better to clarify upfront that the model is mostly aimed at describing a broad range of lexically-scoped languages, and not wilder scoping approaches, such as dynamic scoping, Javascript's with, Racket's first-class namespaces, Ancona's "Reconciling positional and nominal binding" (ITRS'12), Tanter's scoping strategies ("Beyond static and dynamic scope", DLS'09), Dezani et al unbind/rebind ("Extending the lambda-calculus with unbind and rebind", TIA'11), etc. This does not reduce the value of the current proposal (and in fact raises interesting perspectives regarding the applicability of the calculus in these challenging settings), but would help focus the expectations of the reader.
+
+***** We will clarify the range of languages that we aspire to model.
+*****
+
+Even regarding lexically-scoped mechanisms, the coverage argument is done with rather simple examples. I would have liked to see a more challenging setting like Scala or Newspeak (mixin composition of traits, nested classes/objects, etc). Here I suspect lies something that will not fit in the "we can tweak only WF/ordering and leave the calculus untouched". The reason is that there is a limitation baked in the definition of scope graphs (Fig 1), which assumes only one parent. Why insist on this restriction? In particular, it forces the treatment of inheritance to be quite simplistic, ignoring multiple inheritance. The discussion of inheritance also misses super and field shadowing, which seem relevant to assess the applicability of the calculus in this context.
+
+*******
+(Not sure we should respond but…) Applying this formalism to complete languages is indeed left for future work. 
+The limitation to one parent might not be fundamental and can maybe be dropped, however the inheritance mechanism is not modeled through the parent relation but with the imports, e.g. A inherits from B and C then the scope of A contains 2 imports for B and C.
+*******
+
+Details:
+
+p2 "the the realm"
+   "use-def" not introduced 
+
+p7 "resolution paths for variables a,b, and c." -> and d
+
+p16 The text suggests that the connection between classes and modules is a realization of this paper, while there are several papers on exploiting classes as a module mechanism (family polymorphism, virtual classes, Scala, Newspeak, etc.). Some rephrasing and references would be welcome.
+
+p23 "the precise characterization of capture in our general setting is complex" -> can you give a hint at why is complexity expected?
+
+p24 paragraph on language engineering related work misses a comparison part (for now just descriptive)
+
+bib "In icfp" -> several crossrefs not resolved
+
+===========================================================================
+                            ESOP15 Review #51C
+                     Updated 4 Dec 2014 5:28:32am EST
+---------------------------------------------------------------------------
+                  Paper #51: A Theory of Name Resolution
+---------------------------------------------------------------------------
+
+                      Overall merit: 4. Strong accept -- I will champion
+                                        this paper
+                 Reviewer expertise: 4. Expert
+
+                      ===== Comments for author =====
+
+Name resolution is a subtle issue in many programming languages that combine module mechanisms and nested scopes, and more complicated in OO languages or functional languages where inheritance and let binders add complexity.
+
+This paper presents an abstract models of variables with scopes, nesting and module import, that allows a language or tool designer to formally specify the name resolution rules of a programming language. The model represents each code region that is characterized by the same set of variables being ‘in scope’ – here called ‘a scope’ -  as one node in a graph, and every variable definition or reference is also a node. Paths in the graph are used to define the visibility rules.
+
+The model is very interesting and quite different from the standard approaches. First of all, it is quite simple and represent the issue at the correct level of abstraction, with no unnecessary details. And, most importantly, differently from other formal models, the model construction does not require any name resolution nor does it require the code itself to respect any form of well-formedness of the variable references: one may first build the model, and then use it in order to decide which variable  occurrences are not in scope of their definition, and which are ambiguous.
+
+This is a very nice paper. It gives a new approach to an old problem that is often neglected, the model is convincing, and the paper is very well written.
+

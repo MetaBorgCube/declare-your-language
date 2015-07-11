@@ -1,0 +1,466 @@
+\section{Introduction}
+\sectionlabel{Introduction}
+
+Name resolution and type resolution are two fundamental concerns in programming
+language specification and implementation.
+Name resolution means determining the identifier declaration corresponding to
+each identifier use in a program.  Type resolution means determining the type of
+each identifier and expression in the program, as part of performing type
+checking or inference.
+These two tasks are essential components of many language processing tools,
+including interpreters, compilers and IDEs. Moreover, precise descriptions of
+name and type resolution are essential parts of a formal language semantics.
+Yet there are as yet no universally accepted formalisms that support both
+specification and implementation of these tasks.
+This is in notable contrast to the situation with syntax definition, for which
+context-free grammars provide a well-established declarative formalism that
+underpins a wide variety of useful tools.
+
+In this paper, we show how two existing formalisms, scope graphs and type
+constraints, can be extended and combined to fill this gap.
+Our formalisms: (i) have a clear and clean underlying theory; (ii) handle a
+broad range of common language features; (iii) are declarative, but are
+realizable by practical algorithms and tools; (iv) are factored into
+language-specific and language-independent parts, to maximize re-use; and (v)
+apply to erroneous programs (for which resolution fails or is ambiguous) as well
+as to correct ones.   Moreover, although name and type resolution are obviously
+related, as far as possible we treat them as separate concerns; this improves
+modularity and helps clarify exactly what the relationships between these two
+tasks are.
+
+Our starting point is recent work by Neron {\it et
+al.}~\cite{NeronTVW-ESOP-2015}, which shows how name resolution for
+lexically-scoped languages can be formalized in a way that meets the criteria
+above.  The name binding structure of a program is captured in a {\it scope
+graph} which records identifier declarations and references and their scoping
+relationships, while abstracting away program details.  Its basic building
+blocks are {\it scopes}, which are minimal program regions that behave uniformly
+with respect to resolution.  Each scope can contain identifier declarations and
+references, each tagged with its position in the original AST.
+A scope graph is constructed from the program AST using a language-dependent
+traversal, but thereafter, it can be processed in a language-independent way.  A
+{\it resolution calculus} gives a formal definition of what it means for a
+reference to identifier $x$ at position $i$ to resolve to a declaration of $x$
+at position $j$, written $\ri{x}{i}\resolve\di{x}{j}$.
+A given reference may resolve to one, none, or many declarations.  There is a
+sound and complete {\it resolution algorithm} that computes the set of
+declarations to which each reference resolves.
+
+Scope graphs do not include explicit type information. However, if the language
+associates types with identifier declarations, it is easy to obtain the type of
+an identifier reference by first resolving the reference to a declaration and
+then looking up the associated type information by position in the
+AST.
+
+% \footnote{ There is nothing special about types in this regard: the same
+% mechanism can be used to obtain other declaration attributes such as record
+% field offsets, visibility attributes, etc.}
+
+One well-known mechanism for type resolution, which meets our formalism criteria
+above, is based on extracting {\it constraints} on types and type variables from
+the AST and then using {\it unification} to solve the constraints and
+instantiate the variables.
+This technique goes back at least to Milner's seminal paper on
+polymorphism~\cite{Milner78:0}, and has since been extended to cover many
+additional language features, notably subtyping. Pottier and Remy
+\cite{Pottier-Remy/emlti} give a detailed exposition, and show how an efficient resolution
+algorithm can be expressed using rewrite rules.
+The constraint approach is most commonly used for type inference, but even for
+the simpler problem of type checking, passing to constraints is a useful way to
+separate the language-dependent part of the task (generating the constraints)
+from the language-independent part (solving the constaints).
+
+This simple two stage approach---name resolution using the scope graph followed
+by a separate type resolution stage---will work for many language constructs.
+But the full story is more complicated, because sometimes name resolution also
+depends on type resolution.
+Consider the program fragments in Figure~\ref{fig:records-program}, written in a
+language with nominal records and using standard dot notation for record field
+access. 
+(Subscripts on identifiers represent source code positions and are not part
+of the language itself.)
+In order to resolve the type of \cod{y$_7$.x$_8$} we must first resolve the
+field name \cod{x$_8$} to the appropriate declaration field (\cod{x$_2$} or
+\cod{x$_6$}).
+But this name resolution depends on the {\it type} of \cod{y$_7$}, so we must
+resolve that type first, which again, requires first resolving the \emph{name}
+of \cod{y$_7$}.
+In general, we may need arbitrarily deep recursion between the two kinds of
+resolution. For example, to handle the nested record dereference on the last
+line, we must first resolve the name of \cod{y$_9$}, then its type, then the
+name and type of \cod{a$_{10}$}, and finally the name and type of
+\cod{x$_{11}$}.
+
+To solve this challenge, we reformulate the task of generating a scope graph
+from a given program as one of finding a minimal solution to a set of {\it scope
+constraints} obtained by an AST traversal.
+Scope constraints are analogous to typing constraints, but are resolved using a
+different (and simpler) algorithm.
+We then introduce a class of {\it scope variables} and modify the resolution
+calculus to characterize resolution in potentially {\it incomplete} scope graphs
+(i.e., graphs characterized by constraints involving unresolved scope
+variables).
+We can then interleave (partial) scope graph resolution and type unification
+until a complete instantiation of all variables (types, positions, and scopes)
+is obtained.  This approach permits us to resolve all the names and types for
+the record examples of Figure~\ref{fig:records-program} and for a broad range of
+other language constructs.
+
+\paragraph{Contributions}
+
+Our specific contributions are as follows:
+
+\begin{itemize}
+\item We show how to complement name resolution based on scope graphs with
+  type resolution based on type constraints including
+  type-dependent name resolution (\Section{by-example}).
+\item We extend the name resolution calculus and algorithm of 
+\cite{NeronTVW-ESOP-2015} to handle incomplete scope graphs 
+(\Section{extscopegraph}, \Section{resolution-algorithm}).
+\item We define a constraint language that can express both typing and name
+binding constraints, parameterized by an underlying notion of type
+compatibility, and define satisfiability for problems in this language
+(\Section{constraintlang}).
+\item We describe the details of constraint generation for a model
+language that illustrates many of the interesting resolution issues
+associated with modules, classes, and records (\Section{collection}). 
+\item We describe an algorithm for solving problems in our constraint
+language instantiated to use nominal subtyping, and show that it is 
+sound with respect to the satisfiability
+specification (\Section{resolution-algorithm}).
+\end{itemize}
+
+% \item (and complete?????? \PN{Unlikely for the generic
+% constraint language since variables can be everywhere, maybe if we restrict variable to where they
+% actually appear  in our collection}). 
+
+\noindent Our constraint generator and solver have been implemented and will be
+submitted as artifacts to accompany the paper. The implementation provides name
+and type resolution in the IDE generated with the Spoofax Language
+Workbench~\cite{KatsV10} for the LMR model language used in this paper and has
+been used to generate the scope graphs and type constraints for the examples in
+this paper automatically.
+
+\begin{figure}[t]
+\begin{lstlisting}[language=LMR,basicstyle=\lstfigurestyle,breaklines=true]
+record A$_1${ x$_2$: Int }
+record B$_3${ a$_4$: A$_5$  x$_6$:Bool }
+...
+y$_7$.x$_8$  // what is the type of y$_7$ ? 
+y$_9$.a$_{10}$.x$_{11}$ // what are the types of y$_9$, y$_9$.a$_{10}$ ?
+\end{lstlisting}
+\caption{Program with records}
+\label{fig:records-program} 
+\end{figure}
+
+
+\endinput
+
+As an example, consider the program in Figure~\ref{fig:simple-prog}
+in an expression-oriented language with standard lexical scoping rules.
+\begin{figure}
+\begin{lstlisting}[language=LMR,basicstyle=\lstfigurestyle,breaklines=true]
+fun y$_1$:Int { 
+  fun y$_2$:Bool { 
+    let x$_3$:Bool = if y$_4$ then True else y$_5$ 
+    in x$_6$
+  }
+}
+\end{lstlisting}
+\label{fig:simple-prog}
+\caption{A simple program}
+\end{figure}
+Subscripts on identifiers
+represent AST positions. From the scope graph for this program,
+the resolution algorithm will generate the facts
+\[
+\ri{\cod{y}}{4}  \resolve  \di{\cod{y}}{2},
+\ri{\cod{y}}{5}  \resolve  \di{\cod{y}}{2},
+\ri{\cod{x}}{6}  \resolve  \di{\cod{x}}{3}
+\]
+Note that resolution takes account of the shadowing of the binding
+at \cod{y}$_1$ by the binding at \cod{y}$_2$; this is the whole point
+of the resolution calculus.
+
+Scope graphs do not 
+include explicit type information. However, if the language associates
+types with identifier declarations, it is easy to obtain the type of
+an identifier reference by first resolving the reference to a declaration
+and then looking up the associated type information by position in the AST.\footnote{
+There is nothing special about types in this regard: the same
+mechanism can be used to obtain other declaration attributes such as 
+record field offsets, visibility attributes, etc.} 
+For example, the program of Figure~\ref{fig:simple-prog} carries this
+associated type information:
+\[
+\typeat{1}  =  \mbox{\tt Int},
+\typeat{2}  =  \mbox{\tt Bool},
+\typeat{3}  =  \mbox{\tt Bool}
+\]
+This lookup facility 
+can be made available as a service to a separate type resolution mechanism.
+
+One well-known mechanism for type resolution, which meets our formalism criteria
+above, is based on extracting {\it constraints} on types and type variables from
+the AST and then using {\it unification} to solve the constraints and
+instantiate the variables.
+This technique goes back at least to Milner's seminal paper on
+polymorphism~\cite{Milner78:0}, and has since been extended to cover many
+additional language features, notably subtyping; Pottier and Remy~(Chapter 10 of
+\cite{Pierce05advancedtopics}) give a detailed exposition, and show how an
+efficient resolution algorithm can be expressed using rewrite rules.
+The constraint approach is most commonly used for type inference, but even for
+the simpler problem of type checking, passing to constraints is a useful way to
+separate the language-dependent part of the task (generating the constraints)
+from the language-independent part (solving the constaints).
+
+Figure~\ref{fig:simple-constraints} illustrates how a constraint-based approach to
+type checking might work on top of name resolution for a small fragment
+of a simple monomorphically-typed language. At the top of the figure,
+we show the set of constraints, obtained by walking over the program AST; 
+we defer discussion of the details of constraint generation to a later section.
+\begin{figure}[tb]
+\begin{boxedminipage}{\hsize}
+\center{
+Constraints (where overall program type is $\tau_0$)}
+\[
+\begin{array}{rcl}
+\tau_0 & = & \mbox{\tt Int} \rightarrow \tau_1  \\
+\tau_1 & = & \mbox{\tt Bool} \rightarrow \tau_2  \\
+\ri{y}{4} & \resolve & \di{y}{\iota_1} \\
+\typeat{\iota_1} & = & \mbox{\tt Bool}\\
+\ri{y}{5} & \resolve & \di{y}{\iota_2} \\
+\typeat{\iota_2} & = & \mbox{\tt Bool} \\
+\ri{x}{6} & \resolve & \di{x}{\iota_3} \\
+\typeat{\iota_3} & = & \tau_2\\
+\end{array}
+\]
+\end{boxedminipage}
+\\
+\begin{boxedminipage}{\hsize}
+\center{Solution to constraints}
+\\
+$\iota_1 = 2$, $\iota_2 = 2$, $\iota_3 = 3$,
+$\tau_2 = \mbox{\tt Bool}$,\\
+$\tau_1 = \mbox{\tt Bool} \rightarrow \mbox{\tt Bool}$,
+$\tau_0 = \mbox{\tt Int} \rightarrow \mbox{\tt Bool} \rightarrow \mbox{\tt Bool}$
+\end{boxedminipage}
+\caption{Constraints for Simple Program}
+\label{fig:simple-constraints}
+\end{figure}
+There are two forms of constraints: conventional type equalities,
+and name resolution constraints.  The latter replace the implicit
+name resolution via manipulation of a typing context that would 
+be used in a more conventional presentation.
+Note that constraints can
+mention {\em position variables} $\iota$ as well as ordinary type variables $\tau$. At the bottom of the figure, we show a solution to the constraint
+set, written as a substiution on type and position variables. The solution
+is obtained by plugging in the facts about $\resolve$ and $\typeat{}$ derived
+from the scope graph, and then performing unification; again, we defer details
+to a later section.
+
+%% Source expression:
+%% \\
+%% {\tt $\lambda$ y$_1$:Int. $\lambda$ y$_2$:Bool. let x$_3$:Bool = if y$_4$ then True else y$_5$ in x$_6$}
+%% \\
+%% \\
+%% Facts from scope graph:
+%% \\
+%% $
+%% \begin{array}{rcl}
+%% \ri{y}{4} & \resolve & \di{y}{2} \\
+%% \ri{y}{5} & \resolve & \di{y}{2} \\
+%% \ri{x}{6} & \resolve & \di{x}{3} \\
+%% \end{array}
+%% $
+%% \\
+%% Facts from AST:
+%% \\
+%% $
+%% \begin{array}{rcl}
+%% \typeat{1} & = & \mbox{\tt Int}\\
+%% \typeat{2} & = & \mbox{\tt Bool}\\
+%% \typeat{3} & = & \mbox{\tt Bool}
+%% \end{array}
+%% $
+%% \\
+
+%% The language of constraints:
+
+%% t_1 = t_2
+
+%% where
+
+%% t = Int | Bool | t -> t | TypeAt(p) | TypeOf(c) | \tau
+
+%% and positions p = i | \iota
+
+%% \semop{if e1 then e2 else e3}^t  =  \semop{e1}^bool /\  [[e2]]^t /\ [[e3]]^t  
+
+%% [[x_i]]^t = x_i |-->  x_j /\ TypeAt(j) = t  (fresh $j$)
+
+%% [[c]]^t = TypeOf(c) = t
+
+%% [[let x_i:u = e1 in e2]]^t = [[e1]^u  /\ [[e2]]^t   
+
+%% [[\x_i:u.e]]^t = t = u -> \tau /\ [[e]]^\tau              (fresh \tau)
+
+
+This simple two stage approach---name resolution using the
+scope graph followed by separate type resolution---will work for
+many language constructs. But the full story is more complicated,
+because sometimes name resolution also depends on type resolution.
+Consider the program fragments in Figure~\ref{fig:records-program}, written
+in a language having nominal records and using standard dot notation 
+for record field access. 
+\begin{figure}
+\begin{lstlisting}[language=LMR,basicstyle=\lstfigurestyle,breaklines=true]
+record A$_1$ {x$_2$:Int}
+record B$_3$ {a$_4$:A$_5$, x$_6$:Bool}
+...
+y$_7$.x$_8$  // what is the type of y$_7$ ? 
+y$_9$.a$_{10}$.x$_{11}$ // what are the types of y$_9$, y$_9$.a$_{10}$ ?
+\end{lstlisting}
+\caption{Program with records}
+\label{fig:records-program} 
+\end{figure}
+In a scope graph setting, we can create one scope that contains
+the field declaration of record type \cod{A$_1$}, and another that
+contains those of \cod{B$_3$}, and associate each scope with the
+corresponding type name.
+Now, in order to resolve the type of \cod{y$_7$.x$_8$} we must first 
+resolve the field name \cod{x$_8$} to the appropriate
+declaration field (\cod{x$_2$} or \cod{x$_6$}). 
+But this name resolution depends on the {\it type} of \cod{y$_7$},
+so we must resolve that type first.  
+In general, we may need arbitrarily deep recursion between
+the two kinds of resolution. For example, to handle the nested 
+record dereference on the last line, we must first resolve the name
+of \cod{y$_9$}, then its type, then the name and type of \cod{a$_{10}$}, 
+and finally the name and type of \cod{x$_{11}$}. 
+
+To solve this challenge, we 
+reformulate the task of generating a scope graph from a given program
+as one of finding a minimal solution to a set of {\it scope constraints}
+obtained by an AST traversal.
+Scope constraints are analogous to typing constraints, 
+but are resolved using a different (and simpler) algorithm.
+We then introduce a class of {\it scope variables} and modify
+the resolution calculus to characterize resolution in potentially {\it incomplete} 
+scope graphs (i.e., graphs characterized by constraints involving unresolved 
+scope variables).
+We can then interleave (partial) scope graph resolution and type unification 
+until a complete instantiation of all variables (types, positions, and
+scopes) is obtained.  This approach permits us to resolve all the names
+and types for the record examples of Figure~\ref{fig:records-program} 
+and for a broad range of other language constructs. 
+
+Our specific contributions are as follows:
+
+\begin{itemize}
+\item We define a constraint language that can express both typing 
+and name binding constraints, parameterized by an underlying notion
+of type compatibility, and define satisfiability for problems
+in this language. 
+\item We show how to extend the name resolution calculus and algorithm of 
+~\cite{NeronTVW-ESOP-2015} to handle incomplete scope graphs.
+\item We describe details of constraint generation for a simple toy
+language that illustrates many of the interesting resolution issues
+associated with modules, classes, and records. 
+\item We describe an algorithm for solving problems in our constraint
+language instantiated to use nominal subtyping, and show that it is 
+sound (and complete?????? \PN{Unlikely for the generic constraint language since variables can be everywhere, maybe if we restrict variable to where they actually appear in our collection}).
+\end{itemize}
+Our constraint generator and solver have been implemented and will
+be submitted as artifacts to accompany the paper.
+
+[Roadmap may follow or be incorporated in above.]
+
+%% \paragraph{Contributions:}
+%% \begin{itemize}
+%%  \item extension of scope graphs with types
+%%  \item general theory of name and type resolution in this extended model
+%%  \item resolution algorithm for several instances
+%%  \item a prototype implementation of resolution alg(s)
+%% \end{itemize}
+
+
+%% In this paper, we extend the scope graph formalism to handle type dependent resolution.
+
+%% the formalism is parameterized with a theory of equality on types (HM(X)-ish)
+
+%% we present a general theory of combined name and type resolution
+
+%% we derive an algorithm for name and type resolution for several instances, including monomorphic types, nominal subtyping, Hindley-Milner polymorphism, …
+
+%% abstract syntax trees are translated to constraints that represent (partial) facts about name and types of a program
+
+%% Introduced name binding as separate concern in \cite{NeronTVW-ESOP-2015}
+%% Name binding can use type system e.g. a.x where a is a record or an object
+%% Type systems use name binding usually through environments, but environment can become complicated structures (with OO languages)
+
+%% Focus on nominal type system ?
+
+%% Goal: \\
+%% Express typing rules using the resolution relation from \cite{NeronTVW-ESOP-2015}\\
+%% Extend coverage of scope graphs with interactions between type inference and name resolution (A x = New A; A.x ; Pascal ``with'')
+
+%% \paragraph{Contributions:}
+%% \begin{itemize}
+%%  \item Constraint language to express both typing and name binding constraints
+%%  \item A name resolution specification and algorithm for incomplete scope graphs
+%%  \item Constraint generation for a language LMR with modules and records
+%%  \item Constraint solving algorithm 
+%% \end{itemize}
+
+
+%% \paragraph{Contributions:}
+%% \begin{itemize}
+%%  \item extension of scope graphs with types
+%%  \item general theory of name and type resolution in this extended model
+%%  \item resolution algorithm for several instances
+%%  \item a prototype implementation of resolution alg(s)
+%% \end{itemize}
+
+%% \paragraph{Motivation}
+
+%% many kinds of interaction between name resolution and type resolution
+
+%% we would like to propose a general framework for modeling such interactions
+
+%% \paragraph{eventual goal:} 
+%% a single framework that can be used to declaratively describe name and type resolution, as basis for reasoning and implementation.
+
+%% \paragraph{dimensions of generality:}
+
+%% language independent modeling of interaction phenomena
+
+%% strength of the type system: monomorphic types, subtyping, parametric polymorphism, non-parametric overloading (type classes), structural types
+
+%% \paragraph{features we may / should consider to support (in the limit):}
+%% \begin{itemize}
+%%  \item qualified names
+%%  \item type-based name resolution (e.g. field access in Java): resolution scopes based on types
+%%  \item with in Pascal: imports based on types
+%%  \item overloading resolution in Java : filtering of appropriate names based on types
+%%  \item nominal subtyping: based on declarations of classes and their supertypes
+%%  \item Hindley/Milner parametric polymorphism
+%%  \item generics in Java : HM + subtyping + bounded parameters
+%%  \item functors / signatures in ML
+%%  \item structural types; resolution into types that are computed during analysis
+%%  \item record types     
+%%  \item structural subtyping
+%%  \item interfaces in Java: check that implementation is complete
+%%  \item traits
+%%  \item type classes
+%% \end{itemize}
+
+%% \paragraph{Scope Graphs with Types}
+
+%% formalization of the representation of scope graphs with types using constraints
+
+%% specification of the semantics by means of deduction rules (?)
+
+%% type dependent resolution
+
+

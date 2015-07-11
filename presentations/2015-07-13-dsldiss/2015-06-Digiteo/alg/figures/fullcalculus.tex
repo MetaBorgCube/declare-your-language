@@ -1,0 +1,191 @@
+\begin{figure}[p]
+
+\begin{minipage}[t]{.49\hsize}
+\begin{boxedminipage}[t]{\hsize}
+\textbf{References and declarations}
+\begin{itemize}
+  \item $\mbox{$\dsi{x}{i}{S}$}$: declaration with name $x$ at position $i$ and optional
+  associated named scope $S$
+  \item $\ri{x}{i}$: reference with name $x$ 
+  at position~$i$ 
+\end{itemize}
+\textbf{Scope graph}
+\begin{itemize}
+  \item $\G$: scope graph
+  \item $\S{\G}$: scopes $S$ in $\G$ 
+  \item $\D{S}$: declarations $\dsi{x}{i}{S'}$ in $S$
+  \item $\R{S}$: references $\ri{x}{i}$ in $S$
+  \item $\I{S}$: imports $\ri{x}{i}$ in $S$
+  \item $\P{S}$: parent scope of $S$
+\end{itemize}
+\textbf{Well-formedness properties}
+\begin{itemize}
+  \item $\P{S}$ is a partial function
+  \item The parent relation is well-founded
+  \item Each $\ri{x}{i}$ and $\di{x}{i}$ appears in exactly one scope $S$
+\end{itemize}
+\end{boxedminipage}
+\caption{Scope graphs}
+\figurelabel{scope-graph}
+\end{minipage}
+\begin{minipage}[t]{.49\hsize}
+\begin{boxedminipage}[t]{\hsize}
+\textbf{Resolution paths}
+\vspace*{-0.4\baselineskip}
+$$\begin{array}{rl}
+          s & := \dstep{\di{x}{i}}\ |\ \istep{\ri{x}{i}}{\dsi{x}{j}{S}}\ |\ \pstep\\
+          p & := []\ |\ s\ |\ p\cdot p\\
+          & \mbox{\rm (inductively generated)} \\[0pt]
+          [] \cdot p & = p \cdot [] = p\\
+          (p_1 \cdot p_2) &\cdot\ p_3  = p_1 \cdot (p_2 \cdot p_3)
+\end{array}$$ 
+
+\textbf{Well-formed paths}
+
+\vspace*{-0.5\baselineskip}
+
+\[
+	   \WF(p) \Leftrightarrow p \in \pstep^* \cdot \istep{\_}{\_}^* 
+\]
+	
+\textbf{Specificity ordering on paths}
+
+%\bigskip
+
+	\infrule{DI}{}{
+		\dstep{\_} < \istep{\_}{\_}
+	}
+
+\medskip
+
+	\infrule{IP}{}{
+		\istep{\_}{\_} < \pstep 
+	}
+
+\medskip
+
+	\infrule{DP}{}{
+		 \dstep{\_} < \pstep
+	}
+
+\medskip
+
+    \infrule{Lex1}{
+		s_1 < s_2
+	}{ 
+		s_1\cdot p_1 < s_2 \cdot p_2
+	}
+
+
+\medskip
+
+	\infrule{Lex2}{
+		p_1 < p_2
+	}{ 
+		s \cdot p_1 < s \cdot p_2
+	}
+
+\smallskip
+
+\end{boxedminipage}
+\caption{Resolution paths, well-formedness predicate, and specificity
+ordering.}
+\figurelabel{order}
+\end{minipage}
+
+\bigskip
+
+\begin{boxedminipage}{\hsize}
+\textbf{Edges in scope graph}
+\smallskip
+
+	\infrule{P}{
+		\P{S_1} = S_2
+	}{
+		\seeni \vdash \pstep : S_1 \edge S_2
+	}
+
+\medskip
+
+	\infrule{I}{
+		\ri{y}{i} \in \I{S_1}\setminus\seeni  
+		\tab
+		\seeni \vdash p : \ri{y}{i} \resolve \dsi{y}{j}{S_2}
+	}{
+		\seeni \vdash \istep{\ri{y}{i}}{\dsi{y}{j}{S_2}} : S_1 \edge S_2 
+	}
+
+\medskip
+\textbf{Transitive closure}
+
+%\medskip
+       
+	\infrule{N}{
+		}{
+		\seeni \vdash [] : A \medge A
+	}
+
+\medskip
+
+	\infrule{T}{
+		\seeni \vdash s : A \edge B
+		\tab 
+		\seeni \vdash p : B \medge C
+	}{
+		\seeni \vdash s \cdot p : A \medge C
+	}
+
+\smallskip
+
+\textbf{Reachable declarations}
+\medskip
+
+	\infrule{R}{
+		\di{x}{i} \in \D{S'}
+		\tab
+		\seeni \vdash p : S \medge S'
+		\tab 
+		\WF(p)
+	}{
+		\seeni \vdash p \cdot \dstep{\di{x}{i}} : S \reach \di{x}{i}
+	}
+
+\medskip
+
+\textbf{Visible declarations}
+\medskip
+
+\infrule{V}{
+ 	\seeni \vdash p : S \reach \di{x}{i}
+			\tab
+			\tab
+			% tab
+  		\forall j,p' (
+  		   \seeni \vdash p' : S \reach \di{x}{j} \Rightarrow 
+  		   \neg (p' < p)
+  		)
+  	}{
+		\seeni \vdash {p} : S \resolve \di{x}{i}
+	}
+
+\medskip
+
+\textbf{Reference resolution}
+
+\medskip 
+
+\infrule{X}{
+		\ri{x}{i} \in \R{S}
+    \tab
+    \{ \ri{x}{i} \} \cup \seeni \vdash p : S \resolve \di{x}{j}
+	}{
+		\seeni \vdash p : \ri{x}{i} \resolve \di{x}{j}
+	}
+\end{boxedminipage}
+\caption{Resolution calculus}
+\figurelabel{rescalc}
+
+
+
+\end{figure}
+

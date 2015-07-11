@@ -1,0 +1,87 @@
+
+\begin{figure}[p]
+\begin{boxedminipage}{\hsize}
+\textbf{Resolution paths}
+
+\vspace*{-.6\baselineskip}
+
+\textbf{Edges in scope graph}
+
+\smallskip
+
+	\infrule{R}{
+		x^p \in \R{S}
+	}{
+		\mathcal{I} \vdash x^p \scopea{x}{R(x^p)} [S]
+	}
+	
+\smallskip
+
+	\infrule{D}{
+		d_x \in \D{S}
+	}{
+		\mathcal{I} \vdash S\cdot S^* \scopea{x}{D(d_x)} d_x
+  }
+
+\smallskip
+
+	\infrule{T}{}{
+		\mathcal{I} \vdash S_1\cdot S_2\cdot S^* \scopea{x}{T} S_2 \cdot S^*
+	}
+
+\smallskip
+
+	\infrule{Par}{
+		\P{S} = S'
+	}{
+		\mathcal{I} \vdash S\cdot S^* \scopea{x}{Par} [S']
+	}
+
+\smallskip
+
+	\infrule{I^t}{
+		y^p \in \mathcal{I}^t(S_1)  
+		\tab 
+		y^p \notin \mathcal{I} 
+		\tab
+		y^p\!,\mathcal{I} \vdash y^p \resolvea{P^*}\!\!\!d_y^{S_2^*}		
+	}{
+		\mathcal{I} \vdash S_1\cdot S_1^* \scopea{x}{I^t(y^p,P^*)} S_2^* 
+	}
+
+\smallskip
+
+	\infrule{I}{
+		y^p \in \I{S_1}  
+		\tab 
+		y^p \notin \mathcal{I} 
+		\tab
+		y^p\!,\mathcal{I} \vdash y^p \resolvea{P^*}\!\!\!d_y^{S_2^*}	
+	}{
+		\mathcal{I} \vdash S_1\cdot S_1^* \scopea{x}{I(y^p\!,P^*)} S_2^* 
+	}
+
+\smallskip
+
+\textbf{Path composition}
+
+	\infrule{C1}{}{
+		\mathcal{I} \vdash d_x \lra{[]}{x} d_x
+	}
+
+\smallskip
+
+	\infrule{C2}{
+		\mathcal{I} \vdash A \scopea{x}{P} B
+		\tab 
+		\mathcal{I} \vdash B \lra{P^*}{x} C
+	}{
+		\mathcal{I} \vdash A \lra{P\cdot P^*}{x} C
+	}
+
+\smallskip
+
+\end{boxedminipage}
+\caption{Automata}
+\label{fig:automata}
+\end{figure}

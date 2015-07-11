@@ -1,0 +1,80 @@
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\textbf{Transitive closure}
+       
+\vspace*{-0.5\baselineskip}
+
+	\infrule{N'}{
+		}{
+		\seeni,\seens \vdash [] : A \medge A
+	}
+
+\medskip
+
+	\infrule{T'}{
+		\seeni \vdash s : A \edge B
+		\tab 
+                B \not\in \seens
+                \tab
+		\seeni,\{B\} \cup \seens \vdash p : B \medge C
+	}{
+		\seeni,\seens \vdash s \cdot p : A \medge C
+	}
+
+\smallskip
+
+\textbf{Reachable declarations}
+\medskip
+
+	\infrule{R'}{
+                \di{x}{i} \in \D{S'}
+                \tab
+                S \not\in \seens
+                \tab
+                \seeni,\{S\} \cup \seens \vdash p : S \medge S'
+		\tab 
+		\WF(p)
+	}{
+		\seeni,\seens \vdash p \cdot \dstep{\di{x}{i}} : S \reach \di{x}{i}
+	}
+
+\medskip
+
+\textbf{Visible declarations}
+\medskip
+
+\infrule{V'}{
+ 	\seeni,\seens \vdash p : S \reach \di{x}{i}
+			\tab
+			\tab
+			% tab
+  		\forall j,p' (
+  		   \seeni,\seens \vdash p' : S \reach \di{x}{j} \Rightarrow 
+  		   \neg (p' < p)
+  		)
+  	}{
+		\seeni,\seens \vdash p : S \resolve \di{x}{i}
+	}
+
+\medskip
+
+\textbf{Reference resolution}
+
+\medskip 
+
+\infrule{X'}{
+		\ri{x}{i} \in \R{S}
+                \tab
+                \{\ri{x}{i}\} \cup \seeni,\emptyset \vdash p : S \resolve \di{x}{j}
+	}{
+		\seeni \vdash p : \ri{x}{i} \resolve \di{x}{j}
+	}
+
+\medskip
+
+\end{boxedminipage}
+\vspace*{-\baselineskip}
+\caption{``Primed'' resolution calculus with ``seen scopes'' component}\medskip
+\label{fig:seencalc}
+\end{figure}
+

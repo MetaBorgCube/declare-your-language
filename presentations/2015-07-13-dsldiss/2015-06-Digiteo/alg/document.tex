@@ -1,0 +1,86 @@
+\documentclass{llncs}
+\input{commands/main}
+
+
+\title{A Theory of Name Resolution}
+
+\author{
+  Pierre Neron \inst{1}
+  \and
+  Andrew Tolmach\inst{2}
+  \and
+  Eelco Visser\inst{1}
+  \and
+  Guido Wachsmuth\inst{1}
+}
+
+\authorrunning{} % abbreviated author list (for running head)
+
+\institute{%
+	$^{1)}$ Delft University of Technology, The Netherlands,\\
+	\email{\{p.j.m.neron, e.visser, g.wachsmuth\}@tudelft.nl},\\
+	$^{2)}$ Portland State University, Portland, OR, USA\\
+	\email{tolmach@pdx.edu}
+}
+
+
+
+\begin{document}
+
+        % For tech report (with appendix):
+        %\newcommand{\techrep}[2]{#2}
+        % For short (ESOP) version
+        \newcommand{\techrep}[2]{#1}
+        
+        \techrep{\pagestyle{headings}}{}
+	\mainmatter
+	\maketitle
+	\techrep{
+          {\makeatletter
+            \let\thefootnote\relax\footnotetext{Pierre Neron, Andrew P. Tolmach, Eelco Visser, 
+              Guido Wachsmuth. A Theory of Name Resolution. 
+              In Jan Vitek (editor), Programming Languages and Systems - 
+              24th European Symposium on Programming, ESOP 2015, Held as 
+              Part of the European Joint Conferences on Theory and Practice of Software, 
+              ETAPS 2015, London, UK, April 11-18, 2015, Proceedings. 
+              Lecture Notes in Computer Science, Springer, April 2015.\vspace*{-2.7cm}}
+            \makeatother}
+        }{}
+        \begin{abstract}
+	\input{tex/00-abstract}
+	\end{abstract}
+	
+% 	\parindent0pt
+% 	\parskip0.5\baselineskip
+
+        \newcommand{\refcoverageappendix}{A}
+        \newcommand{\refproofappendix}{B}
+        
+	\input{figures/resalg}
+        \eject
+	\input{figures/resalg1}
+        \eject
+        \input{figures/resalg0}
+
+\end{document}
+
+	
+\endinput
+	
+	
+	\input{tex/2-objectives}
+	\newpage\clearpage
+	\input{tex/3-scope-graphs}
+	\newpage\clearpage
+	\input{tex/5-theory-of-visibility}
+	\newpage\clearpage
+	\input{tex/6-resolution-automata}
+	\newpage\clearpage
+	\input{tex/9-evaluation}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

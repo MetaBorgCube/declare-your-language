@@ -1,0 +1,97 @@
+
+\begin{figure}[p]
+\begin{boxedminipage}{\hsize}
+\textbf{Resolution paths}
+
+\renewcommand{\scopea}[1]{\stackrel{#1}{\longrightarrow}}
+
+\vspace*{-.6\baselineskip}
+
+	$$p := D(d_x^S) |\ R(r_x)\ |\ I(r_x,d_x^S)\ |\ P\ |\ p\cdot p$$
+
+\smallskip
+
+       
+\textbf{Edges in scope graph}       
+              
+\medskip
+
+	\infrule{P}{
+		\P{S_1} = S_2
+	}{
+		\mathcal{I} \vdash {P} : S_1 \scopea{x} {S_2}
+	}
+
+\medskip
+
+	\infrule{I}{
+		r_y \in \mathcal{I}(S_1)  
+		\tab 
+		r_y \notin \mathcal{I} 
+		\tab
+		\mathcal{I}(S_1)\cup\mathcal{I} \vdash {p'} : y_o \resolveau d_y^{S_2}		
+	}{
+		\mathcal{I} \vdash {I(r_y,d_y^{S_2})} : S_1 \scopea{x} S_2 
+	}
+
+\medskip
+
+	\infrule{C}{
+		\mathcal{I} \vdash p_1 : A \scopea{x} B
+		\tab 
+		\mathcal{I} \vdash {p_2} : B \scopea{x} C
+	}{
+		\mathcal{I} \vdash {p_1\cdot p_2} : A \scopea{x} C
+	}
+
+\textbf{Edges in scope graph}
+\smallskip
+
+	\infrule{R}{
+		r_x \in \R{S}
+	}{
+		\mathcal{I} \vdash {R(r_x)} : r_x \scopea{x} S
+	}
+	
+\medskip
+
+	\infrule{D}{
+		d_x^{S'} \in \D{S}
+	}{
+		\mathcal{I} \vdash {D(d_x^{S'})} : S \scopea{x} d_x^{S'}
+  }
+       
+       
+\smallskip
+
+\textbf{Well formedness policy}\smallskip
+
+	\infrule{W}{
+		\mathcal{I} \vdash p : r_x \scopea{x} d_x
+		\tab 
+		WF(p)
+	}{
+		\mathcal{I} \vdash p : r_x \lra d_x
+	}
+
+\smallskip
+\textbf{Minimality (Shadowing)}\smallskip
+
+	\infrule{M}{
+ 	%	\begin{array}{c}
+    	\mathcal{I} \vdash {p_1} : x_o \lra d_x
+			\tab
+			\tab
+			% tab
+  		\forall d'_x,p_2(\mathcal{I} \vdash {p_2} : x_o \lra d'_x\Rightarrow\neg
+  	p_2 < p_1)
+  	% \end{array}
+	}{
+		\mathcal{I} \vdash {p_1} : x_o \resolveau d_x
+	}
+\end{boxedminipage}\medskip
+\caption{Edge calculus.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}
+

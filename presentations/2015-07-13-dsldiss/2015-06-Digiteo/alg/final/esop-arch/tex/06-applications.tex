@@ -1,0 +1,483 @@
+\section{$\alpha$-equivalence and Renaming}\sectionlabel{applications}
+
+The choice of a particular name for a bound identifier should not affect the meaning of a program. 
+This notion of name irrelevance is usually referred to as $\alpha$-equivalence, 
+but definitions of $\alpha$-equivalence exist only for some languages and are
+language-specific.
+In this section we show how the scope graph and resolution calculus can be used to 
+specify $\alpha$-equivalence in a language-independent way.
+
+%\paragraph{Position} In this section, we assume that the positions annotations not only uni%quely identify the reference or definition but also encode the position of the identifier i%n the AST. Therefore if two programs have a reference or a definition at the same position %then the annotations are equal.
+
+\paragraph{Free variables.}
+A free variable is a reference that does not resolve to any declaration ($\ri{x}{i}$ is free if $\nexists\ j,p\ s.t.\ \seeni \vdash p : \ri{x}{i} \resolve \di{x}{j}$); 
+a bound variable has at least one declaration.
+For uniformity, we introduce for each possibly free variable $x$ a program-independent artificial declaration $\di{x}{\bar{x}}$ with an artificial position $\bar{x}$. These declarations do not belong to any scope but are reachable through a particular well-formed path $\top$, which is less specific than any other path, according to the following rules:\vspace*{-.6\baselineskip}
+$$ \infrulenl{}{\seeni \vdash \top : S \reach \di{x}{\bar{x}}}\tab\tab\tab
+\infrulenl{p \neq \top}{p < \top} $$
+This path representing the resolution of a free reference is shadowed by any existing path leading to a concrete declaration; therefore the resolution of bound variables is unchanged. 
+
+\subsection{$\alpha$-Equivalence}
+We now define $\alpha$-equivalence using scope graphs. Except for the leaves representing identifiers, two \a-equivalent programs must have the same abstract syntax tree. 
+We write {\tt P} $\simeq$ {\tt P'} (pronounced ``{\tt P} and {\tt P'} are similar'')
+when the ASTs of {\tt P} and {\tt P'} are equal up to identifiers.
+To compare two programs we first compare their AST structures; if these are similar
+then we compare how identifiers behave in these programs. 
+Since two potentially \a-equivalent programs are similar, the identifiers occur at the same positions. In order to compare the identifiers' behavior, we define equivalence classes of positions of identifiers in a program: positions in the same equivalence class are declarations of, or references to, the same entity. The abstract position $\bar{x}$ identifies the equivalence class corresponding to the free variable $x$. 
+
+Given a program {\tt P}, we write $\mathbb{P}$ for the set of positions corresponding to references and declarations and $\mathbb{PX}$ for $\mathbb{P}$ extended with the artificial positions (e.g. $\bar{x}$). We define the $\seq{\text{\tt P}}$ equivalence relation between elements of $\mathbb{PX}$ as the reflexive symmetric and transitive closure of the resolution relation.
+\begin{definition}[Position equivalence] 
+\vspace*{-\baselineskip}\medskip
+      $$
+      \infrulenl{ \seeni \vdash p : \ri{x}{i} \resolveau{} \di{x}{i'}}{ i \seq{\text{\tt P}} i'} \tab\tab\tab\tab
+      \infrulenl{ i' \seq{\text{\tt P}} i}{ i \seq{\text{\tt P}} i'}\tab\tab\tab\tab  
+      \infrulenl{ i \seq{\text{\tt P}} i' \tab i' \seq{\text{\tt P}} i''}{ i \seq{\text{\tt P}} i''} \tab\tab\tab\tab 
+      \infrulenl{}{i \seq{\text{\tt P}} i}
+      $$
+\end{definition}
+ 
+\noindent
+In this equivalence relation, the class containing the abstract free variable declaration cannot contain any other declaration. So the references in a particular class are either all free or all bound.
+\begin{lemma}[Free variable class]\label{lemma:freevarclass} The equivalence class of a free variable does not contain any other declaration, i.e. $ \forall\ \di{x}{i}, i \seq{\mtt{P}} \bar{x} \Longrightarrow i = \bar{x} $
+\end{lemma}
+\begin{proof} Detailed proof is in appendix \refproofappendix~of \cite{TUD-SERG-2015-001-local}. We first prove:\\
+  \tab$\forall\ \ri{x}{i},\ (\seeni \vdash \top : \ri{x}{i} \resolve \di{x}{\bar{x}}) \Longrightarrow \forall\ p\ i',\ \seeni \vdash p : \ri{x}{i} \resolveau \di{x}{i'} \Longrightarrow i' = \bar{x} \wedge p = \top$\\
+and then proceed by induction on the equivalence relation. 
+\end{proof}
+
+\noindent
+The equivalence classes defined by this relation contain references to or declarations of 
+the same entity. 
+Given this relation, we can state that two programs are \a-equivalent if the identifiers at identical positions refer to the same entity, that belong to the same equivalence class:
+
+\begin{definition}[\a-equivalence] Two programs {\tt P1} and {\tt P2} are \a-equivalent (denoted {\tt P1} $\aeq$ {\tt P2}) when they are similar and have the same $\sim$-equivalence classes:
+\vspace*{-.5\baselineskip}
+ $$\mtt{P1} \aeq \mtt{P2}\ \triangleq\ \mtt{P1} \simeq \mtt{P2} \wedge \forall\ i\ i',\ i \seq{\mtt{P1}} i' \Leftrightarrow i \seq{\mtt{P2}} i'$$
+\end{definition}
+\begin{remark}
+\vspace*{-.5\baselineskip}
+  $\aeq$ is an equivalence relation since $\simeq$ and $\Leftrightarrow$ are equivalence relations.
+\end{remark}
+
+%\subsection{The $\aeq$ Relation}
+
+\paragraph{Free variables.} The $\seq{\mtt{P}}$ equivalence classes
+corresponding to free variables $x$ also contain the artificial position
+$\bar{x}$. Since the equivalence classes of two equivalent programs {\tt P1} and
+{\tt P2} have to be exactly the same, every element equivalent to $\bar{x}$
+(i.e. a free reference) in {\tt P1} is also equivalent to $\bar{x}$ in {\tt P2}.
+Therefore the free references of \a-equivalent programs have to be identical.
+
+\paragraph{Duplicate declarations.}
+The definition allows us to also capture \a-equivalence of programs with duplicate declarations. 
+Assume that a reference $\ri{x}{i_1}$ resolves to two definitions $\di{x}{i_2}$ and $\di{x}{i_3}$; then 
+$i_1$, $i_2$ and $i_3$ belong to the same equivalence class. Thus all $\alpha$-equivalent programs will have the same ambiguities.
+
+% For example, in the program {\tt P1} in Figure \ref{fig:dupalpha}, \re{x}{9} has a duplicate declaration (it can resolve to \re{x}{2} through \re{A}{1} or to \re{x}{4} through \re{B}{3}) whereas \re{x}{13} simply resolves to \re{x}{2} and \re{x}{17} to \re{x}{4}. 
+% Thus positions 2, 4, 9, 13, and 17 are in the same equivalence class. 
+% (Similarly, positions 1,6, and 11 form an equivalence class refering to module \re{A}{}
+% and positions 3,7, and 15 form an equivalence class refering to module \re{B}{}, while
+% positions 8, 12, and 16 each form singleton equivalence classes.)
+% The program {\tt P2} is \a-equivalent to {\tt P1}: all members of each equivalence
+% class have been consistently renamed. 
+% However the program {\tt P3}, where only the first declaration of \re{x}{} and its direct references are renamed into \re{z}{}, is not \a-equivalent to {\tt P1}, \re{z}{9} now only resolves to \re{z}{2} thus this program does not contain the initial ambiguity of {\tt P1}.
+
+% \begin{figure}[t]
+%   \begin{boxedminipage}{\hsize}
+% \begin{center}
+% \begin{minipage}{.24\linewidth}    
+% \begin{lstlisting}[language=PCFM,frame=,escapechar=?]
+% module A?$_{_1}$? { 
+%   def x?$_{_2}$? := 1
+% }
+% module B?$_{_3}$? { 
+%   def x?$_{_4}$? := 2
+% }
+% module C?$_{_5}$? {
+%   import A?$_{_6}$? B?$_{_7}$?;
+%   def y?$_{_8}$? := x?$_{_9}$?
+% }
+% module D?$_{_{10}}$? {
+%   import A?$_{_{11}}$?;
+%   def y?$_{_{12}}$? := x?$_{_{13}}$?
+% }
+% module E?$_{_{14}}$? {
+%   import ?B$_{_{15}}$?;
+%   def y?$_{_{16}}$? := x?$_{_{17}}$?
+% }
+% \end{lstlisting}
+% \begin{center}
+% {\tt P1}
+% \end{center}
+% \end{minipage}
+% \hspace{.05\linewidth}\vline\hspace{.05\linewidth}
+% \begin{minipage}{.24\linewidth}
+%   \begin{lstlisting}[language=PCFM,frame=,escapechar=?]  
+% module AA?$_{_1}$? { 
+%   def z?$_{_2}$? := 1
+% }
+% module BB?$_{_3}$? { 
+%   def z?$_{_4}$? := 2
+% }
+% module C?$_{_5}$? {
+%   import AA?$_{_6}$? BB?$_{_7}$?;
+%   def s?$_{_8}$? := z?$_{_9}$?
+% }
+% module D?$_{_{10}}$? {
+%   import AA?$_{_{11}}$?;
+%   def u?$_{_{12}}$? := z?$_{_{13}}$?
+% }
+% module E?$_{_{14}}$? {
+%   import BB?$_{_{15}}$?;
+%   def v?$_{_{16}}$? := z?$_{_{17}}$?
+% }
+% \end{lstlisting}
+% \begin{center}
+% {\tt P2}
+% \end{center}
+% \end{minipage} 
+% \hspace{.05\linewidth}\vline\hspace{.05\linewidth}
+% \begin{minipage}{.24\linewidth}
+% \begin{lstlisting}[language=PCFM,frame=,escapechar=?]  
+% module A?$_{_1}$? { 
+%   def z?$_{_2}$? := 1
+% }
+% module B?$_{_3}$? { 
+%   def x?$_{_4}$? := 2
+% }
+% module C?$_{_5}$? {
+%   import A?$_{_6}$? B?$_{_7}$?;
+%   def y?$_{_8}$? := z?$_{_9}$?
+% }
+% module D?$_{_{10}}$? {
+%   import A?$_{_{11}}$?;
+%   def y?$_{_{12}}$? := z?$_{_{13}}$?
+% }
+% module E?$_{_{14}}$? {
+%   import B?$_{_{15}}$?;
+%   def y?$_{_{16}}$? := x?$_{_{17}}$?
+% }
+% \end{lstlisting}
+% \begin{center}
+% {\tt P3}
+% \end{center}    \end{minipage} 
+% \end{center}    
+%   \end{boxedminipage}
+%   \caption{\a-equivalence and duplicate declaration}
+%   \label{fig:dupalpha}
+% \end{figure}
+
+% APT: commenting out because hard to explain briefly and properly
+%\paragraph{Unbound modules.}
+%Given a term {\tt t}, a reference in {\tt t} is usually said to be bound if it is linked with a binder in {\tt t}. A \emph{bound} variable has its corresponding declaration inside the term {\tt t} whereas a {\it free} variable does not have a declaration. A closed term is a term that does not contain any free variable. For example in the term {\tt fun x -> x + y} the variable {\tt x} is bound and {\tt y} is free, therefore this term is an open term. However the presence of imports really complicates this problem, in the program {\tt import A; 2 $\cdot$ x} the module variable {\tt A} is free but one can not know if {\tt x} is bound or free, it depends if the corresponding declaration of {\tt A} defines {\tt x} or not. Since {\tt A} does not resolve to any module here, it can not provide a resolution for {\tt x}, thus we consider that {\tt x} is free in such a program.
+
+
+\subsection{Renaming}
+
+%In a context without imports, substitutions are usually defined on free variables and induc%tively on the structure of the term. When the inductive call meets a binder, it renames the bound variable with a fresh one in the sub-term where this variable is bound (and where this bound variable appear is free) before doing the recursive call on this sub-term for the main renaming, as in the following sequence.
+%\begin{example}[Capture-avoiding substitution sequence in lambda calculus]\label{ex:lambdasubs}
+%$$[y\backslash x]\ \lambda x.\ (x\ y)\ \longrightarrow\ \lambda z.\ [y\backslash x][x \backslash z]\ (x\ y)\ \longrightarrow\ \lambda z.\ (z\ x)$$   
+%\end{example}
+
+%In this paper we do not address the general substitution problem, i.e. substitution of a variable by a term, but we consider the particular case of renaming, i.e. the substitution of a bound variable by a new variable.
+Renaming is the substitution of a bound variable by a new variable throughout the program.
+It has several practical applications such as rename refactoring in an IDE, transformation to a program with unique identifiers,  or as an intermediate transformation when implementing  capture-avoiding substitution.
+
+%Without imports, renaming of bound variable can simply be achieved by changing the name of the binder and substituting the free variable for the new one in the sub-term where it is bound. However the parts of the term where the variable is bound is not so easily accessible when the language has imports.   
+%Imports completely cross over the usual inductive structure of terms and prevent us from using the same schema since a declaration can now bind in a completely different part of the program.
+
+A valid renaming should respect $\alpha$-equivalence classes.
+%When renaming a declaration or a reference, we want to not only rename this particular occurrence of the variable but also all the uses of the variable that refer to the same entity. Therefore we want to change the name of the identifier for an entire equivalence class. 
+To formalize this idea we first define a generic transformation scheme on programs that also depends on the position of the sub-term to rewrite:
+
+\begin{definition}[Position dependent rewrite rule] Given a program \mtt{P}, we denote by $(t_i \rightarrow t'\ |\ F)$ the transformation that replaces the occurrences of the sub-term $t$ at positions $i$ by $t'$ if the condition $F$ is true. $(T) \mtt{P}$ denotes the application of the transformation $T$ to the program {\tt P}.
+\end{definition}
+
+\noindent
+Given this definition we can now define the renaming transformation that replaces the identifier corresponding to an entire equivalence class:
+\begin{definition}[Renaming] Given a program {\tt P} and a position $i$ corresponding to a declaration or a reference for the name $x$, we denote by {\upshape [$x_i$:=$y$]{\tt P}} the program {\tt P'} corresponding to {\tt P} where all the identifiers $x$ at positions $\seq{\mtt{P}}$-equivalent to $i$ are replaced by $y$:
+$$[x_i := y]\mtt{P} \triangleq (x_{i'} \rightarrow y\ |\ i' \seq{\mtt{P}} i)\mtt{P} $$
+\end{definition}
+
+\noindent
+However, not every renaming is acceptable: a renaming might provoke variable captures and completely change the meaning of a program. %We consider that a renaming is \emph{valid} if and only if it produces an \a-equivalent program.
+\begin{definition}[Valid renamings] Given a program {\tt P},  renaming {\upshape [$x_i$ := $y$]} is valid only if it produces an \a-equivalent program, i.e.    
+  $[x_i := y]\mtt{P} \aeq \mtt{P}$
+\end{definition}
+\begin{remark} This definition prevents the renaming of free variables since \a-equivalent programs have exactly the same free variables.
+\end{remark}
+Intuitively, valid renamings are those that do not accidentally ``capture'' variables. 
+Since the capture of a reference resolution also depends on the seen-import context in which this resolution occurs, a precise characterization of capture in our general setting is complex and we leave it for future work.
+
+
+\endinput
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{definition}[Capture] We say that a declaration $d_x$ can capture a variable $y$, different from $x$, in scope $S$ if there is a path from $S$ to $d_x$ that is not shadowed by a path from $y$ to $d_y$.
+$$d_x \prec_S y \triangleq x \neq y \wedge \exists p_x\ s.t.\ \vdash p_x : S \resolveau d_x \wedge \forall\ p_y\ d_y,\ \vdash p_y : S \resolveau d_y \Rightarrow \neg p_y < p_x$$
+If $d_x \prec_S y$, then renaming the declaration $d_x$ into $y$ would introduce a new resolution for $y$. We also denote $d_x \prec r_x$ the proposition $d_x \prec_S r_y$ where $r_y \in \R{S}$. 
+\end{definition}
+% \begin{remark} This definition works also for free variables, $d_x$ can capture the free variable $y$ in $S$ if there is a resolution for $x$ in $S$.
+% \end{remark}
+
+Renaming a bound occurrence $x_i$ into $y$ in a program {\tt P} can create two different kinds of captures:
+\begin{itemize}
+ \item a reference to $x$ in {\tt P} can be captured by an existing declarations of $y$ when that reference is renamed into $y$ 
+ \item a declaration of $x$ in {\tt P} can capture an existing reference to $y$ when that declaration is renamed into $y$
+\end{itemize}
+When these two kinds of capture are avoided then the \a-equivalence is preserved.
+
+\begin{lemma}[Renaming correctness condition] The renaming of an occurrence of a simple variable (i.e. not an import) $x$ into a different name $y$, i.e. $[x_i:=y]\mtt{P}$, is valid if and only if no reference equivalent to $i$ is captured by a declaration of $y$ and no declaration equivalent to $i$ captures a reference to $y$.
+\TODO{False, need to state that y is not the name of an import}
+  \begin{multline*}
+    (\forall r_{x_{i'}}, i \seq{\mtt{P}} {i'} \Rightarrow \forall S, \neg r_{x_{i'}} \in \I{S} ) \wedge \forall\ S\ r_{z_i} \in \I{S}, y \neq z \in \Longrightarrow\\
+    (\forall r_{x_{i'}}, i \seq{\mtt{P}} {i'}, \forall d_y, \neg d_y \prec r_{x_i} \wedge
+    \forall d_{x_{i'}}, i \seq{\mtt{P}} {i'}, \forall r_y, \neg d_{x_{i}} \prec y)\ \Longleftrightarrow\ 
+    [x_{{i}} := y]\mtt{P} \aeq \mtt{P}
+  \end{multline*}
+\end{lemma}
+\begin{proof}
+  
+
+
+  \TODO{straightforward if we only rename pure references (not imports), if not ?????????????????? in particular the interaction with $\mathcal{I}$}
+\end{proof}
+
+\paragraph{Refactoring} \TODO{Renaming in IDE ? desugaring ? } 
+
+\paragraph{Transformation to unique identifiers} Dealing with name binding in a program transformation that performs subtle optimization can be tedious and error prone. Therefore many transformation assume that the input program has unique identifiers, that is: a particular name represents only one entity in the entire program. In particular, if the program does not have duplicate declarations then every variable is declared at most once. 
+\begin{definition}[Program with unique identifier] A program has unique identifier if the names associated to the $\sim$-equivalence classes are all different. A program {\tt P} has unique identifiers if and only if:
+$$ \forall \omega_{x_{i_1}}, \oplus \forall \omega_{x_i} omega_{x_{i'}}, i = \bar{x} \vee i' = \bar{x} \vee i \seq{\mtt{P}} i'$$
+where $\omega = d | r$
+  
+\end{definition}
+
+In a program analysis, for example, it allows to use a global environment to store abstract values without having to update it every time the analysis enter a binder. It also allows to inline and change declarations without taking care of different captures. 
+
+
+
+\subsection{Substitution}
+
+
+For example, in the program {\tt P1} in figure \ref{fig:exrenaming}, if one try to naively rename \lstinline{z} into \lstinline{y} as in the program {\tt P2}, the reference \re{y}{2} in {\tt P2} will now refer to \re{y}{1} instead of remaining free even if the declaration of \re{y}{1} is in a completely different part of the program. The same kind of phenomenon occurs if one tries to rename the variable \re{y}{} into \re{z}{}. 
+\begin{figure}[h]
+  \begin{boxedminipage}{\hsize}
+\begin{center}
+\begin{minipage}{.28\linewidth}    
+\begin{lstlisting}[language=PCFM,frame=,escapechar=?]
+module A?$_{_1}$? {
+  def x?$_{_1}$? := 3;
+  def y?$_{_1}$? := 5
+}
+module B?$_{_1}$? {
+  import A?$_{_2}$?;
+  def t?$_{_1}$? := x?$_{_2}$? + z?$_{_1}$?
+}
+   \end{lstlisting}
+\begin{center}
+{\tt P1}
+\end{center}    \end{minipage}
+\hspace{.02\linewidth}\vline\hspace{.02\linewidth}
+\begin{minipage}{.28\linewidth}
+\begin{lstlisting}[language=PCFM,frame=,escapechar=?]  
+module A?$_{_1}$? {
+  def x?$_{_1}$? := 3;
+  def y?$_{_1}$? := 5
+}
+module B?$_{_1}$? {
+  import A?$_{_2}$?;
+  def t?$_{_1}$? := x?$_{_2}$? + y?$_{_2}$?
+}
+   \end{lstlisting}
+\begin{center}
+{\tt P2}
+\end{center}    \end{minipage}
+\hspace{.02\linewidth}\vline\hspace{.02\linewidth}
+\begin{minipage}{.28\linewidth}
+\begin{lstlisting}[language=PCFM,frame=,escapechar=?]  
+module A?$_{_1}$? {
+  def x?$_{_1}$? := 3;
+  def u?$_{_1}$? := 5
+}
+module B?$_{_1}$? {
+  import A?$_{_2}$?;
+  def t?$_{_1}$? := x?$_{_2}$? + y?$_{_1}$?
+}
+   \end{lstlisting}
+\begin{center}
+{\tt P3}
+\end{center}    \end{minipage}
+\end{center}    
+  \end{boxedminipage}
+  \caption{Renaming and imports}
+  \label{fig:exrenaming}
+\end{figure}
+ In order to properly substitute \re{z}{} with \re{y}{} in {\tt P1}, one first need to rename the bound instance of \re{y}{} into a completely fresh variable (e.g. \re{u}{}) and only then to replace the free instance of \re{z}{} by \re{y}. This gives the program {\tt P3}. This intermediate transformation (substituting the bound variable \re{y}{} by \re{u}{}) consists in computing an \a-equivalent term where the naive substitution of \re{z}{} by \re{y}{} can be safely applied. Just as in Example \ref{exrenaming} where we first substitute the bound $x$ by $z$. However in a program with imports this substitution of a bound variable with a fresh one cannot be limited to a particular sub-term where this variable is bound but has to be propagated defined on the entire program. 
+
+
+\subsection{Capture Free Substitution}
+
+\begin{definition}[Renaming of a free variable specification] When substituting the free variable $x$ by $y$ in a program {\tt P}, a capture occurs if an initial reference to the free variable $x$ becomes a bound instance of the variable $y$. The result of this capture free substitution should produce a similar program {\tt P2} with the same the equivalence classes except for the one of $\bar{x}$ that becomes the one of $\bar{y}$:
+$$
+\begin{array}{rl}
+\forall\ e,& \neg (e \seq{\mtt{P1}} \bar{x} \vee e = \bar{y}) \Longrightarrow \forall\ e',\ e \seq{\mtt{P1}} e' \Leftrightarrow e \seq{\mtt{P2}} e' \bigwedge \\
+& (e \seq{\mtt{P1}} \bar{x} \vee e = \bar{y}) \Longleftrightarrow (e \seq{\mtt{P2}} y \vee e = \bar{x}) 
+\end{array}
+$$
+\end{definition}
+\begin{remark} According to this definition it is not safe to substitute $x$ by $y$ in $x + y$.
+\end{remark}
+
+\begin{lemma}[Free variable substitution correctness]
+  \begin{multline*}
+    (\forall r_{x_i}, i \seq{\mtt{P}} x \Rightarrow r_{x_i} \in \R{S} \Rightarrow \forall\ d_y,\ \neg d_y \prec_S x) \Longrightarrow \\
+    (x_i \rightarrow y | x_i \seq{\mtt{P}} x)\mtt{P} \in valid([x:=y]\mtt{P})
+  \end{multline*}
+    
+\end{lemma}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection{Substitution by closed terms}
+
+
+
+
+\subsubsection{Programs with unique variable definitions}
+
+In a compiler or in a program transformation algorithm it is always tedious and troublesome to deal with name binding and especially shadowing. One of the solution to avoid complication is to only work on program with unique declarations. A program has unique declarations if, in the entire program, a particular name is only bound once, and all the references with this name refer to that declaration (one can not redefine a free variable).  
+
+
+
+
+
+
+
+
+I(x,d).p \in minima{E} <=> not D in E /\ p \in minima{ p' | I(x,d).p' in E } 
+
+
+In this paragraph, given a closed import term {\tt t}, we aim at transforming this term into an equivalent one {\tt t$_u$} that has unique identifiers; i.e. a term in which all occurrences of the same name refer to the same declaration:
+$$ \text{{\tt t} has unique identifiers} \triangleq \forall\ r_x\ r'_x\ d_x,\ \vdash r_x \resolveau d_x \Longrightarrow\ \vdash r'_x \resolveau d_x$$
+The main idea is to use the (unique) position of the declaration as the identifier in the new program. Of course the free variables (that do not resolve to any declaration) have to remain unchanged.
+
+
+	given a closed scope graph, rename all identifiers to unique names
+	
+	given two programs are they alpha equivalent?
+	
+	for closed programs without unresolved names
+	
+	what happens if we consider programs with unresolved names, in particular
+	unresolved import names
+	
+	% \x . (open A in x)
+	
+	free variables?
+	
+	what are the free variables of a sub-term in the context of a fully resolved
+	scope graph?
+	
+	define notion of pretty-printing
+	
+	
+
+\subsection{Renaming and Substitution}
+	
+\subsection{Variable Renaming}
+	
+	rename the name of one declaration (or reference) and all occurrences that are
+	bound to it
+	
+	renaming can be done with scope graph only
+	
+	main issue: is the name graph preserved?
+	
+	fixing: can we rename other declarations in order to avoid capture / conflicts
+	
+	define variable capture
+	
+\subsection{Substitution}
+	
+	substitution of a term for an identifier
+	
+	should be possible syntactically: define constraints
+	
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Navigation in IDE
+\item {\bf 
+  Alpha-equivalence / renaming / substitution}
+
+For $\alpha$-equivalence, first consider the set of closed, well-defined (no duplicate definitions) programs. The type of identifiers is $\mathbb{I}$ and the type of occurrences is $\mathbb{O}$, we assume there exists an injective (f(x) = f(y) <=> x = y) function $fresh : \mathbb{O} \rightarrow \mathbb{I}$. Given a program p, we rename every identifier of the program depending on its position:
+$$ x_o \rightarrow fresh(o)\tab\tab\ if\ \exists S, d_{x_o} \in S $$
+$$ x_o \rightarrow fresh(o')\tab\tab\ if\ \exists P, P : x_o \rightarrow d_{x_{o'}}  $$.
+We denote $Unique(p)$ this transformation.
+Given such a transformed program, when resolving it then for every reference $x_o$ we have:
+$$ \exists P, P : x_o \rightarrow d_{x_{fresh^{-1}(x)}}$$
+And for every definition $d_{x}$ we have 
+$$ Id(x) @ fresh^{-1}(x)$$
+I guess this will be sufficient to prove that $\forall p, Unique(Unique(p)) = Unique(p)$ (unique is a projection $Unique\circ Unique = Unique$ or $Unique$ is a normalization strategy. Then comparing the normal form is a definition of alpha-equivalence (for a fixed $fresh$ function).
+
+Particular attention is required when talking about open terms (where some variables are not defined), then one need to split the set of identifiers, assume $\mathbb{I}^f$ is the set of unbound identifiers then we need to ensure that $fresh(\mathbb{O}) \cap \mathbb{I}^f = \emptyset$.
+Then same transformation can be applied and one can compare normalized programs. 
+However the normalization depends on the $fresh$ function, that here depends on the program (it should not touch free variables of the program), however alpha-equivalent programs have the same free variables so, to check alpha equivalence first check sets of free variables, and then define a function $fresh$ valid for all programs, and then compare the normal form.
+
+Another solution is to extend the set of possible identifiers, e.g. $\mathbb{I}' = \mathbb{I} + \mathbb{N}$ and define $fresh$ such that its image is included in the extension $fresh(\mathbb{O}) \cap \mathbb{I} = \emptyset$. Therefore normalization cannot capture free variables of the program.
+
+\item {\bf alpha-equivalence v2:}
+
+Another way, that does not involve renaming is to consider equivalence classes of positions. Define the following relation $\sim' : \mathbb{O} \times \mathbb{O}$:
+$$ o_1 \sim' o_2 \Leftrightarrow
+\left\{ 
+  \begin{array}{l}
+\exists x, Id(x)@ o_1 \wedge Id(x)@ o_2 \wedge \\
+\exists P, P : x_{o_1} \rightarrow d_{x_{o_2}} \vee 
+\forall P d, \neg P : x_{o_1} \rightarrow d \wedge \neg P : x_{o_2} \rightarrow d   
+  \end{array}\right.$$
+And define $\sim$ as its transitive, symmetric, reflexive closure.
+Then $\alpha$-equivalent programs have the same AST (modulo identifier names) and same $\sim$ equivalence classes. 
+
+\item
+  Error recovery / code completion
+\item
+  Hygienic transformations
+\item
+  Task engine: incremental evaluation (separate paper)
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 

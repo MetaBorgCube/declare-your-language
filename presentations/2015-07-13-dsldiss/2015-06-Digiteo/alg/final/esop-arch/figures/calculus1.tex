@@ -1,0 +1,375 @@
+\newcommand\state[2]{\langle#1,#2\rangle}
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+	\infrule{Reference}{
+		x_p \in \R{S}
+	}{
+		R_x : \state{xs}{r_{x_p}} \to \state{x_p:xs}{S}
+	}
+	
+\bigskip
+
+	\infrule{Declaration}{
+		d_x \in \D{S}
+	}{
+		D_x : \state{x:xs}{S} \to \state{xs}{d_x}
+  }
+
+
+\bigskip
+
+	\infrule{Parent}{
+		\P{S} = S'
+	}{
+		P : \state{xs}{S} \to \state{xs}{S'}
+	}
+
+\bigskip
+
+	\infrule{Import}{
+		x_p \in \I{S}, x_p \not\in xs
+	}{
+		I : \state{xs}{S} \to \state{xs}{r_{x_p}}
+	}
+
+\bigskip
+
+	\infrule{DeclScope}{		
+	}{
+		DS : \state{y:xs}{d_x^S} \to \state{y:xs}{S}
+	}
+
+
+\bigskip
+
+	\infrule{Composition}{
+		p_1 : A \to B
+		\tab 
+		p_2 : B \to C
+	}{
+		p_1 \cdot p_2 : A \to C
+	}
+\end{boxedminipage}
+\caption{Calculus.}
+\label{fig:nocycles}
+\end{figure}
+	
+
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\textbf{Resolution paths}
+
+\vspace*{-.6\baselineskip}
+
+	$$P := D(x) | T | R(x) | I(x_p,P) | Par$$
+
+\smallskip
+
+\textbf{Edges in scope graph}
+
+\smallskip
+
+	\infrule{Reference}{
+		x_p \in \R{S}
+	}{
+		R(x) : \state{xs}{r_{x_p}} \to \state{x_p::xs}{S}
+	}
+	
+\medskip
+
+	\infrule{D}{
+		d_x \in \D{S}
+	}{
+		D(x) : \state{x_p::xs}{S} \to \state{xs}{d_x}
+              }
+
+\medskip
+
+	\infrule{Parent}{
+		\P{S} = S'
+	}{
+		Par : \state{xs}{S} \to \state{xs}{S'}
+	}
+
+\medskip
+
+	\infrule{I}{
+		y^o \in \mathcal{I}(S)  
+		\tab 
+		y^o \notin xs 
+		\tab
+		{P^*} : \state{xs}{r_{y_o}} \resolveau \state{xs}{d_y^{S'}}		
+	}{
+		I(y_o,P^*) : \state{xs}{S} \to \state{xs}{S'}
+	}
+
+\medskip
+
+	\infrule{C}{
+		P_1 : A \to B
+		\tab 
+		P_2 : B \to C
+	}{
+		P_1\cdot P_2 : A \to C
+	}
+
+\smallskip
+
+\textbf{Resolution}
+
+	\infrule{Res}{
+          \begin{array}{c}
+            P_1 : \state{xs}{r_{x_p}} \to \state{xs}{d_x}
+            \tab\tab\tab\tab\tab\smallskip
+            P_1 : WFP\\
+            \forall d'_x\ P_2, 
+            (P_2 : \state{xs}{r_{x_p}} \to \state{xs}{d'_x})
+            \Rightarrow\neg
+            P_2 < P_1
+          \end{array}
+    	}{
+          P_1 : \state{xs}{r_{x_p}} \resolveau \state{xs}{d_x}
+        }
+
+\end{boxedminipage}
+\caption{Resolution calculus.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}
+
+\begin{figure}[p]
+\begin{boxedminipage}{\hsize}
+
+
+\textbf{Well-formed paths}
+
+	\display{
+	  \labeled{WFP}{
+	    to be defined
+	  }
+	}
+	
+\textbf{Specificity ordering on paths}
+
+\bigskip
+
+   to be defined
+
+\smallskip
+
+\textbf{Definition of a path}
+
+  \vspace*{-\baselineskip}
+  
+  \display{
+  	\labeled{Def1}{
+  	  def(D(d_x)) = d_x
+  	}
+  }
+  \\[-10pt]
+  \display{
+  	\labeled{Def2}{
+  	  def(P \cdot P^*) = def(P^*)
+  	}
+  }
+  \vspace*{-2\baselineskip}
+\end{boxedminipage}
+\caption{Resolution calculus with path specificity ordering.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}
+
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+	\infrule{Reference}{
+		x_p \in \R{S}
+	}{
+		R_x : \state{xs}{r_{x_p}} \to \state{x_p}{}
+	}
+	
+\bigskip
+
+	\infrule{Declaration}{
+		d_x \in \D{S}
+	}{
+		D_x : \state{x:xs}{S:NS} \to \state{xs}{d_x:S:NS}
+  }
+
+
+\bigskip
+
+	\infrule{Parent}{
+		\P{S} = S' \tab S' \notin NS
+	}{
+		P : \state{xs}{S:NS} \to \state{xs}{S':S:NS}
+	}
+
+\bigskip
+
+	\infrule{I}{
+		y^o \in \mathcal{I}(S)  
+		\tab 
+		y^o \notin xs 
+		\tab
+		{P^*} : \state{xs}{r_{y_o}} \resolveau \state{xs}{d_y^{S'}:NS_y}
+                \tab 
+                S' \notin S:NS
+              }{
+		I(y_o,P^*) : \state{xs}{S:NS} \to \state{xs}{S':S:NS}
+              }
+
+\medskip
+
+	\infrule{Composition}{
+		p_1 : A \to B
+		\tab 
+		p_2 : B \to C
+	}{
+		p_1 \cdot p_2 : A \to^* C
+	}
+
+\textbf{Resolution}
+
+	\infrule{Res}{
+          \begin{array}{c}
+            P_1 : \state{xs}{r_{x_p}} \to \state{xs}{d_x:NS}
+            \tab\tab\tab\tab\tab\smallskip
+            P_1 : WFP\\
+            \forall d'_x\ P_2,NS' 
+            (P_2 : \state{xs}{r_{x_p}} \to \state{xs}{d'_x,NS'})
+            \Rightarrow\neg
+            P_2 < P_1
+          \end{array}
+    	}{
+          P_1 : \state{xs}{r_{x_p}} \resolveau \state{xs}{d_x}
+        }
+
+\end{boxedminipage}
+\caption{Calculus with seen-scopes}
+\label{fig:nocycles}
+\end{figure}
+	
+
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\textbf{Resolution paths}
+
+\vspace*{-.6\baselineskip}
+
+	$$P := D(x) | T | R(x) | I(x_p,P) | Par$$
+
+\smallskip
+
+\textbf{Edges in scope graph}
+
+\smallskip
+
+	\infrule{Reference}{
+		x_p \in \R{S}
+	}{
+		R(x) : \state{xs}{r_{x_p}} \to \state{x_p::xs}{S}
+	}
+	
+\medskip
+
+	\infrule{D}{
+		d_x \in \D{S}
+	}{
+		D(x) : \state{x_p::xs}{S} \to \state{xs}{d_x}
+              }
+
+\medskip
+
+	\infrule{Parent}{
+		\P{S} = S'
+	}{
+		Par : \state{xs}{S} \to \state{xs}{S'}
+	}
+
+\medskip
+
+	\infrule{I}{
+		y^o \in \mathcal{I}(S)  
+		\tab 
+		y^o \notin xs 
+		\tab
+		{P^*} : \state{xs}{r_{y_o}} \resolveau \state{xs}{d_y^{S'}}		
+	}{
+		I(y_o,P^*) : \state{xs}{S} \to \state{xs}{S'}
+	}
+
+\medskip
+
+	\infrule{C}{
+		P_1 : A \to B
+		\tab 
+		P_2 : B \to C
+	}{
+		P_1\cdot P_2 : A \to C
+	}
+
+\smallskip
+
+\textbf{Resolution}
+
+	\infrule{Res}{
+          \begin{array}{c}
+            P_1 : \state{xs}{r_{x_p}} \to \state{xs}{d_x}
+            \tab\tab\tab\tab\tab\smallskip
+            P_1 : WFP\\
+            \forall d'_x\ P_2, 
+            (P_2 : \state{xs}{r_{x_p}} \to \state{xs}{d'_x})
+            \Rightarrow\neg
+            P_2 < P_1
+          \end{array}
+    	}{
+          P_1 : \state{xs}{r_{x_p}} \resolveau \state{xs}{d_x}
+        }
+
+\end{boxedminipage}
+\caption{Resolution calculus.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}
+
+\begin{figure}[p]
+\begin{boxedminipage}{\hsize}
+
+
+\textbf{Well-formed paths}
+
+	\display{
+	  \labeled{WFP}{
+	    to be defined
+	  }
+	}
+	
+\textbf{Specificity ordering on paths}
+
+\bigskip
+
+   to be defined
+
+\smallskip
+
+\textbf{Definition of a path}
+
+  \vspace*{-\baselineskip}
+  
+  \display{
+  	\labeled{Def1}{
+  	  def(D(d_x)) = d_x
+  	}
+  }
+  \\[-10pt]
+  \display{
+  	\labeled{Def2}{
+  	  def(P \cdot P^*) = def(P^*)
+  	}
+  }
+  \vspace*{-2\baselineskip}
+\end{boxedminipage}
+\caption{Resolution calculus with path specificity ordering.}
+\label{fig:rescalc}
+\label{fig:order}
+\end{figure}

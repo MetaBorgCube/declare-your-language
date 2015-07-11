@@ -1,0 +1,18 @@
+\lstdefinelanguage{DynSem} {
+  morekeywords={
+    module, imports,
+    signature, sorts, constructors, native,
+    rules, 
+    value, 
+    where},
+  literate={!=}{$\not\equiv$}1{==}{$\equiv$}1{=>}{$\Rightarrow$}1{->}{$\rightarrow$}1{-->}{$\rightarrow$}1{|-}{$\vdash$}1{|-->}{$\mapsto$}1,
+  comment=[l]{\/\/},
+  mathescape=true,
+  sensitive=true
+}
+
+\newcommand{\dynsemcode}[1]{\lstinline[language=DynSem,basicstyle=\lstinlinestyle]{#1}}
+\newcommand{\DynSem}{\langname{DynSem}}
+
+\newenvironment{dynsemfragment}{\begin{lstlisting}[language=DynSem]}{
+\end{lstlisting}}

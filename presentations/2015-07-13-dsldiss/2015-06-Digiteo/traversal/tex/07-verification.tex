@@ -1,0 +1,43 @@
+\label{ssec:verification}
+
+We want to prove the soundness of the constraint resolution algorithm, that is, that the solver produces a correct solution to the program resolution problem. If the solver reduces to an empty set of constraints, then the initial constraint was satisfiable. Moreover we want to ensure that the produced typing environment is a valid one, that is, it corresponds to a solution. Therefore we want to ensure the following property:\vspace*{-2mm}
+\begin{multline}\tag{$\diamondsuit$}\label{eq:solvsound}
+  \forall C,\G,\leqa,\psi, \G', \leqa', \psi',\\
+  (C,\G,\leqa,\psi) \longrightarrow^* (\CTrue,\G',\leqa',\psi') \Rightarrow\\
+  \exists \sigma, \sigma(\G),\leq_{\sigma(\leqa)},\psi' \models \sigma(C_1)\vspace*{-2mm}
+\end{multline}  
+\begin{proof}
+To prove this result we first state some results on the auxiliary unification and least upper bound computations.
+
+\paragraph{Unification} % The unification of two terms $t_1$ and $t_2$ aims at producing a substitution $\sigma$ 
+If $\unify{t_1}{t_2} = \sigma$ then $ \sigma t_1 = \sigma t_2 \wedge \sigma\sigma = \sigma $.
+See \cite{0092409} for a survey on unification problem and unification algorithms for first order terms.
+
+\paragraph{Least Upper Bound} 
+Similarly, given a set of ground subtyping assumptions $A$, 
+if $\lub{t_1}{t_2} \lubred{A} t$ then $t$ is the least upper bound of $t_1$ and
+$t_2$ for $\leq_A$, i.e. $t = \sqcup_{\leq_A}\{t_1,t_2\}$. 
+For LMR, the least upper bound computation is presented in \Figure{solver-functions-LMR}  in the Appendix.
+
+
+% Given the restriction on the set of assumptions due to unique inheritance, 
+% this computation is similar to the computation of common ancestors of two nodes in a tree. 
+% \APT{I don't understand this last sentence at all. Is it important?}
+
+\paragraph{Resolution Soundness} We now can prove the property \ref{eq:solvsound} of the constraint resolution algorithm. We
+first prove that for each reduction step, if the output is satisfiable the input is also satisfiable in the 
+same definition-to-type environment. This is stated by the following property:\vspace*{-2mm}
+\begin{multline}\tag{$\dagger$}\label{eq:solvsoundstep}
+ \forall (C_1,\G_1,\leqa_1,\psi_1), (C_2,\G_2,\leqa_2,\psi_2),\\
+     (C_1,\G_1,\leqa_1,\psi_1) \longrightarrow (C_2,\G_2,\leqa_2,\psi_2) \Rightarrow\\
+     \forall \sigma, (\sigma\G_2,\leq_{\sigma(\leqa_2)},\sigma\psi_2) \models \sigma(C_2) \Rightarrow\\
+     \exists \sigma', (\sigma'\G_1,\leq_{\sigma(\leqa_1)},\sigma'\psi_2) \models \sigma'(C_1)\vspace*{-2mm}
+\end{multline}  
+  
+
+The proof of this property is by case analysis on the reduction step and is presented in Appendix \ref{app:proof}. 
+
+Using this result \ref{eq:solvsoundstep}, we can prove property \ref{eq:solvsound} by a simple
+induction on the number of reduction steps.\vspace*{-3mm}
+  
+\end{proof}

@@ -1,0 +1,34 @@
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\begin{grammar}
+\sdnn{program}{\ks{\w{decl}}}
+\\
+\sdnn{decl}{\kw{module}\ \w{id}\ \kw{\{}\ \ks{\w{decl}}\ \kw{\}}}
+\altf{\kw{import}\ \w{id}}
+\altf{\kw{def}\ \w{id}\ \kw{=}\ \w{exp}}
+\\
+\sdnn{exp}{\w{int}}
+\altf{\w{exp}\ \kw{\oplus}\ \w{exp}}
+\altf{\kw{(}\ \w{exp}\ \w{)}}
+\altf{\kw{ifz}\ \w{exp}\ \kw{then}\ \w{exp}\ \kw{else}\ \w{exp}}
+\altnn{\w{id}}
+\altf{\w{exp}\ \kw{.}\ \w{id}}
+\altf{\kw{fun}\ \w{id}\  \kw{\{}\ \w{exp}\ \kw{\}}}
+\altf{\kw{fix}\ \w{id}\  \kw{\{}\ \w{exp}\ \kw{\}}}
+\altf{\w{exp}\ \w{exp}}
+\altnn{\kw{let}\ \ks{\w{bind}}\ \kw{in}\ \w{exp}}
+\altf{\kw{letrec}\ \ks{\w{bind}}\ \kw{in}\ \w{exp}}
+\altf{\kw{letpar}\ \ks{\w{bind}}\ \kw{in}\ \w{exp}}
+\\
+\sdnn{bind}{\w{id}\ \kw{=}\ \w{exp}}
+%\mc{id}{identifiers}
+%\\
+%\mc{int}{integer constants}
+\end{grammar}
+\end{boxedminipage}
+\vspace*{-\baselineskip}
+  \caption{Syntax of LM, a small language with Lets and Modules used to
+  illustrate the resolution theory in this paper.}
+  \figurelabel{pcfm:grammar}
+\end{figure}
+  

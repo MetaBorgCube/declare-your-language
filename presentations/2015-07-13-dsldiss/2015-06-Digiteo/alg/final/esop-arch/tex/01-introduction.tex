@@ -1,0 +1,215 @@
+\section{Introduction}\sectionlabel{introduction}
+
+Naming is a pervasive concern in the design and implementation of
+programming languages. Names identify \emph{declarations} of program
+entities (variables, functions, types, modules, etc.) and allow these
+entities to be \emph{referenced} from other parts of the program. Name
+\emph{resolution} associates each reference to its intended
+declaration(s), according to the semantics of the language. Name
+resolution underlies most operations on languages and programs,
+including static checking, translation, mechanized description of
+semantics, and provision of editor services in IDEs. Resolution is often
+complicated, because it cuts across the local inductive structure of
+programs (as described by an abstract syntax tree). For example, the
+name introduced by a \pcfmcode{let} node in an ML AST may be referenced by an
+arbitrarily distant child node. Languages with explicit name spaces
+lead to further complexity; for example, resolving a qualified
+reference in Java requires first resolving the class or package name to
+a context, and then resolving the member name within that context. 
+But despite this diversity, 
+it is intuitively clear that the basic concepts of resolution reappear in
+similar form across a broad range of lexically-scoped languages.
+
+In practice, the name resolution rules of real programming
+languages are usually described using {\it ad hoc} and informal
+mechanisms. Even when a language \emph{is} formalized, its resolution
+rules are typically encoded as part of static and dynamic judgments
+tailored to the particular language, rather than being presented
+separately using a uniform mechanism. This lack of modularity in
+language description is mirrored in the implementation of language
+tools, where the resolution rules are often encoded multiple times to
+serve different purposes, e.g., as the manipulation of a symbol table in
+a compiler, a use-to-definition display in an IDE, or a substitution
+function in a mechanized soundness proof. This repetition results in
+duplication of effort and risks inconsistencies. To see how much better
+this situation might be, we need only contrast it with 
+the realm of syntax definition, where context-free grammars provide 
+a well-established declarative formalism that underpins a 
+wide variety of useful tools. 
+
+\paragraph{Formalizing resolution.}\label{formalizing-resolution}
+This paper describes a formalism that we believe can help play 
+a similar role for name resolution in lexically-scoped languages. 
+It consists of a
+\emph{scope graph}, which represents the naming structure of a program,
+and a \emph{resolution calculus}, which describes how to resolve
+references to declarations within a scope graph. The scope graph
+abstracts away from the details of a program AST, leaving just the
+information relevant to name resolution. Its nodes include name
+references, declarations, and ``scopes,'' which (in a slight abuse of
+conventional terminology) we use to mean minimal program regions that
+behave uniformly with respect to name resolution. 
+Edges in the scope graph associate
+references to scopes, declarations to scopes, or scopes to ``parent''
+scopes (corresponding to lexical nesting in the original program AST).
+The resolution calculus specifies how to construct a path through
+the graph from a reference to a declaration, which corresponds to 
+a possible resolution of the reference. Hiding of one definition
+by a ``closer'' definition is modeled by providing
+an ordering on resolution paths. Ambiguous references 
+correspond naturally to multiple resolution paths starting
+from the same reference node; unresolved references correspond
+to the absence of resolution paths.  
+To describe programs involving explicit name
+spaces, the scope graph also supports giving names to scopes, and can
+include ``import'' edges to make the contents of a named scope visible
+inside another scope. The calculus supports complex import patterns including
+transitive and cyclic import of scopes.
+
+This language-independent formalism gives us clear, abstract definitions
+for concepts such as scope, resolution, hiding, and import. 
+We build on these concepts to define generic notions 
+of $\alpha$-equivalence and valid renaming.  
+We also give a practical algorithm for computing conventional
+static environments mapping bound identifiers to the 
+AST locations of the corresponding declarations,
+which can be used to implement
+a deterministic, terminating resolution function that is consistent 
+with the calculus.  We expect that the formalism can be used 
+as the basis for other language-independent tools. 
+In particular, any tool that relies
+on use-to-definition information, such as an IDE offering code completion for
+identifiers, or a live variable analysis in a compiler, should
+be specifiable using scope graphs.
+
+On the other hand, 
+the construction of a scope graph from a given program is a
+language-\emph{dependent} process. For any given language, the
+construction can be specified by a conventional syntax-directed
+definition over the language grammar; 
+we illustrate this approach for a small language in this paper.  
+We would also like a more
+generic \emph{binding specification language} which could be
+used to describe how to 
+construct the scope graph for an arbitrary object language.
+We do not present such a language in this paper. However, the
+work described here was inspired in part by our previous work on 
+NaBL~\cite{KonatKWV12}, a DSL that provides high-level,
+non-algorithmic descriptions of name binding and scoping rules 
+suitable for use by a  (relatively) naive language designer.
+The NaBL implementation integrated into the Spoofax Language Workbench
+\cite{KatsV10} automatically generates an incremental name resolution
+algorithm that supports services such as code completion and static
+analysis. However, the NaBL language itself is defined largely by
+example and lacks a high-level semantic description; one might say that
+it works well in practice, but not in theory. Because they are
+language-independent, scope graphs can be used to give a formal
+semantics for NaBL specifications, although we defer detailed
+exploration of this connection to further work. 
+
+\paragraph{Relationship to Related Work.}
+
+The study of name binding has received a great deal of attention,
+focused in particular on two topics.
+The first is how to represent 
+(already resolved) programs in a way that makes the binding
+structure explicit and supports 
+convenient program manipulation ``modulo
+$\alpha$-equivalence''~\cite{deBruijn72,DBLP:conf/pldi/PfenningE88,Chargueraud12,GabbayP02,Cheney05a}.
+Compared to this work, our system is novel in several significant respects.
+(i)~Our representation of program binding structure is {\it independent}
+of the underlying language grammar and program AST, with the
+benefits described above.
+(ii)~We support representation of ill-formed programs, 
+in particular, programs with ambiguous or undefined references; such programs
+are the normal case in IDEs and other front-end tools. 
+(iii)~We support description of binding in languages with
+explicit name spaces, such as modules or OO classes, which
+are common in practice.  
+
+A second well-studied topic is binding specification languages, 
+which are usually enriched grammar descriptions that permit simultaneous 
+specification of language syntax and binding
+structure~\cite{SewellNOPRSS10,DybvigHB92,HermanW08,StansiferW14,WeirichYS11}.
+This work is essentially complementary to the design we present here. 
+
+\paragraph{Specific contributions.}\label{contributions}
+
+\begin{itemize}
+  
+ \item \emph{Scope Graph and Resolution Calculus}: We introduce a
+ language-independent framework to capture the relations among
+ \emph{references}, \emph{declarations}, \emph{scopes}, and  \emph{imports} in a
+ program. 
+We give a declarative specification of the resolution of
+ references to declarations by means of a calculus that defines resolution paths
+ in a scope graph (\Section{rescalc}).
+
+ \item \emph{Variants}: We illustrate the modularity of our core framework design
+by describing several variants that support more complex binding 
+schemes (\Section{extensions}).
+
+ \item \emph{Coverage}: We show that the framework covers interesting  name
+ binding patterns in existing languages, including various flavors of let bindings,
+ qualified names, and inheritance in Java (\Section{coverage}).
+  
+ \item \emph{Scope graph construction:} We show how scope graphs can be constructed
+ for arbitrary programs in a simple example language via straightforward syntax-directed traversal (\Section{construction}).
+
+ \item \emph{Resolution algorithm}: We define a deterministic and terminating
+ resolution algorithm based on the construction of binding environments, and
+ prove that it is sound and complete with respect to the calculus
+ (\Section{resalg}).
+ 
+ \item \emph{$\alpha$-equivalence and renaming}: We define a language-independent
+ characterization of $\alpha$-equivalence of programs, and use it to define a 
+ notion of valid renaming (\Section{applications}).
+
+The extended version of this paper \cite{TUD-SERG-2015-001-local} presents the encoding 
+of additional name binding patterns and the details of the correctness proof 
+of the resolution algorithm.
+
+\end{itemize}
+
+
+\endinput
+
+
+\TODO{This is an attempt at relating scope graphs to traditional notions of
+scope. Not clear that this is useful (too meta) or where it should go. }
+
+The traditional understanding of `Scope'\footnote{We will use Scope with a
+capital S for the traditional sense of scope.} in programming languages is
+described in
+Wikipedia\footnote{\url{http://en.wikipedia.org/wiki/Scope_(computer_science)}}
+as ``[T]he [S]cope of a name binding – an association of a name to an entity,
+such as a variable – is the part of a computer program where the binding is
+valid: where the name can be used to refer to the entity.'' Thus, a Scope in
+this sense is a collection of program points (AST nodes), in which a
+declaration can be referred to (in which it is visible).
+Such a notion of Scope is the \emph{outcome} of name resolution and cannot be
+used as a \emph{building block} for a \emph{theory of name resolution}.
+Each language and each scoping construct can define a complicated function,
+selecting a more or less arbitrary set of AST nodes to compose the Scope for a
+declaration, inhibiting a general, language independent theory of name
+resolution.
+Even if a Scope assignment is more well behaved, it is non-modular.
+Two declarations defined close to each other, say in the same block, do not
+necessarily have the same Scope, since the Scope of a declaration may be
+affected by \emph{other} declarations (for the same name) through shadowing.
+
+To remedy this situation we introduce a theory that provides a principled
+procedure for determining the Scope of declarations.
+The basic building block of our theory is a \emph{scope} (with lower case s;
+for lack of a better term), which corresponds to a \kw{letrec} block (or a module), i.e.
+a group of mutually recursive declarations, \emph{not} including the set of all
+program points in which these bindings are valid.
+We model visibility of declarations in other scopes than the scope in which they
+are declared, through \emph{edges} in the scope graph.
+Scope graph edges provide a unified model of different scoping regimes.
+We first consider \emph{lexical scope}, in which names are declared in the local
+lexical environment.
+In \Section{imports} we consider \emph{imports}, which make names from a
+non-local context available.
+
+

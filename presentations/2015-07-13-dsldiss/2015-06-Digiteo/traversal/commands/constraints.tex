@@ -1,0 +1,41 @@
+\newcommand{\typeat}[1]{\mbox{\tt TypeAt}(#1)}
+
+\newcommand{\tct}[3]{\typconstraintcolor{#1} & \typconstraintcolor{#2} & \typconstraintcolor{#3}}
+\newcommand{\tctl}[3]{\typconstraintcolor{#1} & \typconstraintcolor{#2} & \multicolumn{4}{l}{\typconstraintcolor{#3}}}
+\newcommand{\sct}[3]{\subtypecolor{#1} & \subtypecolor{#2} & \subtypecolor{#3}}
+\newcommand{\rct}[3]{\resconstraintcolor{#1} & \resconstraintcolor{#2} & \resconstraintcolor{#3}}
+
+\newcommand{\EqASubtype}[2]{\sct{#1}{<:}{#2}} 
+\newcommand{\EqCResolve}[2]{\rct{#1}{\mapsto}{#2}}
+\newcommand{\EqCTeq}[2]{\tct{#1}{\equiv}{#2}}
+\newcommand{\EqCAssoc}[2]{\rct{#1}{\Cassoc}{#2}}
+\newcommand{\EqCSubtype}[2]{\tct{#1}{\preceq}{#2}}
+\newcommand{\EqCType}[2]{\tct{#1}{:}{#2}}
+\newcommand{\EqCTypeL}[2]{\tctl{#1}{:}{#2}}
+\newcommand{\EqCLub}[3]{\tct{#1}{\mbox{\it\ is }}{#2 \sqcup #3}}
+\newcommand{\EqCLubL}[3]{\tctl{#1}{\mbox{\it\ is }}{#2 \sqcup #3}}
+
+\newcommand{\CSubst}[2]{{#1}{=}{#2}}
+\newcommand{\RCSubst}[2]{\rct{#1}{=}{#2}}
+\newcommand{\TCSubst}[2]{\tct{#1}{=}{#2}}
+\newcommand{\TCSubstL}[2]{\tctl{#1}{=}{#2}}
+
+\newenvironment{mconstraints}[1]{%
+#1 \arraycolsep=1.5pt \[\begin{array}{rcl@{\hspace{1em}}rcl}}{\end{array}\]}
+
+\newsavebox\boxone
+\newsavebox\boxtwo
+\newdimen\vdiff
+\newcommand{\twoboxes}[4]{%
+  \begin{lrbox}{\boxone}
+    \parbox{#1}{#3}
+  \end{lrbox}%
+  \begin{lrbox}{\boxtwo}
+    \parbox{#2}{#4}
+  \end{lrbox}
+  \setbox0=\vbox{\usebox\boxone}
+  \vdiff=\ht0 \advance\vdiff by \dp0
+  \setbox0=\vbox{\usebox\boxtwo}
+  \advance\vdiff by -\ht0 \advance\vdiff by -\dp0
+}
+

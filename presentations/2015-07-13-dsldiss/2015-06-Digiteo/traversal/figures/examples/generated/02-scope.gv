@@ -1,0 +1,44 @@
+
+digraph { 
+rankdir=BT
+  "2" [shape="circle",label=<2>];
+  "fac_2" [shape="square",label=<fac<sub>2</sub>>];
+  "2" -> "fac_2"[arrowhead="normal",weight=1,constraint=true];
+  "fac_8" [shape="square",label=<fac<sub>8</sub>>];
+  "fac_8" -> "2"[arrowhead="normal",weight=1,constraint=true];
+  "2" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+  
+  "3" [shape="circle",label=<3>];
+  "n_3" [shape="square",label=<n<sub>3</sub>>];
+  "3" -> "n_3"[arrowhead="normal",weight=1,constraint=true];
+  "n_4" [shape="square",label=<n<sub>4</sub>>];
+  "n_5" [shape="square",label=<n<sub>5</sub>>];
+  "fac_6" [shape="square",label=<fac<sub>6</sub>>];
+  "n_7" [shape="square",label=<n<sub>7</sub>>];
+  "n_4" -> "3"[arrowhead="normal",weight=1,constraint=true];
+  "n_5" -> "3"[arrowhead="normal",weight=1,constraint=true];
+  "fac_6" -> "3"[arrowhead="normal",weight=1,constraint=true];
+  "n_7" -> "3"[arrowhead="normal",weight=1,constraint=true];
+  "3" -> "2"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+  
+  "1" [shape="circle",label=<1>];
+  "n_1" [shape="square",label=<n<sub>1</sub>>];
+  "1" -> "n_1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+  
+  
+  
+   
+   
+}

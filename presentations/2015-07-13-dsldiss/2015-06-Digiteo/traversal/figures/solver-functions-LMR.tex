@@ -1,0 +1,31 @@
+\begin{figure*}[t]
+  \begin{boxedminipage}{\linewidth}
+  \begin{align*}
+    \lub{\intty}{\intty} \lubred{A}
+    &\ \intty & \alabl{Lub-Int} \\
+    \lub{\recty{d}}{\recty{d'}} \lubred{A}&
+    \left\{
+    \begin{array}{ll}
+    \recty{d} 
+    & \textit{\ if\ } \recty{d'} \leq_A \recty{d}  \\
+    \lub{\recty{d}}{\recty{d''}} 
+    &\textit{\ if\ } \recty{d'} <: \recty{d''} \in A
+    \end{array}\right.
+    & \alabl{Lub-Rec} \\
+    \lub{\arrty{t_1}{t_2}}{\arrty{t_3}{t_4}}
+    \lubred{A} &\ \arrty{\glb{t_1}{t_3}}{\lub{t_2}{t_4}} & \alabl{Lub-Arrow} \\
+    \glb{\intty}{\intty}
+    \lubred{A}&\ \intty & \alabl{Glb-Int} \\
+    \glb{\recty{d}}{\recty{d'}}
+    \lubred{A}&\
+                     \begin{cases}
+                       \recty{d} & \textit{if } \recty{d} \leq_A \recty{d'} \\
+                       \recty{d'} &  \textit{if } \recty{d'} \leq_A \recty{d} \\
+                     \end{cases} & \alabl{Glb-Rec} \\
+    \glb{\arrty{t_1}{t_2}}{\arrty{t_3}{t_4}}
+    \lubred{A}&\ \arrty{\lub{t_1}{t_3}}{\glb{t_2}{t_4}} & \alabl{Glb-Arrow}\\
+  \end{align*}\vspace*{-8mm}
+  \end{boxedminipage}
+  \caption{LMR specific functions}
+\figurelabel{solver-functions-LMR}
+\end{figure*}
