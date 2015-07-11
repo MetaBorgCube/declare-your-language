@@ -1,0 +1,10 @@
+module names
+
+imports
+	
+	include/PAPLJ
+	
+namespaces
+	
+binding rules
+
