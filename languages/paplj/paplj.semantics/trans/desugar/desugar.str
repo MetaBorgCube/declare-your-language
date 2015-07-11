@@ -25,3 +25,6 @@ strategies // for use in tests
   post-desugar-test =
     post-desugar; strip-annos
     
+  desugar-all-test =
+    desugar-all; strip-annos
+    

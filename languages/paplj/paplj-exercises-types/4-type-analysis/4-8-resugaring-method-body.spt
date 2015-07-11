@@ -107,7 +107,7 @@ test do block [[
     }
   run 1
 ]] run post-desugar-test 
-to Program(
+to      Program(
           "tst"
         , [ Class(
               "A"
@@ -118,8 +118,8 @@ to Program(
                 , "getX"
                 , []
                 , Do(
-                    [ Set(This(), "x", Num("1"))
-                    , Get(This(), "x")
+                    [ Set(This(), ClassT("A"), "x", Num("1"))
+                    , Get(This(), ClassT("A"), "x")
                     ]
                   )
                 )

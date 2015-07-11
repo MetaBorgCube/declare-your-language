@@ -7,30 +7,45 @@ language PAPLJ
 start symbol Expr
 
 
-test and [[
+test and 1 [[
   true && false
 ]] parse
 to And(True(), False())
-
-test and [[
-  x && y
+ 
+test and 2 [[
+  let Bool x = true Bool y = false in x && y
 ]] run desugar-all-test 
-to If(Var("x"), Var("y"), False())
+to      Let(
+          [Bind(BoolT(), "x", True())]
+        , Let(
+            [Bind(BoolT(), "y", False())]
+          , If(Var("x"), Var("y"), False())
+          )
+        )
 
 
       
-test or [[
-  true || false
+test or 1 [[
+  let Bool x = true Bool y = false in x || y 
 ]] parse
-to Or(True(), False())
+to  Let(
+      [Bind(BoolT(), "x", True()), Bind(BoolT(), "y", False())]
+    , Or(Var("x"), Var("y"))
+    )
 
-test or [[
-  x || y
+test or 2 [[ 
+  let Bool x = true Bool y = false in x || y 
 ]] run desugar-all-test 
-to If(Var("x"), True(), Var("y"))
+to      Let(
+          [Bind(BoolT(), "x", True())]
+        , Let(
+            [Bind(BoolT(), "y", False())]
+          , If(Var("x"), True(), Var("y"))
+          )
+        )
   
 
-test let [[
+test let 1 [[
   let Num x = 1 Num y = 2 Num z = 3 in x + y + z
 ]] parse
 to  Let(
@@ -41,7 +56,7 @@ to  Let(
     , Add(Add(Var("x"), Var("y")), Var("z"))
     )
 
-test let [[
+test let 2 [[
   let Num x = 1 Num y = 2 Num z = 3 in x + y + z
 ]] run desugar-all-test 
 to      Let(

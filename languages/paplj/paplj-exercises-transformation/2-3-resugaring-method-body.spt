@@ -35,7 +35,7 @@ to Program(
     , Num("1")
     )
 
-test do block [[
+test do block 1 [[
   program tst 
     class A {
       Num x
@@ -96,7 +96,7 @@ to Program(
     , Num("1")
     )
 
-test do block [[
+test do block 2 [[
   program tst 
     class A {
       Num x
