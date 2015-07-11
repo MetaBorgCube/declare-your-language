@@ -1,0 +1,11 @@
+module runtime
+
+signature
+  native operators
+    plusI   : Int * Int -> Int
+    minusI  : Int * Int -> Int
+    timesI  : Int * Int -> Int
+    gtI     : Int * Int -> Bool
+    eqI     : Int * Int -> Bool
+    modI    : Int * Int -> Int
+    str2int : String -> Int  

@@ -1,0 +1,26 @@
+module trans/semantics/runtime/environment
+
+imports trans/semantics/runtime/values
+imports trans/semantics/signatures/Common-sig
+
+signature
+  semantic components
+    Env -> Map<String, V>  
+  variables
+    E : Env
+  constructors
+    bindVar  : String * V --> Env
+    readVar  : String --> V      
+    bindVars : List(String) * List(V) --> Env
+    
+rules
+  
+  E |- bindVar(x, v) --> {x |--> v, E}.
+    
+  E |- readVar(x) --> E[x].
+  
+  bindVars([], []) --> {}.
+  
+  bindVars([x | xs], [v | vs]) --> {x |--> v, E}
+  where bindVars(xs, vs) --> E.
+  

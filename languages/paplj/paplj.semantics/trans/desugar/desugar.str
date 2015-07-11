@@ -1,0 +1,27 @@
+module desugar
+imports src-gen/signatures/Expressions-sig
+imports desugar/desugar-rules
+imports desugar/desugar-types
+imports desugar/resugar-rules
+
+strategies
+	
+  pre-desugar = 
+  	innermost(desugar-let <+ desugar-do)
+	
+  post-desugar =
+    innermost(desugar-do <+ desugar-get <+ desugar-set);
+    resugar
+    
+  desugar-all = 
+    innermost(desugar-or <+ desugar-and 
+              <+ desugar-do <+ desugar-let)
+
+strategies // for use in tests
+                
+  pre-desugar-test =
+    pre-desugar; strip-annos
+    
+  post-desugar-test =
+    post-desugar; strip-annos
+    
