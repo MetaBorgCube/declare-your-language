@@ -1,0 +1,4 @@
+program tst 
+run 
+  false && true
+  
