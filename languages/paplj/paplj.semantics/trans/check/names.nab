@@ -17,7 +17,7 @@ binding rules
   	defines Class c of type ClassT(c)
   	scopes Field, Method, Variable
   	implicitly defines Variable This() of type ClassT(c)
-  	
+  	 
   Extends(c) : 
   	imports Field, Method from Class c
   	
@@ -34,7 +34,7 @@ binding rules
   	defines Variable x of type t
   	
   Let(bs, e) :
-  	scopes Variable
+  	scopes Variable  
   
   Bind(t, x, e) : 
   	defines Variable x of type t
