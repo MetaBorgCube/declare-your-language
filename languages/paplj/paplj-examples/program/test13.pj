@@ -7,4 +7,4 @@ program test13
     }
   }
 run 
-  new A().init(8).x
+  new A().init(8).x 
