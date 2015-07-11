@@ -13,7 +13,7 @@ imports
 language General properties
   
   name:          PAPLJ
-  id:            paplj.semantics
+  id:            paplj.analysis
   extends:       Root
   
   description:   "Spoofax-generated editor for the PAPLJ language"
