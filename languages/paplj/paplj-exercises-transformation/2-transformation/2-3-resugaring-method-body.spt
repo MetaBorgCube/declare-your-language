@@ -1,4 +1,4 @@
-module ex2-1-desugaring-do
+module ex2-3-resugaring-method-body
 
 // solve in: trans/desugar/resugar-rules.str
 
@@ -55,7 +55,7 @@ to      Program(
                   NumT()
                 , "getX"
                 , []
-                , Do([Get(This(), ClassT("A"), "x")])
+                , Do([Get(This(), "x")])
                 )
               ]
             )
@@ -86,8 +86,8 @@ to Program(
             , "getX"
             , []
             , Do(
-                [Set(This(), "x", Num("1")), Get(This(), 
-                 "x"), Skip()]
+                [Set(This(), "x", Num("1")), 
+                 Get(This(), "x"), Skip()]
               )
             )
           ]
@@ -118,10 +118,8 @@ to Program(
                 , "getX"
                 , []
                 , Do(
-                    [ Set(This(), 
-                     ClassT("A"), "x", Num("1"))
-                    , Get(This(), 
-                     ClassT("A"), "x")
+                    [ Set(This(), "x", Num("1"))
+                    , Get(This(), "x")
                     ]
                   )
                 )

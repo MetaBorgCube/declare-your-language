@@ -32,6 +32,28 @@ to Num("1")
  
  
 test do block [[
+  { ;;1;;; }
+]] parse
+to Do([Skip(), Skip(), Num("1"), Skip(), Skip(), Skip()])
+
+test do block [[
+  { ;;1;;; }
+]] run pre-desugar-test 
+to Num("1")
+
+ 
+test do block [[
+  { ;;1;;3;;6; }
+]] parse
+to  Do([Skip(), Skip(), Num("1"), Skip(), Num("3"), Skip(), Num("6"), Skip()])
+
+test do block [[
+  { ;;1;;3;;6; }
+]] run pre-desugar-test 
+to Do([Num("1"), Do([Num("3"), Num("6")])])
+
+ 
+test do block [[
   { 1; 2 }
 ]] parse
 to Do([Num("1"), Num("2")])

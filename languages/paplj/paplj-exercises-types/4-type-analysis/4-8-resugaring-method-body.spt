@@ -1,0 +1,130 @@
+module ex4-8-resugaring-method-body
+
+// solve in: trans/desugar/resugar-rules.str
+
+language PAPLJ
+
+start symbol Program
+
+
+test method body [[
+  program tst 
+    class A {
+      Num x
+      Num getX() {
+        this.x;
+      }
+    }
+  run 1
+]] parse
+to Program(
+      "tst"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , [Field(NumT(), "x")]
+        , [ Method(
+              NumT()
+            , "getX"
+            , []
+            , Do([Get(This(), "x"), Skip()])
+            )
+          ]
+        )
+      ]
+    , Num("1")
+    )
+
+test do block [[
+  program tst 
+    class A {
+      Num x
+      Num getX() {
+        this.x;
+      }
+    }
+  run 1
+]] run post-desugar-test 
+to      Program(
+          "tst"
+        , [ Class(
+              "A"
+            , NoExtends()
+            , [Field(NumT(), "x")]
+            , [ Method(
+                  NumT()
+                , "getX"
+                , []
+                , Do([Get(This(), ClassT("A"), "x")])
+                )
+              ]
+            )
+          ]
+        , Num("1")
+        )
+        
+ 
+test method body [[
+  program tst 
+    class A {
+      Num x
+      Num getX() {
+        this.x = 1;
+        this.x;
+      }
+    }
+  run 1
+]] parse
+to Program(
+      "tst"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , [Field(NumT(), "x")]
+        , [ Method(
+              NumT()
+            , "getX"
+            , []
+            , Do(
+                [Set(This(), "x", Num("1")), Get(This(), 
+                 "x"), Skip()]
+              )
+            )
+          ]
+        )
+      ]
+    , Num("1")
+    )
+
+test do block [[
+  program tst 
+    class A {
+      Num x
+      Num getX() {
+        this.x = 1;
+        this.x;
+      }
+    }
+  run 1
+]] run post-desugar-test 
+to Program(
+          "tst"
+        , [ Class(
+              "A"
+            , NoExtends()
+            , [Field(NumT(), "x")]
+            , [ Method(
+                  NumT()
+                , "getX"
+                , []
+                , Do(
+                    [ Set(This(), "x", Num("1"))
+                    , Get(This(), "x")
+                    ]
+                  )
+                )
+              ]
+            )
+          ]
+        , Num("1")
+        )
