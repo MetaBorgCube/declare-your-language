@@ -18,6 +18,12 @@ rules
   desugar-do :
   	Do([e, Skip()]) -> Do([e])
     
+  desugar-do :
+    Do([e, Do([Skip()])]) -> e
+    
+  desugar-do :
+    Do([Do([Skip()]), e]) -> e
+    
   desugar-let :
   	Let([], e) -> e
   	
