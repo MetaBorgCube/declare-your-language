@@ -3,4 +3,3 @@ menus
   menu: "Transform" (openeditor) (realtime) 
     action: "Desugar"       = editor-desugar 
     action: "Desugar AST"   = editor-desugar-ast
-    action: "Desugar Types" = editor-post-analysis-desugar
