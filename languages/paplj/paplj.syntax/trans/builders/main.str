@@ -1,0 +1,6 @@
+module builders/main
+
+imports builders/syntax
+imports	builders/editor
+imports builders/analysis
+imports	builders/debugging

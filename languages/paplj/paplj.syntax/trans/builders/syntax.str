@@ -1,0 +1,18 @@
+module syntax
+imports pretty-print/pp
+rules
+	
+  // Prints the abstract syntax ATerm of a selection.
+  debug-show-aterm:
+	(selected, position, ast, path, project-path) -> (filename, result)
+	with
+	  filename := <guarantee-extension(|"aterm")> path;
+	  result   := selected
+	
+  // Formats the program using a pretty printer.	
+  editor-format:
+    (selected, position, ast, path, project-path) -> (filename, result)
+    with
+      ext      := <get-extension> path;
+      filename := <guarantee-extension(|$[pp.[ext]])> path;
+      result   := <pp-debug> selected

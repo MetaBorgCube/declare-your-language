@@ -21,7 +21,7 @@ language General properties
   
   extensions:    pj
   table:         include/PAPLJ.tbl
-  start symbols: Start
+  start symbols: Program
   
   provider:      include/paplj.ctree
   provider:      include/paplj-java.jar
