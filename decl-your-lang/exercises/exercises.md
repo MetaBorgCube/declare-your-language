@@ -2,28 +2,82 @@
 
 ## Installation Instructions
 
+Spoofax
+
+The PAPLJ project
+
+
+building the project
 
 
 ## 1. Syntax
 
-* project: paplj.syntax
-* exercises: paplj-exercises-syntax
+* Open projects paplj.syntax, paplj.syntax.exercises
+
+* Build the paplj.syntax project
+
+* Open a test-suite in the exercises project
+	* Run the `Run testsuites` entry in the `Transform` menu
+
+* Add productions to make the exercise tests succeed
+	* syntax/Expressions.sdf3 
+	* syntax/Classes.sdf3
+
+* Use the doodle.pj file to try out different programs, or make your own
+
+* Try out the `Syntax` menu
+	* Format
+	* Show Abstract Syntax
+	* How do ‘Builders’ work?
+
+* Close project paplj.syntax
 
 ## 2. Transformation
 
-* project: paplj.transformation
-* project: paplj-exercises-transformation
+* Open paplj.transformation, paplj.transformation.exercises
 
-## 3. Name Analysis
+* Inspect the solution for the syntax exercises
 
-## 4. Type Analysis
+* Add rewrite rules to make the exercise tests succeed
+	* trans/desugar/desugar-rules.str
+	* trans/desugar/resugar-rules.str
 
-## 5. Dynamic Semantics
+* Use the doodle.pj file to try out different programs, or make your own
 
-* 5-1-booleans.spt
-* 5-2-numbers.spt
-* 5-3-variables.spt
-* 5-4-new.spt
-* 5-5-fields.spt
-* 5-6-methods.spt
-* 5-7-counter.spt
+* Try out the `Transform` menu
+	* Desugar
+	* Desugar AST
+
+* Close project paplj.transformation
+
+## 3. Name and Type Analysis
+
+* Open projects paplj.analysis, paplj.analysis.exercises
+
+* Inspect the solution for the transformation exercises
+
+* Add name binding rules to make the exercise tests succeed
+	* trans/check/names.nab
+
+* Add type rules to make the exercise tests succeed 
+	* trans/check/types.ts
+
+* Close project paplj.analysis
+
+## 4. Dynamic Semantics
+
+* Open projects paplj.semantics, paplj.semantics.exercises
+
+* Inspect the solution for the analysis exercises
+
+* Add reduction rules to make the exercise tests succeed
+	* trans/semantics/interp.ds
+
+* To build, first generate Java code from DynSem
+	* Use `All to Java` entry in `Semantics` menu for `trans/semantics/semantics.ds`
+
+* Close project paplj.semantics
+
+## 5. Full Definition
+
+The project paplj.full contains the full definition of the dynamic semantics
