@@ -17,3 +17,5 @@ types.generated.str
 languages/paplj/paplj-exercises-semantics/.cache
 languages/paplj/paplj-exercises-types/.cache
 languages/paplj/paplj-exercises-names/.cache
+languages/paplj/paplj.semantics/editor/java/ds/generated
+sub.generated.str
