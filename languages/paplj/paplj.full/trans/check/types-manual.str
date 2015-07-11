@@ -20,7 +20,7 @@ signature constructors
 
 rules
 	
-  type-func-least-upper-bound(|ctx) : x@(t1, t2) -> result
+  type-func-least-upper-bound(|ctx) : x@(t1, t2) -> <strip-annos>result
   	with
   		t1sups-task := <relation-create-lookup(|ctx, "<sub:")> t1;
   		t2sups-task := <relation-create-lookup(|ctx, "<sub:")> t2;

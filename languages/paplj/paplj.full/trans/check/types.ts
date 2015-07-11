@@ -5,7 +5,7 @@ src-gen/signatures/Expressions-sig
 src-gen/signatures/Classes-sig
 
 relations
- 
+
   define reflexive, transitive <sub: 
 
 type rules 
@@ -60,7 +60,7 @@ type rules
   where e1 : NumT() else error "number expected" on e1
     and e2 : NumT() else error "number expected" on e2
 
-  Eq(e1, e2) + Neq(e1, e2) : BoolT()
+  Eq(e1, e2) + Neq(e1, e2) + Lt(e1, e2): BoolT()
   where e1 : NumT() else error "number expected" on e1
     and e2 : NumT() else error "number expected" on e2
   

@@ -33,6 +33,9 @@ rules
     
     // instead of <get-type> e1
   
+  get-type-na =
+    get-type; strip-annos
+    
 signature
   constructors
     URI : A * A -> A
