@@ -1,4 +1,4 @@
-module syntax-expressions
+module ex1-4-disambiguation
 language PAPLJ
 start symbol Expr
 
@@ -62,12 +62,15 @@ test and over or priority [[
 ]] parse to Or(Var("x"), And(Var("y"), Var("z")))
 
 test operators combined  [[
-  v1 + v2 - v3 * v4 / v5 == y
+  v1 + v2 - v3 * v4 + v5 == y 
 ]] parse to 
-    Eq(
-      Sub(
-        Add(Var("v1"), Var("v2"))
-      , Div(Mul(Var("v3"), Var("v4")), Var("v5"))
+   Eq(
+      Add(
+        Sub(
+          Add(Var("v1"), Var("v2"))
+        , Mul(Var("v3"), Var("v4"))
+        )
+      , Var("v5")
       )
     , Var("y")
     )

@@ -1,8 +1,0 @@
-module syntax-forms
-language PAPLJ
-start symbol Program
-
-test empty form [[
-  program empty
-  run 3
-]] parse succeeds

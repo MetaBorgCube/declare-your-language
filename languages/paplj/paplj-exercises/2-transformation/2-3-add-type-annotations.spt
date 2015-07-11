@@ -1,0 +1,51 @@
+module ex2-3-add-type-annotations
+
+// solve in: trans/desugar/desugar-rules.str
+
+language PAPLJ
+
+start symbol Program
+
+
+test get [[
+  program tst 
+    class A { Num x }
+  run new A().x
+]] parse
+to Program("tst"
+   , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+   , Get(New("A"), "x")
+   )
+
+test get typed [[
+  program tst 
+    class A { Num x }
+  run new A().x
+]] run post-desugar-test 
+to Program("tst"
+   , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+   , Get(New("A"), ClassT("A"), "x")
+   )   
+   
+   
+
+test set [[
+  program tst 
+    class A { Num x }
+  run new A().x = 5
+]] parse
+to Program("tst"
+   , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+   , Set(New("A"), "x", Num("5"))
+   )
+
+test set typed [[
+  program tst 
+    class A { Num x }
+  run new A().x = 5
+]] run post-desugar-test 
+to  Program("tst"
+    , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+    , Set(New("A"), ClassT("A"), "x", Num("5"))
+    )
+    

@@ -1,0 +1,87 @@
+module ex2-1-desugaring-do
+
+// solve in: trans/desugar/desugar-rules.str
+
+language PAPLJ
+
+start symbol Expr
+
+
+test do block [[
+  { 1 }
+]] parse
+to Do([Num("1")])
+
+test do block [[
+  { 1 }
+]] run pre-desugar-test 
+to Num("1")
+
+
+ 
+test do block [[
+  { 1; }
+]] parse
+to Do([Num("1"),Skip])
+
+test do block [[
+  { 1; }
+]] run pre-desugar-test 
+to Num("1")
+
+ 
+ 
+test do block [[
+  { 1; 2 }
+]] parse
+to Do([Num("1"), Num("2")])
+
+test do block [[
+  { 1; 2 }
+]] run pre-desugar-test 
+to Do([Num("1"), Num("2")])
+ 
+
+test do block [[
+  { 1; 2; 3; }
+]] parse
+to Do([Num("1"),Num("2"),Num("3"),Skip])
+     
+test do block [[
+  { 1; 2; 3; }
+]] run pre-desugar-test 
+to Do([Num("1"), 
+     Do([Num("2"), Num("3")])]
+   )
+  
+
+test do block [[
+  { 1; 2; 3; 4; 5; }
+]] parse
+to  Do([Num("1"),Num("2"),Num("3"),Num("4"),Num("5"),Skip])
+     
+test do block [[
+  { 1; 2; 3; 4; 5; }
+]] run pre-desugar-test 
+to Do([ Num("1")
+      , Do([ Num("2")
+           , Do([Num("3"), 
+               Do([Num("4"), Num("5")])])
+           ])
+      ])
+      
+test do block [[
+  { 1; 2; 3; 4; 5; }
+]] run pre-desugar-test 
+to [[
+  {1; {
+    2; {
+      3; {
+        4; 5
+      }
+    }
+  }}
+]]
+      
+      
+      

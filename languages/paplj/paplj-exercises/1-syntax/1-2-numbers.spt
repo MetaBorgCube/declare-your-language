@@ -2,51 +2,47 @@ module ex4-2-numbers
 
 language PAPLJ
 
-start symbol Program
-
-setup program header [[
-	program tst run // ignore this error
-]]
+start symbol Expr
 
 test number [[  
-  [[1]] 
-]] run get-type to NumT() 
+  1
+]] parse to Num("1")
 
 test min [[  
-  [[- 889]] 
-]] run get-type to NumT() 
+  - 889
+]] parse to Min(Num("889"))
 
 test add [[  
-  [[1 + 2]]
-]] run get-type to NumT() 
+  1 + 2
+]] parse to Add(Num("1"), Num("2"))
 
 test sub [[  
-  [[1 - 2]]
-]] run get-type to NumT() 
+  1 - 2
+]] parse to Sub(Num("1"), Num("2"))
 
 test mul [[  
-  [[11 * 29]]
-]] run get-type to NumT() 
+  11 * 29
+]] parse to Mul(Num("11"), Num("29"))
 
 // etc.
 
 
 test block [[
-  [[{ 1 }]] + 6 
-]] run get-type-na to NumT() 
+  { 1 } + 6 
+]] parse to Add(Do([Num("1")]), Num("6"))
 
 test block [[
-  [[{ 1; 2; 3; 5 }]]
-]] run get-type-na to NumT() 
+  { 1; 2; 3; 5 }
+]] parse to Do([Num("1"), Num("2"), Num("3"), Num("5")])
 
 test block [[
-  [[{ 1; 2; 3; 5; }]]
-]] run get-type-na to NumT() 
+  { 1; 2; 3; 5; }
+]] parse to Do([Num("1"), Num("2"), Num("3"), Num("5"), Skip()])
 
 test block [[
-  [[{ false; 5; }]]
-]] run get-type-na to NumT() 
+  { false; 5; }
+]] parse to Do([False(), Num("5"), Skip()])
 
 test block [[
-  [[{ 5; false; }]]
-]] run get-type-na to BoolT() 
+  { 5; false; }
+]] parse to Do([Num("5"), False(), Skip()])

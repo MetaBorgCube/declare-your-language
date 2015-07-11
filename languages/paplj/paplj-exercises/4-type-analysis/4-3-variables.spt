@@ -1,19 +1,15 @@
-module ex5-3-variables 
+module ex4-3-variables 
 
 language PAPLJ
 
-start symbol Program
-
-setup program header [[
-  program tst run // ignore this error
-]]
-
 test let [[ 
+  program tst run 
   let Num x = 2 in [[x]]
 ]] run get-type to NumT() 
 
 
 test let [[ 
+  program tst run 
   let 
     Num x = 2 
     Num y = 3
@@ -21,6 +17,7 @@ test let [[
 ]] run get-type to NumT() 
 
 test let [[ 
+  program tst run 
   let 
     Num x = 2 
     Num y = 3 + [[x]]
@@ -28,6 +25,7 @@ test let [[
 ]] run get-type to NumT() 
 
 test let [[ 
+  program tst run 
   let 
     Num x = 2 
     Num y = 3 + x
@@ -36,6 +34,7 @@ test let [[
 ]] run get-type to NumT() 
 
 test let [[ 
+  program tst run 
   let 
      Bool x = true
      Num y = let Num x = 8 in 3 + [[x]]
@@ -43,6 +42,7 @@ test let [[
 ]] run get-type to NumT() 
 
 test let [[ 
+  program tst run 
   let 
      Num x = 6 
      Num y = let Num x = 8 + x in 3 + [[x]]

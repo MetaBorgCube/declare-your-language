@@ -7,56 +7,51 @@ start symbol Program
 test method call [[ 
   program test 
     class A { 
-      Num const() { 78 }
+      Num [[const]]() { 78 }
     }
   run 
-    [[new A().const()]]
-]] run get-type-na to NumT()
+    new A().[[const]]()
+]] resolve #2 to #1
 
-test method that updates field [[ 
+test type dependent name resolution 1 [[ 
   program test 
-    class A{ 
-      Num x 
-      A init(Num y) {
-        this.x = y;
-        this
-      }
+    class A{
+      A [[init]]() { this }
+    }
+    class B{
+      B init() { this }
     }
   run 
-    [[new A().init(8)]].x
-]] run get-type-na to ClassT("A")
+    new A().[[init]]()
+]] resolve #2 to #1
 
-test method that updates field [[ 
+test type dependent name resolution 2 [[ 
+  program test 
+    class A{
+      A init() { this }
+    }
+    class B{
+      B [[init]]() { this }
+    }
+  run 
+    new B().[[init]]()
+]] resolve #2 to #1
+
+
+
+test method parameters [[ 
   program test 
     class A { 
       Num x 
-      A init(Num y) {
-        this.x = y;
-        [[this]]
+      A init(Num [[y]], Bool z, A a) {
+        this.x = [[y]];
+        this
       }
     }
-    class B {
-      
-    }
-  run 
-    new A().init(8).x
-]] run get-type-na to ClassT("A")
+  run new A()
+]]  resolve #2 to #1
 
-// test method with multiple parameters [[ 
-//   program test 
-//     class A { 
-//       Num x 
-//       A init(Num y, Bool z, A a) {
-//         this.x = a.x;
-//         this
-//       }
-//     }
-//     class B {
-//       
-//     }
-//   run 
-//     new [[A().init(8, 89, new A()).x]] 
-// ]] run get-type-na to NumT()
+
 
 
 // test recursive class [[

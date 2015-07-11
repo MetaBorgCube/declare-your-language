@@ -4,17 +4,15 @@ language PAPLJ
 
 start symbol Program
 
-setup program header [[
-  program tst run // ignore this error
-]]
-
 test let [[ 
+  program tst run
   let Num x = 2 in x
 ]] run runprogram-value  
 to NumV("2")
 
 
 test let [[ 
+  program tst run
   let 
     Num x = 2 
     Num y = 3
@@ -23,6 +21,7 @@ test let [[
 to NumV("5")
 
 test let [[ 
+  program tst run
   let 
     Num x = 2 
     Num y = 3 + x
@@ -31,6 +30,7 @@ test let [[
 to NumV("7")
 
 test let [[ 
+  program tst run
   let 
     Num x = 2 
     Num y = 3 + x
@@ -40,6 +40,7 @@ test let [[
 to NumV("11")
 
 test let [[ 
+  program tst run
   let 
      Num x = 2 
      Num y = let Num x = 8 in 3 + x
@@ -48,6 +49,7 @@ test let [[
 to NumV("13")
 
 test let [[ 
+  program tst run
   let 
      Num x = 2 
      Num y = let Num x = 8 + x in 3 + x

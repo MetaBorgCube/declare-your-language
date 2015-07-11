@@ -1,0 +1,47 @@
+module ex5-4-new
+
+language PAPLJ
+
+start symbol Program
+
+test new 1 [[ 
+  program test 
+    class A{ }
+  run  
+    new A()
+]] parse to
+   Program(
+      "test"
+    , [Class("A", NoExtends(), [], [])]
+    , New("A")
+    )
+        
+test new 2 [[ 
+  program test 
+    class A{ }
+    class B extends A{ }
+  run  
+    new B()
+]] parse to
+   Program(
+      "test"
+    , [ Class("A", NoExtends(), [], [])
+      , Class("B", Extends("A"), [], [])
+      ]
+    , New("B")
+    )
+        
+test new 3 [[ 
+  program test 
+    class A{ Num z }
+    class B extends A{ }
+  run  
+    new B()
+]] parse to
+   Program(
+      "test"
+    , [ Class("A", NoExtends(), [Field(NumT(), "z")], [])
+      , Class("B", Extends("A"), [], [])
+      ]
+    , New("B")
+    )

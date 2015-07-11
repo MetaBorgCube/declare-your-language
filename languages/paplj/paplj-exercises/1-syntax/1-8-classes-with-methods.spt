@@ -1,0 +1,142 @@
+module ex5-6-methods 
+
+language PAPLJ
+
+start symbol Program
+
+test method call [[ 
+  program test 
+    class A { 
+      Num const() { 78 }
+    }
+  run 
+    new A().const()
+]] parse to
+   Program(
+      "test"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , []
+        , [Method(NumT(), "const", [], Do([Num("78")]))]
+        )
+      ]
+    , Call(New("A"), "const", [])
+    )
+
+test method that updates field [[ 
+  program test 
+    class A{ 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        this
+      }
+    }
+  run 
+    new A().init(8).x
+]] parse to
+   Program(
+      "test"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , [Field(NumT(), "x")]
+        , [ Method(
+              ClassT("A")
+            , "init"
+            , [Param(NumT(), "y")]
+            , Do([Set(This(), "x", Var("y")), This()])
+            )
+          ]
+        )
+      ]
+    , Get(
+        Call(New("A"), "init", [Num("8")])
+      , "x"
+      )
+    )
+
+test method that updates field [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num y) {
+        this.x = y;
+        this
+      }
+    }
+    class B {
+      
+    }
+  run 
+    new A().init(8).x
+]] parse to
+   Program(
+      "test"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , [Field(NumT(), "x")]
+        , [ Method(
+              ClassT("A")
+            , "init"
+            , [Param(NumT(), "y")]
+            , Do([Set(This(), "x", Var("y")), This()])
+            )
+          ]
+        )
+      , Class("B", NoExtends(), [], [])
+      ]
+    , Get(
+        Call(New("A"), "init", [Num("8")])
+      , "x"
+      )
+    )
+
+test method with multiple parameters [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num y, Bool z, A a) {
+        this.x = a.x;
+        this
+      }
+    }
+    class B {
+      
+    }
+  run 
+    new A().init(8, 89, new A()).x
+]] parse to
+    Program(
+      "test"
+    , [ Class(
+          "A"
+        , NoExtends()
+        , [Field(NumT(), "x")]
+        , [ Method(
+              ClassT("A")
+            , "init"
+            , [ Param(NumT(), "y")
+              , Param(BoolT(), "z")
+              , Param(ClassT("A"), "a")
+              ]
+            , Do(
+                [Set(This(), "x", Get(Var("a"), "x")), This()]
+              )
+            )
+          ]
+        )
+      , Class("B", NoExtends(), [], [])
+      ]
+    , Get(
+        Call(
+          New("A")
+        , "init"
+        , [Num("8"), Num("89"), New("A")]
+        )
+      , "x"
+      )
+    )
+

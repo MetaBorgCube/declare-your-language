@@ -2,17 +2,13 @@ module ex3-1-variables
 
 language PAPLJ
 
-start symbol Program
-
-setup program header [[
-  program tst run // ignore this error
-]]
-
 test resolve var [[ 
+  program tst run 
   let Num [[x]] = 2 in [[x]] + 2
 ]] resolve #2 to #1
 
 test let [[  
+  program tst run 
   let 
     Num [[x]] = 2 
     Num y = 3
@@ -20,6 +16,7 @@ test let [[
 ]] resolve #2 to #1
 
 test let [[ 
+  program tst run 
   let 
     Num [[x]] = 2 
     Num y = 3 + [[x]]
@@ -27,6 +24,7 @@ test let [[
 ]] resolve #2 to #1
 
 test let [[ 
+  program tst run 
   let 
     Num x = 2 
     Num y = 3 + x
@@ -35,6 +33,7 @@ test let [[
 ]] resolve #2 to #1 
 
 test let [[ 
+  program tst run 
   let 
      Num x = 2 
      Num y = let Num [[x]] = 8 in 3 + [[x]]
@@ -42,6 +41,7 @@ test let [[
 ]] resolve #2 to #1
 
 test let [[ // problem 
+  program tst run 
   let 
      Num x = 2 
      Num y = let Num [[x]] = 8 + [[x]] in 3 + x
