@@ -81,14 +81,6 @@ rules // objects
 
   This o |- This() --> o.  
   
-  //Cast(c, o) --> o.
-  // check that ClassT(c') <sub: ClassT(c)
-
-// rules // exceptions
-// 
-//   Get(NullV(), _, _) --> ExceptionV().
-//   Set(NullV(), _, _, _) --> ExceptionV().
-  
 rules // list of expressions
 
   []: List(Expr) --> [].
