@@ -1,7 +1,11 @@
 
-# Declare Your Language in Spoofax / Exercises
+# Declare Your Language in Spoofax 
 
-## Installing Spoofax
+Instructions for the hands-on Spoofax tutorial at the DSLDI Summer School at EPFL in Lausanne on July 13, 2015
+
+Please go through sections A. and B. _before_ the session on Monday morning.
+
+## A. Installing Spoofax
 
 We highly recommend to work with a fresh Eclipse and Spoofax installation. You can download a copy for your OS and architecture:
 
@@ -11,7 +15,7 @@ We highly recommend to work with a fresh Eclipse and Spoofax installation. You c
 * [Windows 64 bit](http://buildfarm.metaborg.org/job/spoofax-master/lastSuccessfulBuild/artifact/dist/spoofax-windows-x64-jre.zip)
 * [Windows 32 bit](http://buildfarm.metaborg.org/job/spoofax-master/lastSuccessfulBuild/artifact/dist/spoofax-windows-x86-jre.zip)
 
-## The Tutorial Projects
+## B. The Tutorial Projects
 
 You should start with a fresh Eclipse workspace and import the prepared Spoofax projects into the workspace. To start clone the git repository: https://github.com/MetaBorgCube/declare-your-language.
 
