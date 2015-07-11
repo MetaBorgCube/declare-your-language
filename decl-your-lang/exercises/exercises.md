@@ -1,8 +1,18 @@
 # Declare Your Language in Spoofax / Exercises
 
+## Installation Instructions
+
+
+
 ## 1. Syntax
 
+* project: paplj.syntax
+* exercises: paplj-exercises-syntax
+
 ## 2. Transformation
+
+* project: paplj.transformation
+* project: paplj-exercises-transformation
 
 ## 3. Name Analysis
 
