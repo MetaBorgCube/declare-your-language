@@ -1,0 +1,13 @@
+module resugar-rules
+imports src-gen/signatures/Expressions-sig
+imports src-gen/signatures/Classes-sig
+
+rules
+
+  resugar-method :
+  	Method(t, name, params, e) -> Method(t, name, params, Do([e]))
+  	where <not(?Do(_))> e 
+  
+strategies
+	
+  resugar = innermost(resugar-method)

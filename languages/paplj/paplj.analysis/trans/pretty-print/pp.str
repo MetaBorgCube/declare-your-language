@@ -1,0 +1,46 @@
+module pp
+
+imports libstratego-gpp
+imports lib/runtime/refactoring/-
+imports include/PAPLJ-parenthesize
+
+imports 
+  src-gen/pp/PAPLJ-pp
+  src-gen/pp/Programs-pp
+  src-gen/pp/Expressions-pp
+  src-gen/pp/Classes-pp
+
+rules
+	
+  pp-partial-lang-string = pp-partial-LangC-string
+	 
+  pp-LangC-string =
+    parenthesize-PAPLJ
+    ; prettyprint-SDF-start-symbols
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-partial-LangC-string =
+    parenthesize-PAPLJ
+    ; prettyprint-example
+    ; !V([], <id>)
+    ; box2text-string(|120)
+      
+  pp-debug :
+    ast -> result
+    with
+       result := <pp-LangC-string> ast
+    <+ <bottomup(try(not(is-string); not(is-list); not(pp-LangC-string); debug(!"cannot pp ")))> ast
+    ;  result := ""
+
+rules
+  
+  /**
+  * Given an old AST and a new AST, pretty-prints the new AST while presevering 
+  * layout (e.g. whitespacing and comments) associated with the old AST.
+  *
+  * Example:
+  *   new-text := <construct-textual-change> (old-ast, new-ast)
+  */
+  construct-textual-change = construct-textual-change(pp-partial-LangC-string, parenthesize, override-reconstruction, resugar)
+
