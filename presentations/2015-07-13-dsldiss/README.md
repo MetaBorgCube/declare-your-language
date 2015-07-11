@@ -11,9 +11,9 @@ We highly recommend to work with a fresh Eclipse and Spoofax installation. You c
 * [Windows 64 bit](http://buildfarm.metaborg.org/job/spoofax-master/lastSuccessfulBuild/artifact/dist/spoofax-windows-x64-jre.zip)
 * [Windows 32 bit](http://buildfarm.metaborg.org/job/spoofax-master/lastSuccessfulBuild/artifact/dist/spoofax-windows-x86-jre.zip)
 
-## Initial Spoofax Project
+## The Tutorial Projects
 
-You should start with a fresh Eclipse workspace and import the prepared Spoofax projects into the workspace. You can either [clone the git repository](https://github.com/metaborgcube/metaborg-ql) (select the dsldi-2015 branch) or [download the archive](http://download.spoofax.org/update/tutorial/spoofax-hands-on-ipa2015.zip).
+You should start with a fresh Eclipse workspace and import the prepared Spoofax projects into the workspace. To start clone the git repository: https://github.com/MetaBorgCube/declare-your-language.
 
 1. Start Eclipse.
 2. Select a fresh workspace.
@@ -25,20 +25,13 @@ You should start with a fresh Eclipse workspace and import the prepared Spoofax 
     1. Right-click into the Package Explorer.
     2. Select **Import…** from the context menu.
     3. Choose **Existing Projects into Workspace…** from the list.
-    4. Specify the **Root directory** of the metaborg-ql directory.
+    4. Select the **languages/paplj` directory.
     5. Import all projects into your workspace by pressing the **Finish** button.
-    6. Close the `org.spoofax.lang.lwc.ql.syntax`, `org.spoofax.lang.lwc.ql.analysis` and `org.spoofax.lang.lwc.ql.full` projects.
-    6. Select the `org.spoofax.lang.lwc.ql.empty` project.
+    6. Close all projects (right click on project, choose Close Project)
+5. Build the first project
+    6. Select the `paplj.syntax` project.
     7. Build the project by choosing **Build Project** from the **Project** menu or by pressing the corresponding keyboard shortcut (`Ctrl+Alt+B`, or `Cmd+Alt+B` for MacOSX).
     8. Restart Eclipse by going to the **File** menu and choosing **Restart**.
-
-Spoofax
-
-The PAPLJ project
-
-
-building the project
-
 
 ## 1. Syntax
 
