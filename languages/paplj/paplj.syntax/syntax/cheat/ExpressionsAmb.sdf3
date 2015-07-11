@@ -1,0 +1,24 @@
+module ExpressionsAmb
+
+imports Common
+
+context-free syntax
+  
+  Expr       = [([Expr])] {bracket}
+ 
+  Expr.Num   = INT 
+  Expr.Min   = [-[Expr]]
+  Expr.Add   = [[Expr] + [Expr]]
+  Expr.Sub   = [[Expr] - [Expr]]
+  Expr.Mul   = [[Expr] * [Expr]] 
+  
+  Expr.True  = [true]
+  Expr.False = [false]
+  Expr.Not   = [![Expr]]
+  Expr.And   = [[Expr] && [Expr]]
+  Expr.Or    = [[Expr] || [Expr]]
+  
+  Expr.Lt    = [[Expr] <  [Expr]]
+  Expr.Leq   = [[Expr] <= [Expr]]
+  Expr.Eq    = [[Expr] == [Expr]]
+  
