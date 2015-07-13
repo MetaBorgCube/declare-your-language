@@ -11,7 +11,7 @@ ebooks
 languages/LanguageE/editor/java/ds/generated
 languages/paplj/paplj-exercises/.cache
 languages/paplj/paplj-examples/.cache
-languages/paplj/paplj.full/editor/java/ds/generated
+
 types.generated.str
 *.aterm
 languages/paplj/paplj-exercises-semantics/.cache
