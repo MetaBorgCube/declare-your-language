@@ -42,7 +42,7 @@ public class L_A_Method  implements INodeList
   { 
     if(head == null)
     { 
-      throw new InterpreterException("No such element exception");
+      throw new InterpreterException("No such element exception", null, this);
     }
     return head;
   }
@@ -56,7 +56,7 @@ public class L_A_Method  implements INodeList
   { 
     if(tail == null)
     { 
-      throw new InterpreterException("No such element exception");
+      throw new InterpreterException("No such element exception", null, this);
     }
     return tail;
   }
