@@ -22,7 +22,7 @@ import org.spoofax.interpreter.core.Tools;
 
   @Override public void specializeChildren(int depth)
   { 
-    throw new InterpreterException("Operation not supported");
+    throw new InterpreterException("Operation not supported", "aterm specializer", this);
   }
 
   @Override public A_Method specialize(int depth)
