@@ -7,6 +7,8 @@ set -eu
 function terminate() { exit $?; }
 trap terminate SIGINT
 
+git clean -dfx
+
 rm -rf paplj-spoofax
 rm -rf paplj-spoofax.zip
 mkdir -p paplj-spoofax
