@@ -17,7 +17,10 @@ We highly recommend to work with a fresh Eclipse and Spoofax installation. You c
 
 ## B. The Tutorial Projects
 
-You should start with a fresh Eclipse workspace and import the prepared Spoofax projects into the workspace. To start clone the git repository: https://github.com/MetaBorgCube/declare-your-language.
+You should start with a fresh Eclipse workspace and import the prepared Spoofax projects into the workspace.
+You can download the zip or clone the git repository.
+The zip: [paplj-exercises](https://github.com/MetaBorgCube/declare-your-language/blob/master/presentations/2015-07-13-dsldiss/paplj-spoofax.zip?raw=true).
+The git repository: https://github.com/MetaBorgCube/declare-your-language.
 
 1. Start Eclipse.
 2. Select a fresh workspace.
