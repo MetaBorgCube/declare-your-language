@@ -13,7 +13,7 @@ strategies
   bottomup(s) = all(bottomup(s)); s
   // apply s to each sub-term in a post-order traversal
   
-  downup(s) = s; downup(s); s
+  downup(s) = s; all(downup(s)); s
   // apply s on the way down and on the way up
   
   innermost(s) = bottomup(try(s; innermost(s)))
@@ -23,4 +23,4 @@ strategies
   // depth-first search
   
   alltd(s) = s <+ all(alltd(s))
-  // apply s to a frontier of sub-terms
+  // apply s to a frontier of sub-terms 
