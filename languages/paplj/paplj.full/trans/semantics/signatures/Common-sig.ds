@@ -1,0 +1,17 @@
+module trans/semantics/signatures/Common-sig
+
+// should be able to define ID and INT as type aliases for STRING
+
+// signature
+//   sorts ID INT STRING
+//   constructors
+//     str_to_id  : STRING -> ID {implicit}
+//     str_to_int : STRING -> INT {implicit}
+//   arrows 
+//     ID --> String
+//     INT --> String
+//     
+// rules
+// 
+//   str_to_id(x) --> x.
+//   str_to_int(x) --> x.

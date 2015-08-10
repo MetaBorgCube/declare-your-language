@@ -1,0 +1,281 @@
+\section{Constraint Language}\sectionlabel{constraintlang}
+
+\newcommand{\sort}[1]{\text{\sc #1}}
+
+In this section we introduce the syntax and declarative semantics of
+constraints.
+
+\subsection{Syntax of Contraints}
+
+\Figure{constraintsyntax} defines the syntax of constraints.
+The language independent base terms of the constraint language are:
+\begin{itemize}
+ \item \emph{Declarations} in $\sort{D}$, which are either ground declarations
+ $\di{x}{i}$ of the  program or variables $\delta$
+ \item \emph{References} in $\sort{R}$, which are either ground references
+ $\ri{x}{i}$ of the program  or variables $\rho$
+ \item \emph{Scopes} in $\sort{S}$, which are either ground scopes of the
+ program denoted $S_i$ or variables $\varsigma$
+ \item \emph{Positions} in $\sort{I}$, which can be ground positions $i$,
+ positions of a declaration  or a reference $Pos(d)/Pos(r)$ or variables $\iota$
+ \item \emph{Types} in $\sort{T}$, which are either type variables $\tau$ or
+ type constructor applications $c({\sort{T},...,\sort{T}})$ with $c \in
+ C_{\mathcal{T}}$, the set of language-specific type constructors. 
+\end{itemize}
+
+% Therefore we assume a set of type constructor for the
+% language $\TypeCons$, each constructor having a corresponding signature $c ::
+% \kappa_1*\dots*\kappa_n$ of the sorts of the arguments it expects. Types in the
+% sort $\sort{T}$ can be constructed with these type constructors and type
+% variables $\tau$.
+
+\noindent Given these terms we define the syntax of constraints, which come in
+two flavors, \emph{assumptions} and pure \emph{constraints}.
+\emph{Assumptions}, defined by the sort $\sort{A}$, correspond to known facts
+about a program: 
+the scope of a reference ($\AScopeof{\sort{R}}{\sort{S}}$),
+the scope of a declaration ($\AScopeof{\sort{D}}{\sort{S}}$),
+the associated scope of a declaration ($\AAssoc{\sort{D}}{\sort{S}}$),
+the parent of a scope ($\AParent{\sort{S}}{\sort{S}}$),
+a named import in a scope ($\ARImport{\sort{S}}{\sort{S}}$),
+a direct import in a scope ($\ASImport{\sort{S}}{\sort{S}}$),
+and a subtype relation between types ($\ASubtype{\sort{T}}{\sort{T}}$).
+\emph{Constraints}, defined by the sort $\sort{C}$, represent the restrictions
+on name and type resolution, which consist of:
+resolution of a reference to a declaration ($\CResolve{\sort{R}}{\sort{D}}$),
+equality of two types ($\CTeq{\sort{T}}{\sort{T}}$),
+subtype relation between two types ($\CSubtype{\sort{T}}{\sort{T}}$),
+associated scope of a declaration ($\CAssoc{\sort{D}}{\sort{S}}$),
+the type of a declaration ($\CType{\sort{D}}{\sort{T}}$),
+and the least upper bound of two sorts ($\CLub{\sort{T}}{\sort{T}}{\sort{T}}$).
+Assumptions and constraints can be combined using conjunction 
+($\CAnd{\sort{C}}{\sort{C}}$) and $\true$ represents
+the absence of constraints.  As before, we use different colors to help
+distinguish between \assumpcolor{assumptions on the scope graph}, 
+\subtypecolor{assumptions on the subtyping relation}, 
+\typconstraintcolor{pure typing constraints}, and 
+\resconstraintcolor{pure resolution constraints}.
+
+\paragraph{Language-Specific Types}
+
+The language of constraints defined above is independent of the language under
+analysis, except for the type constructors introduced by this language. 
+Therefore we assume a set of language specific types constructors $C_{\mathcal{T}}$
+and each constructors $c$ has an associated arity $c :: n$. 
+For example $\intcon$ and $\boolcon$ are type constructor with arity $0$ and
+$\arrcon$ has arity 2. 
+To represent user-defined types, such as classes in object-oriented languages or algebraic
+data types in functional languages, a type constructor can also include the identity 
+of the type definition. This identity is represented by the corresponding 
+declaration (in the formal sense of scope graphs).
+For example, record types in LMR are represented by $Rec(d)$ with $d$ a
+declaration in the program
+Thus, in \Figure{field-access}, the record definition $A_1$ defines the type
+$Rec(\di{A}{1})$
+
+
+\input{figures/constraintsyntax}
+
+\subsection{Semantics of Constraints}
+
+In our approach, the abstract syntax tree of a program $p$ is reduced by a
+language-specific extraction function $\semop{p}$ to a constraint following the
+syntax defined in \Figure{constraintsyntax}. Given commutativity and
+associativity of conjuction, such a constraint is equivalent to a constraint of
+the form
+\vspace*{-2mm}
+$$\CAnd{A_1}{\CAnd{\ldots}{\CAnd{A_n}{\CAnd{C_1}{\CAnd{\ldots}{C_m}}}}}\vspace*{-2mm}$$
+
+\noindent consisting of a set of assumptions $A_i$ and a set of constraints
+$C_j$. (We define an example extraction function in the next section.) The
+assumptions define the scope graph and subtyping relation with respect to which
+the other constraints need to be solved.
+
+\paragraph{Interpretation of Assumptions}\label{ssec:assumptionsem}
+
+We denote with $A^{<:}$ the set of assumptions of the form $\ASubtype{T_1}{T_2}$
+in $A$ that will be used to build the corresponding sub-typing relation. We
+denote with $A^\G$ the subset formed by the other assumptions that will
+define the scope graph of the program.
+Given a ground set of assumption $A$, we denote $|A|$ the interpretation
+of $A$ as the pair $\G,\leq$ where $\leq$ is the sub-typing relation derived
+from $A^{<:}$ and $\G$ is the scope graph derived from $A^\G$.
+
+% Note that unlike a constraint which does not have to be ground to be satisfied
+% (the constraint $\CTeq{X}{X}$ is always satisfied), a set of assumptions has to
+% be ground to be interpreted. This property of the constraints allows us to type
+% the identity function as $X \rightarrow X$ where $X$ is a free type variable.
+
+\paragraph{Sub-typing} 
+
+From the set of assumptions $A^{<:}$ we derive the relation $\leq$ between
+ground types, built using the type constructors in $\TypeCons$. A variance $v$
+is a non-empty subset of $\{-,+\}$ written $-$ for contravariant, $+$ for
+covariant and $\pm$ for invariant. We also denote $\leq$ for $\leq^{+}$, $\geq$
+for $\leq^{-}$ and $=$ for $\leq^{\pm}$. We require all the arguments in the
+signature of a constructor $c$ to be annotated with a variance parameter. Thus
+the signature of a type constructor $c$ is declared as $c :: v_1*...* v_n$, with
+the $v_i$ variance annotations. Given such a signature for all the type
+constructors, we now define the sub-typing relation $\leq$ derived from a set
+$A^{<:}$ of sub-typing assumptions by the following inductive rules:
+
+\begin{center}$
+\begin{array}{ccc}
+ \infrulenl{}{T \leq T} & & \infrulenl{T_1 \leq T_2 \tab T_2 \leq T_3  }{T_1 \leq T_3}\bigskip\\
+ \infrulenl{T_1 <: T_2 \in A^{<:}}{T_1 \leq T_2} & & 
+ \infrulenl{c :: v_1*...*v_n\tab \forall i,\ s_i \leq^{v_i} t_i }{c(s_1,...,s_n)
+ \leq c(t_1,...,t_n)} \end{array}$
+\end{center}
+
+% \TODO{notation for the subtyping relation associated with a set of constraints
+% or a set of   <: constraints}
+
+\paragraph{Scope graph} 
+
+The assumptions that are not sub-typing assumptions define the scope graph of
+the program. These assumptions define the set of scopes, declarations and
+references and the corresponding relations as follows:
+
+\begin{itemize}[leftmargin=2cm]
+ \item[$\AParent{S}{S'}$] defines a new scope $S$ and declares its parent
+ $\P{S}$ as $S'$ when  $S'$ is not $\bot$
+ \item[$\AScopeof{\d{x}}{S}$] defines a new declaration $\d{x}$ and declares its
+ enclosing scope $\scopeof(\d{x})$ as $S$
+ \item[$\AAssoc{d}{S}$] declares scope $S$ as the associated scope
+ $\defscope(d)$ of  declaration $d$
+ \item[$\AScopeof{\r{x}}{S}$] defines a new reference $\r{x}$ and declares its
+ enclosing  scope $\scopeof(\r{x})$ as $S$
+ \item[$\ARImport{r}{S}$] adds the reference $r$ to the set of named imports
+ $\I{S}$ of  scope $S$
+ \item[$\ASImport{S'}{S}$] adds the scope $S'$ to the set of direct imports
+ $\I{S}$ of  scope $S$
+\end{itemize}
+
+\noindent
+The result is a correct scope graph according to \Section{extscopegraph}
+provided that the parent relation is well-founded.
+
+
+%%%%%%%%%%%%%%%
+%% Next is the version with explicit subsitution \phi in context
+%%%%%%%%%%%%%%%
+% $\begin{array}{cl}
+%   \infrulenl{}{\extenv,\psi,\phi \models \mlit{true}}
+%   & \labl{C-True}\\
+%   \infrulenl{\extenv,\psi,\phi \models C_1 \tab \extenv,\psi,\phi \models C_2}
+%   {\extenv,\psi,\phi \models C_1 \wedge C_2}
+%   & \labl{C-And}\\
+%   \left( \infrulenl{\extenv,\psi,\phi[\vec\tau \mapsto \vec{t}, \vec\sigma \mapsto \vec{s}, \vec\iota \mapsto \vec{i}] \models C}
+%     {\extenv,\psi,\phi \models \exists{\vec\tau \vec\sigma \vec\iota}.C}\right)
+%   & \labl{C-Exists} \\
+%   \infrulenl{\psi(\phi(i)) = \phi(T)}
+%   {\extenv,\psi,\phi \models i : T }
+%   & \labl{C-TypeOf} \\
+%   \infrulenl{\Sigma(\phi(T)) = \phi(S)}
+%   {\extenv,\psi,\phi \models T \Aasso S}
+%   & \labl{C-ScopeOf} \\
+%   \infrulenl{\vdash_{\G} p : x^R_{i_1} \mapsto x^D_{\phi(i_2)}}
+%   {\extenv,\psi,\phi \models i_1 \mapsto i_2}
+%   & \labl{C-Resolve} \\
+%   \infrulenl{\phi(T_1) = \phi(T_2)}
+%   {\extenv,\psi,\phi \models T_1 = T_2}
+%   & \labl{C-Eq} \\
+%   \infrulenl{\phi(T_1) \preceq \phi(T_2)}
+%   {\extenv,\psi,\phi \models T_1 \leq T_2}
+%   & \labl{C-SubType} \\
+%   % \infrulenl{\vdash_{\G} p : \phi(S) \mapsto x^D_{\phi(I)} & \mathbf{P} \not\in p}
+%   % {\extenv,\psi,\phi \models S \xmapsto{X} I}
+%   % & \labl{C-ResolveIn} \\
+% \end{array}$
+
+
+
+\paragraph{Interpretation of Constraints}
+
+\newcommand{\labl}[1]{\tab \text{\sc (#1)}\medskip}
+\newcommand{\extenv}{\G,\leq}
+
+The interpretation of a non-assumption constraints (which we will just call
+constraints) is defined as a truth value in a context, which is a triple of the
+following elements:
+\begin{itemize}
+ \item A scope graph $\G$, as defined in Section \ref{sec:extscopegraph}
+ \item A sub-typing relation $\leq$ on ground types
+ \item A typing environment $\psi$ mapping declarations in $\DG$ to types in 
+ $\sort{T}$
+\end{itemize}
+
+\noindent A context $\extenv,\psi$ satisfies a constraint $C$ if the predicate
+$\extenv,\psi \models C$ holds. This predicate is defined by the set of
+inductive rules in \Figure{conssem}, where $=$ is the syntactic equality on
+terms, $\vdash_{\G} r \resolve d$ the resolution relation in graph $\G$ and, when it exists, $\lubsem{\leq}{S}$ denotes the least upper bound of types
+in $S$ according to order $\leq$.
+
+\input{figures/constraintsem.tex}
+
+
+\subsection{Program Resolution}\sectionlabel{progresolutionspec} 
+
+The goal of the resolution of the program $p$ is to build a multi-sorted
+substitution $\phi$ and a typing environment $\psi$ such that, if $\semop{p} = \CAnd{A_p}{C_p}$ then the following property holds:\vspace*{-2mm}
+\begin{equation}\tag{$\diamond$}
+  \label{eq:resoleq}
+ |\phi(A_p)|,\psi \models \phi(C_p)  \vspace*{-2mm}
+\end{equation}
+% \begin{equation}\tag{$\diamond$}
+%   \label{eq:resoleq}
+%   \frac{
+%     \semop{p} = \CAnd{A_p}{C_p}, \quad \semop{A_p} = \extenv
+%   }{
+%      \phi(\extenv), \psi \models \phi(C_p)  
+%   }
+% \end{equation}
+Where $\phi(E)$ denotes the application of the substitution $\phi$ to all the
+variables appearing in $E$ that are in the domain of $\phi$.
+Note that $\phi$ has to make $\phi(A_p)$ a set of ground assumptions in order to
+be able to interpret it whereas some free variable may remain in $\phi(C_p)$.
+When the proposition \ref{eq:resoleq} holds we say that $\psi$ and $\phi$
+resolve $p$.
+
+
+\endinput
+
+\subsection{Program resolution}\sectionlabel{progresolutionspec} 
+
+The collection of a program constraints generate a constraint that mixes
+assumptions and constraints, moreover this general constraint contains variable,
+including in its assumption sub-terms (see constraint generation for field
+access in \TODO{pointer here}).
+Thus the first step for the resolution of a program is to separate the
+assumptions from the constraint to turn the generated constraint into a pure
+constraint and build the set of assumption separately. This can be done using
+the following rewrite rules:
+$$ (A, \CAnd{a}{c}) \rightarrow (\{a\}\cup A,c) \tab\tab (A, \CAnd{c}{a})
+\rightarrow (\{a\}\cup A,c)$$ where $a$ is an assumption.
+Then given a program $p$ and $C$ the generated constraint for $p$, we denote
+$A_p$ be set of assumption and $C_p$ the pure constraint such that $$
+(\emptyset,C) \rightarrow (A_p,C_p)$$.
+Both $A_p$ and $C_p$ contain free variables of different sorts, moreover, some
+of these variables are even shared between constraints and assumptions.
+The goal of the resolution of the program $p$ is to build a multi-sorted
+substitution $\phi$ and a typing environment $\psi$ such that:
+\begin{equation}\tag{$\diamond$}
+  \label{eq:resoleq}
+ \semop{\phi(A_p)},\psi \models \phi(C_p)  
+\end{equation}
+
+Where $\phi(E)$ denote the application of the substitution $\phi$ to all the
+variables appearing in $E$ that are in the domain of $\phi$.
+Note that $\phi$ has to make $\phi(A_p)$ a set of ground assumptions in order to
+be able to interpret it whereas some free variable may remain in $\phi(C_p)$.
+When the proposition \ref{eq:resoleq} holds we say that $\psi$ and $\phi$
+resolve $p$.
+
+\PN{Next paragraph is dubious, there is probably sub-typing involved ? Or maybe not ?}
+
+\paragraph{Principal solution}
+Allowing free variables in a solution allows us to state what the principal resolution of a program might be, that is a solution 
+that allow to recover all the other possible resolutions. A pair $\phi$, $\psi$ is said to be the principal resolution of a program $p$ if it satisfies the formula \ref{eq:resoleq} and for all $\phi'$, $\psi'$ resolving $p$ then $\phi'$ and $\psi'$ are instances of $\phi$ and $\psi$, i.e.
+$$ \exists \phi''\ s.t.\ \phi' = \phi''\cdot\phi \wedge \forall i, \phi''(\psi(i)) = \psi'(i)$$
+
+\PN{What does it means now in our new setting ? since this is only spec for a given set of constraints, we might still want to include subtyping}

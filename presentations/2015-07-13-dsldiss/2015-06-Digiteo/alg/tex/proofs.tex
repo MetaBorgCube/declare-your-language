@@ -1,0 +1,790 @@
+\section{Proofs}
+\label{app:proofs}
+
+We often write just $\r{x}$ (resp. $\d{x}$) for a reference (resp. declaration) at some particular but unnamed position.
+
+%\renewcommand{\scopea}[1]{\stackrel{#1}{\longrightarrow}}
+\renewcommand{\labelenumi}{\tab $\roman{enumi})$ }
+
+\subsection{Termination of resolution algorithm}\label{subsection:inlinedresalg}
+
+Figure \ref{fig:inlinedresalg} presents the inlined resolution algorithm that only use strictly 
+decreasing recursive calls.
+
+\begin{figure}[h]
+\renewcommand{\S}{\mathcal{S}}
+\begin{boxedminipage}{\hsize}
+$
+\begin{array}{ll}
+  \Res{\seeni}{\r{x}} & := \left\{ \di{x}{i} \left| \exists S\ s.t.\ \r{x} \in \R{S} \wedge \di{x}{i} \in 
+  \left(\begin{array}{l}
+    \Env{D}{\{\r{x}\} \cup \seeni}{\emptyset}{S}  \\
+     \triangleleft ~\Env{I}{\{\r{x}\} \cup \seeni}{\emptyset}{S}  \\
+     \triangleleft ~\Env{P}{\{\r{x}\} \cup \seeni}{\emptyset}{S}    
+  \end{array}\right)
+ \right\}\right. \smallskip  \\
+\Env{D}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \D{S}\smallskip\\
+    \end{array}
+ \right.\smallskip\\
+ \Env{I}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \bigcup \left\{
+        \begin{array}{l}
+          \Env{D}{\seeni}{\{S\}\cup\seens}{S_y}\\
+          \triangleleft ~\Env{I}{\seeni}{\{S\}\cup\seens}{S_y}
+        \end{array}\hspace*{-1mm}
+      \left| 
+        \begin{array}{l}
+          \r{y} \in \I{S} \setminus \seeni\ \wedge \\
+          \exists S_y\ s.t.\ \r{y} \in \R{S_y}\ \wedge \\
+          \ds{y}{S_y} \in 
+          \left(\begin{array}{l}
+              \Env{D}{\{\r{x}\} \cup \seeni}{\emptyset}{S_y}  \\
+              \triangleleft ~\Env{I}{\{\r{x}\} \cup \seeni}{\emptyset}{S_y}  \\
+              \triangleleft ~\Env{P}{\{\r{x}\} \cup \seeni}{\emptyset}{S_y}    
+            \end{array}\right)
+        \end{array}\hspace*{-1.5mm}
+      \right\}\right.\smallskip\\
+    \end{array}
+ \right.\smallskip\\
+ \Env{P}{\seeni}{\seens}{S} & := \left\{
+   \begin{array}{l}
+     \emptyset  \text{ if } S\in\seens\\
+     \left(\begin{array}{l}
+       \Env{D}{\seeni}{\{S\}\cup\seens}{\P{S}} \\
+       \triangleleft ~\Env{I}{\seeni}{\{S\}\cup\seens}{\P{S}} \\
+       \triangleleft ~\Env{P}{\seeni}{\{S\}\cup\seens}{\P{S}} 
+     \end{array}\right)
+   \end{array}
+ \right. \smallskip\\
+\end{array}\medskip
+$
+\end{boxedminipage}
+\caption{Inlined resolution algorithm}
+\label{fig:inlinedresalg}
+\end{figure}
+
+\subsection{Well-formed Paths and Specificity Ordering}
+
+We can give a simple grammatical characterization of well-formed paths, and
+use it to define a measure on paths that is compatible with the specificity 
+ordering.
+
+\begin{lemma}[Well-formed path measure]\label{lem:wfpm} For all well-formed paths $p$, there
+exist $i,j \geq 0$ such that $p = \pstep^i \cdot \istep{\_}{\_}^j$. 
+We write
+$m(p)$ for the corresponding pair $(i,j)$ and write $<$ for the lexicographic ordering
+on these pairs.
+\end{lemma}
+
+\begin{lemma}[WF path measure and specificity ordering are compatible]\label{lem:pathmescomp} 
+For all well-formed paths $p,p'$,
+\begin{equation*}
+ p\cdot\dstep{\_} < p'\cdot\dstep{\_} \iff m(p) < m(p')  
+\end{equation*}
+\end{lemma}
+\begin{proof} Let $m(p) = (i,j)$ and $m(p') = (i',j')$. Let
+$q = p\cdot\dstep{\_}$ and $q' = p'\cdot\dstep{\_}$,
+and write $q_k,q'_{k}$ for the $k$-th steps of $q$ and $q'$, respectively.
+\\ ($\Longrightarrow$) Assume $p < p'$.
+Then in the first step $k$ where $q$ and $q'$ differ (i.e., the first application of rule $Lex1$),
+we have three possible cases:
+\begin{itemize}
+ \item ($DI$) $q_k = \dstep{\_}$ and $q'_k = \istep{\_}{\_}$: then $i = i'$ and $j < j'$; hence $m(p) < m(p')$.
+ \item ($IP$) $q_k = \istep{\_}{\_}$ and $q'_k = \pstep$: then $i < k \le i'$; hence $m(p) < m(p')$.
+ \item ($DP$) $q_k = \dstep{\_}$ and $q'_k = \pstep$: then $i < k \le i'$; hence $m(p) < m(p')$. 
+\end{itemize}
+($\Longleftarrow$) Suppose $m(p) < m(p')$. Then there are two cases:
+\begin{itemize}
+ \item $i < i'$: then $\forall k \leq i, q_k = q'_k$,  
+                    $q_{i+1} = \istep{\_}{\_}$ or $\dstep{\_}$, and $q'_{i+1} = \pstep$; hence $p < p'$.
+ \item $i = i'$ and $j < j'$: then  $\forall k \leq i+j, q_k = q'_k$,
+                    $q_{i+j+1} = \dstep{\_}$ and $q'_{i+j+1} = \istep{\_}{\_}$; hence $p < p'$.
+\end{itemize}
+ \qed
+\end{proof}
+
+
+\subsection{Cycles in Resolution Paths}
+
+To enforce the termination of the resolution algorithm, we only look for cycle-free paths in this algorithm.
+Looking for cycle-free paths is sufficient:
+
+\begin{definition}[Cycle] 
+\label{def:cycle}
+A path $p$ contains a cycle if there exist $p_1, p_2, p_3$ 
+such that $p = p_1 \cdot p_2 \cdot p_3$, $p_2 \neq []$, and 
+there exist $A$, $B$ and $S$ such that 
+$\seeni \vdash p_1 : A \medge S$, $\seeni \vdash p_2 : S \medge S$,and
+$\seeni \vdash p_3: S \medge B$.
+\end{definition}
+
+\begin{lemma}[Lemma~\ref{lemma:cycle-free}: Resolution paths are cycle-free.]
+If 
+\begin{equation*}
+\seeni \vdash p : \r{x} \resolve \d{x}
+\end{equation*}
+then $p$ is cycle-free.
+\end{lemma}
+\begin{proof}
+By rule $(X)$, we have $\seeni' \vdash p: S_r \resolve \d{x}$ where
+$\seeni'$ = $\{\r{x}\} \cup \seeni$ and
+$S_r$ is the (unique) scope such that $\r{x} \in \R{S_r}$.
+By rule $(V)$ we have $\seeni' \vdash p: S_r \reach \d{x}$ and
+\begin{equation}\label{eqn:noshorter}\tag{\mbox{$*$}}
+\nexists\ p'\ \di{x}{i'}\ s.t.\ \seeni' \vdash p': S_r \reach \di{x}{i'}\ \mbox{\it and}\ p' < p.
+\end{equation}
+By rule $(R)$ we have 
+$\seeni' \vdash p_0: S_r \medge S_d$ where $p = p_0 \cdot \dstep{\d{x}}$ and
+$S_d$ is the (unique) scope such that $\d{x} \in \D{S_d}$;
+moreover, $\WF(p_0)$ holds, so by Lemma~\ref{lem:wfpm}, 
+$p_0=\pstep^i\cdot\istep{\_}{\_}^j$ for some $i,j \geq 0$.
+We claim $p_0$ contains no cycle.
+For suppose it does, with $p_1, p_2, p_3$ and $S$ as in Definition~\ref{def:cycle}, 
+and consider the {\it shrunken} path $p' = p_1 \cdot p_3$. Then, since
+$\seeni' \vdash p_1 : S_r \medge S$ and $\seeni' \vdash p_3 : S \medge S_d$, we have
+$\seeni' \vdash p' : S_r \medge S_d$.  Also, $p'$ must have the form $\pstep^{i'}\cdot\istep{\_}{\_}^{j'}$,
+where, depending on the position of $p_2$ in $p_0$,  
+either (i) $i' < i$ or (ii) $i' = i$ and $j' < j$. Therefore $\WF(p')$ holds, 
+and we have $\seeni' \vdash p' \cdot \dstep{\d{x}} : S_r \reach \d{x}$.
+But since $m(p') = (i',j') < (i,j) = m(p_0)$, then by Lemma~\ref{lem:pathmescomp}, $p'\cdot\dstep{\d{x}} < p_0\cdot\dstep{\d{x}}$, contradicting ($\ref{eqn:noshorter}$). 
+So $p_0$ has no cycle, and hence neither does $p$. \qed
+\end{proof}
+
+\begin{comment}
+
+\begin{lemma}[Cycle-free Path Existence]
+\label{lemma:cycle-free} 
+If there is a path for a resolution then there is
+a cycle-free path for this resolution.
+\vspace*{-.6\baselineskip}
+$$
+ \forall\seeni,\r{x},\d{x},  (\exists p\ s.t.\ \seeni \vdash p : \r{x} \resolve \d{x}) \Longrightarrow 
+(\exists p, p\ \mbox{\it is cycle-free} \wedge \seeni \vdash p : \r{x} \resolve
+\d{x}) $$
+\end{lemma}
+\begin{proof}
+The set of all resolution paths 
+$\{ p \mid \seeni \vdash p\cdot\dstep{\d{x}} : \r{x} \resolve \d{x}\}$
+must contain (at least one) shortest path $p$ (we use \emph{shorter} when referring to  the length of the path and \emph{smaller} when referring to the path ordering $<$).  
+We claim $p$ contains no cycle.
+For suppose it does, with $p_1, p_2, p_3$ as in Definition~\ref{def:cycle} and 
+consider the {\it shrunken} path $p' = p_1 \cdot p_3$. Then:
+\begin{equation*}
+\r{x} \in S_r \wedge \d{x} \in S_d \wedge \seeni \vdash p' : S_r \medge S_d
+\end{equation*}
+Moreover, by considering all possible patterns of steps for $p_2$, 
+we can see that $p'$ is well-formed. Hence
+\begin{equation*}
+\seeni \vdash p' : S_r \reach \d{x}  
+\end{equation*}
+We claim $p'$ is also a minimal (most-specific) path resolving $\r{x}$ under $\seeni$.
+For suppose not. Then there is a $q$ such that:
+\begin{equation*}
+  \seeni \vdash q : \r{x} \reach \d{x} \wedge q < p_1 \cdot p_3 
+\end{equation*}
+Then we have two cases:
+  \begin{itemize}
+   \item $q= q_1 \cdot q_2 $ and $q_1 < p_1$; and therefore $q < p_1\cdot p_2 \cdot p_3 = p$   
+   \item $q = p_1 \cdot q_2 $ and $q_2 < p_3$; in this case $p_1 \cdot p_2
+   \cdot q_2$ is also a well-formed path more specific than $p_1\cdot p_2 \cdot p_3 = p$,
+  \end{itemize}
+In either case, we have exhibited a well-formed path more specific than $p$, contradicting
+the assumed minimality of $p$. 
+Therefore  $p'$ is indeed minimal, so we have:
+\begin{equation*}
+\seeni \vdash p' : \r{x} \resolve \d{x} 
+\end{equation*}
+But $p'$ is strictly shorter than $p$, which is a contradiction. 
+So $p$ must not contain a cycle. \qed
+\end{proof}
+\end{comment}
+
+\subsection{Shadowing and Resolution}
+
+%We present here a lemma that allows us to exhibit a minimal (i.e., most specific) path for the resolution of a reference
+%as soon as we know that some declaration is reachable from the reference. 
+%In proofs of minimality of $p$, it will allow us not only to suppose (for contradiction) that
+%$p$ is not minimal (therefore there is more specific path $p'$ such that $\seeni,\seens \vdash p' : S \reach \d{x}$) 
+%but that there is a more specific path $p'$ such that $\seeni,\seens \vdash p' : S \resolve \d{x}$.
+%Using this measure we can directly prove the existence of a minimal well-formed resolution path 
+%when a well-formed resolution path exists. This means that as soon as a declaration is reachable from a reference, it can only be shadowed
+%by other declarations and that this shadowing process stops somewhere. 
+%APT: I couldn't find a way to clarify this paragraph to my satisfaction...
+
+
+\begin{lemma}[Shadowing preserves resolution] \label{lemma:shadowexists}
+If there is a reachability path from a scope to the declaration of a variable, then there
+is a visibility path, at least as specific, from that scope to some declaration of 
+that variable.
+\begin{multline*}
+\forall\ \seeni\ \seens\ S\ p\ \di{x}{i},
+\seeni,\seens \vdash p : S \reach \di{x}{i} \Longrightarrow\\
+(\exists\ q\ j\ s.t.\ \seeni,\seens \vdash q : S \resolve \di{x}{j} \wedge q \leq p).
+\end{multline*}
+\end{lemma}
+\begin{proof} Fix $\seeni$, $\seens$, $S$, $p$, and $\di{x}{i}$. Let 
+$W := \{ p' \mid \exists i'\ s.t.\ \seeni,\seens \vdash p' : S \reach \di{x}{i'} \wedge p' \le p\}$
+be the set of reachability paths from $S$ to $x$ that are at least as specific as $p$. 
+We need to show that $W$ contains a minimal reachable path, i.e., an element $q$ such that:
+$\forall i'\ p', \seeni,\seens \vdash p' : S \reach \di{x}{i'} \Rightarrow \neg (p' < q)$.
+$W$ is not empty (it contains $p$) and the set of associated measures of 
+its members, i.e.
+\begin{equation*}
+ m(W) = \{ m(p') \mid \exists\ i'\ s.t.\ \seeni \vdash\ p'\cdot\dstep{\di{x}{i'}} : S \reach \di{x}{i'} \wedge p'\cdot\dstep{\di{x}{i'}} \le p\}
+\end{equation*}
+is a set of pairs of natural
+numbers, on which the lexicographic ordering is well-founded. Thus it
+has at least one smallest element, with associated path $q$ and declaration position $j$, 
+and using lemma \ref{lem:pathmescomp}, $q$ is minimal for $<$ in $W$. 
+We claim that $q$ is minimal among all reachable paths.
+For suppose not; then there is a path $q' < q$ and an $i'$ such that  
+\begin{equation*}
+  \seeni,\seens \vdash\ q' : S \reach \di{x}{i'}. 
+\end{equation*}
+But since $q$ is in $W$ then $q \leq p$ and $<$ is transitive so $q' < p$ and then $q' \in W$,
+contradicting the minimality of $q$ in $W$.
+Therefore we have an element $q$ and position $j$ such that:
+\begin{equation*}
+  \seeni,\seens \vdash\ q : S \resolve \di{x}{j} \wedge q \le p 
+\end{equation*}\qed
+\end{proof}
+
+\subsection{Correctness of resolution algorithm}
+
+% \begin{lemma} \label{lemma:weakening}
+%   $\forall\ \seeni\ \seens\ p\ S\ S'\ S''\ s.t. \seeni,\{S\}\cup\seens \vdash p  : S' \medge S'' \longrightarrow
+%   \seeni,\seens \vdash p : S' \medge S''$  
+% \end{lemma}
+% \begin{proof}
+%   Trivial, by induction on p, $B \notin \{S\}\cup\seens \Rightarrow B \notin \seens$. 
+% \end{proof}
+
+We now proceed to prove the correctness of the resolution algorithm. We first address some auxiliary lemmas that we will need in the proof.
+First, the path uniquely encodes the sequence of scopes in the resolution: 
+\begin{lemma}[Transition unique] \label{lemma:transuniq}
+\begin{equation*}
+\seeni,\seens \vdash s : S \edge S_1 \Longrightarrow \seeni,\seens \vdash s : S \edge S_2 \Longrightarrow S_1 = S_2
+\end{equation*}
+\end{lemma}
+\begin{proof} Trivial by case analysis on $s$: import steps record the imported scope $S_y$ to which they step,
+and parent steps go to the uniquely defined parent.\qed
+\end{proof}
+
+Then we state that we can cut a resolution path for the reachability relation, i.e., if a declaration is reachable from a scope $S$ then it is also reachable from any scope appearing in the resolution.
+
+\begin{lemma}[Reachable tail] \label{lemma:tailreach} If a definition is reachable from a scope $S$ through scope $S'$ then it is also reachable from $S'$:\\
+  \begin{equation*}
+   \forall\ \seeni\ \seens\ s\ p\ S\ d,
+    \begin{array}[t]{rl}
+    \seeni,\{S\}\cup\seens & \vdash s : S \edge S' \Longrightarrow \\  
+    \seeni,\seens & \vdash s \cdot p\cdot\dstep{\d{x}} : S \reach \d{x} \Longrightarrow \\
+    & \seeni,\{S\}\cup\seens \vdash p\cdot\dstep{\d{x}} : S' \reach \d{x}    
+    \end{array} 
+  \end{equation*}
+   
+\end{lemma}
+\begin{proof} If $s\cdot p$ is well formed then $p$ is also well formed. By inversion of:
+  \begin{equation*}
+    \seeni,\seens \vdash s \cdot p \cdot \dstep{\d{x}} : S \reach \d{x} 
+  \end{equation*}
+and using lemma \ref{lemma:transuniq}, we get:
+\begin{enumerate}[leftmargin=15mm]
+ \item $\seeni,\{S,S'\}\cup\seens \vdash p : S' \medge S_d $
+ \item $S \notin \seens$
+ \item $S' \notin \seens$
+ \item $\d{x} \in \D{S_d}$
+\end{enumerate}
+Therefore, using $i)$, $iii)$ and $iv)$, we get by rule $(R')$:
+\begin{equation*}
+\seeni,\{S\}\cup\seens \vdash p\cdot\dstep{\d{x}} : S' \reach \d{x}   
+\end{equation*}\qed
+\end{proof}
+
+Similarly, if a declaration is visible from a reference then it is visible all along the path.
+
+\begin{lemma}[Visible tail] \label{lemma:tailres}
+If a definition is visible from a scope $S$ through scope $S'$ then it is also visible from $S'$:\\
+\begin{equation*}
+\forall\ \seeni\ \seens\ s\ p\ S\ \di{x}{i}, 
+\begin{array}[t]{rll}
+\seeni,\{S\}\cup\seens & \vdash s : S \edge S' \Longrightarrow & (i) \\
+\seeni,\seens & \vdash s \cdot p \cdot \dstep{\di{x}{i}} : S \resolve \di{x}{i} \Longrightarrow & (ii)\\ 
+& \seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\di{x}{i}} : S' \resolve \di{x}{i}  
+\end{array}
+\end{equation*}
+\end{lemma}
+\begin{proof} By inversion on $(ii)$
+we get:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$\tab] $\seeni,\seens \vdash s \cdot p \cdot \dstep{\di{x}{i}} : S \reach \di{x}{i}$ 
+ \item[$(**)$\tab] $\forall\ p'\ \di{x}{i'}\ s.t.\ \seeni,\seens \vdash p' : S \reach \di{x}{i'} \Rightarrow \neg p' < s\cdot p $ 
+\end{itemize}
+By lemma \ref{lemma:tailreach} and $(*)$ we have:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(\lozenge)$\tab] $\seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\di{x}{i}} : S' \reach \di{x}{i}$
+\end{itemize}
+Suppose $p$ is not minimal. Then there is a $p'$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(Hr)$\tab] $\seeni,\{S\}\cup\seens \vdash p' \cdot \dstep{\di{x}{i'}} : S' \reach \di{x}{i'}$
+ \item[$(<)$\tab] $ p' \cdot \dstep{\di{x}{i'}} < p \cdot \dstep{\di{x}{i}} $
+\end{itemize}
+If $s = \pstep$ then, since inversion on $(Hr)$ gives us $\WF(p')$, we obtain $\WF(s \cdot p')$.
+Alternatively, if $s = \istep{\_}{\_}$ then, since inversion on $(*)$ gives us $\WF(s\cdot p)$, we know $p$
+has the form $\istep{\_}{\_}^*$.
+Then by (<), we must have that $p'$ also has the form $\istep{\_}{\_}^*$, so we again obtain $\WF(s \cdot p')$.
+Therefore, by inversion of $(Hr)$ and using $(i)$ we have: \\
+\begin{equation*}
+\seeni,\seens \vdash s\cdot p'\cdot\dstep{\di{x}{i'}} : S \reach \di{x}{i'}  
+\end{equation*}
+which contradicts $(**)$.
+Therefore $p$ is minimal and using $(\lozenge)$ we have:
+\begin{equation*}
+\seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\di{x}{i}} : S' \resolve \di{x}{i}.
+\end{equation*}\qed
+\end{proof}
+
+%To shorten notation, we write $\pathx{C}$ for $\paths{C}{\seeni}{\seens}{S}$ for each clause class $C$.
+The elements in the $\pathx{C}$ sets are incomparable under the specificity ordering.
+
+\begin{lemma}[Path set minima]\label{lemma:notinf}
+\begin{equation*}
+\forall\ C\ \seeni\ \seens\ S,\ \forall p, p' \in \paths{C}{\seeni}{\seens}{S},\ \neg p < p'.
+\end{equation*}
+\end{lemma}
+\begin{proof} Assume for contradiction that $p < p' (*)$. Proceed by case analysis on $C$:
+  \begin{itemize}
+   \item Case $I$: by definition of $\pathx{I}$:
+    \begin{enumerate}[leftmargin=15mm]
+     \item $p = \istep{\r{y}}{\ds{y}{S_y}}\cdot \bar{p}$ 
+     \item $p' = \istep{\r{z}}{\ds{z}{S_z}}\cdot \bar{p}'$
+     \item $\seeni,\{S\}\cup\seens \vdash \bar{p} : S_y \resolve \di{x}{i} $
+     \item $\seeni,\{S\}\cup\seens \vdash \bar{p}' : S_z \resolve \di{x}{i'} $
+    \end{enumerate}
+    By inversion of $(*)$, $\istep{\r{y}}{\ds{y}{S_y}} = \istep{\r{z}}{\ds{z}{S_z}}$ and hence $S_y = S_z$, so we cannot have $\bar{p} < \bar{p'}$ since both $\bar{p}$ and $\bar{p}'$ are minimal.
+    \item Case $P$: Proof is similar to case $I$: both $\bar{p}$ and $\bar{p}'$ are resolutions from $\P{S}$.
+    \item Cases $L,V,D$: trivial.\qed
+  \end{itemize}
+\end{proof}
+
+
+\newcommand{\Case}[1]{\textbf{Case #1}:}
+\renewcommand{\theenumi}{\arabic{enumi}}
+\renewcommand{\labelenumi}{\theenumi)}
+
+
+We now proceed to prove that the different functions of the algorithm compute definitions corresponding to paths in the $\pathx{C}$ sets.
+\begin{lemma}
+[Lemma~\ref{lemma:pathset-alg}]
+For each class $C \in \{V,L,D,I,P\}$: 
+\begin{equation*}
+\forall\ \seeni\ \seens\ S, \Env{c}{\seeni}{\seens}{S} = \defsof{\paths{C}{\seeni}{\seens}{S}}
+\end{equation*}
+\end{lemma}
+\begin{proof}
+The proof is by three nested inductions,
+the outer one on $\seeni$ (or, more strictly, on the size of \mbox{$|\R{\G} \setminus \seeni|$}, the references
+\emph{not} in $\seeni$) and the second one on $\seens$ (more strictly, the size of \mbox{$|\S{\G} \setminus \seens|$}, 
+the scopes \emph{not} in $\seens$) and the third one on the class $C$, with the order $V > L > D,I,P$.
+We then pick an $\d{x}$, and proceed according to the class $C$:\smallskip
+
+\noindent \Case{D} \\
+$\d{x} \in \Env{D}{\seeni}{\seens}{S} \iff$ (by definition of $\Envu{D}$) \\
+$\d{x} \in \D{S} \wedge S \not\in \seens \iff$ (by rule $(R')$)\\
+$\seeni,\seens\vdash \dstep{\d{x}} : S \reach \d{x} \iff$ (by definition of $\Delta$ and $\pathx{D}$)\\
+$\d{x} \in \defsof{\paths{D}{\seeni}{\seens}{S}}$\\
+
+\noindent \Case{P}\\
+$\d{x} \in \Env{P}{\seeni}{\seens}{S} \iff$ (by definition of $\Envu{P}$) \\
+$\d{x} \in \Env{V}{\seeni}{\{S\} \cup \seens}{\P{S}} \wedge S \not\in \seens \iff$ (by induction on $\seens$)\\
+$\d{x} \in \defsof{\paths{V}{\seeni}{\{S\} \cup \seens}{\P{S}}} \wedge S \not\in \seens \iff$ (by definition of $\Delta$, $\pathx{V}$)\\
+% really need an additional little lemma here 
+$\exists p\ s.t.\ \seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\d{x}} : \P{S} \resolve \d{x} \wedge S \notin \seens$\\ 
+\tab $\iff$ ($\Longrightarrow$ by rule $(P)$  and rules $(V',R')$; $\Longleftarrow$ by weakening)\\
+$\exists p\ s.t.\ \seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\d{x}} : \P{S} \resolve \d{x} \wedge S \notin \seens \wedge \\
+\tab\tab\tab\seeni \vdash \pstep : S \edge \P{S} \wedge \P{S} \notin \{S\}\cup \seens$\\ 
+\tab $\iff$ (by rules $(R')$ and $(T')$)\\
+$\exists p\ s.t.\ \seeni,\{S\}\cup\seens \vdash p \cdot \dstep{\d{x}} : \P{S} \resolve \d{x} \wedge \seeni,\seens \vdash \pstep\cdot p\cdot \dstep{\d{x}} : S \reach \d{x}$ \\
+\tab$ \iff$ (by definition of $\Delta$ and$\pathx{P}$)\\
+% and again here
+$ \d{x} \in \defsof{\paths{P}{\seeni}{\seens}{S}}$\\
+
+\newcommand{\ttab}{\tab\tab\tab}
+\noindent \Case{I}\\
+$\d{x} \in \Env{I}{\seeni}{\seens}{S} \iff$ (definition of $\Envu{I}$) \\
+$\d{x} \in \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \mid \r{y} \in \I{S}\setminus \seeni \wedge \ds{y}{S_y} \in \Res{\seeni}{\r{y}}\right\} \wedge S \not\in \seens$\\
+\tab $ \iff$ (by unfolding of $\Res{\seeni}{\r{y}}$ and induction on $\seeni$) \\
+$\d{x} \in \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \left| 
+  \begin{array}{l}
+    \r{y} \in \I{S}\setminus \seeni  \wedge\\
+    \exists S', \r{y} \in \R{S'} \wedge\\
+    \tab \ds{y}{S_y} \in \defsof{\paths{V}{\{\r{y}\}\cup\seeni}{\emptyset}{S'}} 
+  \end{array}\right\}\right. \wedge S \not\in \seens$\\
+\tab $\iff$ (by definition of $\pathx{V}$ and rule $(X')$)\\
+$\d{x} \in \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \left|  
+  \begin{array}{l}
+   \r{y} \in \I{S}\setminus\seeni \wedge \\
+   \exists q\ \ds{y}{S_y}\ s.t.\ \seeni \vdash q: \r{y} \resolve \ds{y}{S_y}
+\end{array}\right\}\right. \wedge S \not\in \seens$ \\
+\tab $\iff$ (by $L$ case of induction on $\seens$) \\
+$\exists \r{y}\ q\ \ds{y}{S_y}\ p\ s.t.\\
+\ttab \r{y} \in \I{S}\setminus\seeni \wedge \seeni \vdash q:\r{y} \resolve \ds{y}{S_y} \wedge\\
+\ttab p \cdot D(\d{x}) \in \paths{L}{\seeni}{\{S\}\cup\seens}{S_y} \wedge S \not\in \seens$\\
+\tab$\iff$ (by definition of $\pathx{L}$)\\
+$\exists \r{y}\ q\ \ds{y}{S_y}\ p\ s.t.\ \r{y} \in \I{S}\setminus\seeni \wedge \\
+\ttab \seeni \vdash q:\r{y} \resolve \ds{y}{S_y} \wedge \\
+\ttab \seeni,{\{S\}\cup\seens} \vdash p \cdot \dstep{\d{x}} : S_y \resolve \d{x} \wedge \\
+\ttab p \in \istep{\_}{\_}^* \wedge\\
+\ttab S \not\in \seens$\\
+\tab$\iff$ (by rule $(I)$)\\
+$\exists \r{y}\ \ds{y}{S_y}\ p,\\ 
+\ttab \seeni \vdash \istep{\r{y}}{\ds{y}{S_y}} : S \edge S_y\\
+\ttab \seeni,{\{S\}\cup\seens} \vdash p \cdot \dstep{\d{x}} : S_y \resolve \d{x} \wedge \\
+\ttab p \in \istep{\_}{\_}^* \wedge\\
+\ttab S \not\in \seens$\\
+\tab $\iff$ ($\Longrightarrow$ by $(R')$; $\Longleftarrow$ by weakening)\\
+$\exists\ S_x\ \r{y}\ \ds{y}{S_y}\ p,\\ 
+\ttab \seeni \vdash \istep{\r{y}}{\ds{y}{S_y}} : S \edge S_y\\
+\ttab S_y \notin {\{S\}\cup\seens}\\
+\ttab \seeni,{\{S,S_y\}\cup\seens} \vdash p  : S_y \medge S_x\\
+\ttab \d{x} \in S_x \wedge\\
+\ttab \seeni,{\{S\}\cup\seens} \vdash p \cdot \dstep{\d{x}} : S_y \resolve \d{x} \wedge \\
+\ttab p \in \istep{\_}{\_}^* \wedge\\
+\ttab S \not\in \seens$\\
+\tab $\iff$ (by $(T')$, $(I)$ and $\WF$ definition)\\
+$\exists\ S_x\ \r{y}\ \ds{y}{S_y}\ p,\\ 
+\ttab \seeni,{\{S\}\cup\seens} \vdash \istep{\r{y}}{\ds{y}{S_y}}\cdot p : S \medge S_x\\
+\ttab \d{x} \in S_x \wedge\\
+\ttab \seeni,{\{S\}\cup\seens} \vdash p \cdot \dstep{\d{x}} : S_y \resolve \d{x} \wedge \\
+\ttab \WF(\istep{\r{y}}{\ds{y}{S_y}}\cdot p \cdot \dstep{\d{x}}) \wedge\\
+\ttab S \not\in \seens$\\
+\tab $\iff$ (by $(R')$)\\
+$\exists\ \r{y}\ \ds{y}{S_y}\ p,\\ 
+\ttab \seeni,{\seens} \vdash \istep{\r{y}}{\ds{y}{S_y}}\cdot p \cdot \dstep{\d{x}}: S \reach \d{x} \wedge\\
+\ttab \seeni,{\{S\}\cup\seens} \vdash p \cdot \dstep{\d{x}} : S_y \resolve \d{x} $\\
+\tab $\iff$ (by definition of $\pathx{I}$)\\
+$\exists\ \r{y}\ \ds{y}{S_y}\ p,\\
+\ttab \istep{\r{y}}{\ds{y}{S_y}}\cdot p \cdot \dstep{\d{x}} \in \paths{I}{\seeni}{\seens}{S}$\\
+\tab $\iff$ (by definition of $\Delta$)\\
+$\d{x} \in \defsof{\paths{I}{\seeni}{\seens}{S}}$\\
+
+\noindent \Case{L} 
+We split the two directions:
+
+\Case{L.($\Rightarrow$)} \\
+$\d{x} \in \Env{L}{\seeni}{\seens}{S} \Rightarrow$ (by definition of $\Envu{L}$) \\
+$\d{x} \in \Env{D}{\seeni}{\seens}{S} \hiding \Env{I}{\seeni}{\seens}{S}$\\
+By case on the set $\d{x}$ comes from:
+\begin{enumerate}
+ \item If $\d{x} \in \Env{D}{\seeni}{\seens}{S}$ \\
+ then by the induction on the class (since $D < L$) we get:\\
+ $\d{x} \in \defsof{\paths{D}{\seeni}{\seens}{S}} \Rightarrow$ (by definition of $\Delta$ and $\pathx{D}$)\\
+ $\seeni,\seens \vdash \dstep{\d{x}} : S \reach \d{x} \Rightarrow$ ($\dstep{\d{x}}$ is always minimal)\\ 
+ $\seeni,\seens \vdash \dstep{\d{x}} : S \resolve \d{x} \Rightarrow$ (since $\dstep{\d{x}} \in \istep{\_}{\_}^*\cdot \dstep{\_}$)\\
+ $\dstep{\d{x}} \in \paths{L}{\seeni}{\seens}{S}\Rightarrow$ (by definition)
+ $\d{x} \in \defsof{\paths{L}{\seeni}{\seens}{S}}$
+ \smallskip
+
+\item If $\forall\ i,\ \di{x}{i} \notin \Env{D}{\seeni}{\seens}{S}$ and $\d{x} \in \Env{I}{\seeni}{\seens}{S}$
+ then by the induction on class (since $I < L$) we get that:
+ $\d{x} \in \defsof{\paths{I}{\seeni}{\seens}{S}}$\\
+By definition of $\pathx{I}$ there exist $p\ p'\ \r{y}\ \ds{y}{S'}$, such that $p = \istep{\r{y}}{\ds{y}{S'}}  \cdot p'$ and:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $ \seeni,\seens \vdash p : S \reach \d{x}$
+ \item[$(**)$] $ \seeni,\{S\} \cup \seens \vdash p' : S' \resolve \d{x}$
+\end{itemize}
+From $(*)$ we have $\WF(\istep{\r{y}}{\ds{y}{S'}}  \cdot p')$, which trivially implies that
+ $p \in \istep{\_}{\_}^*\cdot \dstep{\_}$.\\
+Thus, to prove that $\d{x} \in \defsof{\paths{L}{\seeni}{\seens}{S}}$ it is sufficient to prove that $ \seeni,\seens \vdash p : S \resolve \d{x}$ and given $(*)$ we need only 
+prove that $p$ is minimal:\\
+Assume for contradiction that there is a path $\bar{p}$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$ (\diamond)$] $ \seeni,\seens \vdash \bar{p} : S \reach \di{x}{i}$
+\end{itemize}
+and $\bar{p} < \istep{\r{y}}{\ds{y}{S'}}\cdot p'$. Then we have 2 cases:
+\begin{itemize}[leftmargin=10mm]
+ \item $\bar{p} = \dstep{\di{x}{i}}$:\\
+  then by definition of $\pathx{D}$ it contains a resolution path for $x$ and by induction hypothesis on the class ($D < L$) there is a definition $\di{x}{i} \in \Env{D}{\seeni}{\seens}{S}$: contradiction.
+ \item $\bar{p} = \istep{\r{y}}{\ds{y}{S'}}\cdot \bar{p}' \wedge \bar{p}' < p'$:\\
+  then by $(\diamond)$ and lemma \ref{lemma:tailreach}, we have that:\\
+  \tab $\seeni,\{S\} \cup \seens \vdash \bar{p}' : S' \reach \di{x}{i}$ \\
+  which contradicts $(**)$ since $\bar{p}' < p'$.\medskip
+\end{itemize}
+\end{enumerate}
+
+\Case{L.($\Leftarrow$)} 
+Assume $\d{x} \in \defsof{\paths{L}{\seeni}{\seens}{S}}$. Then there is a path $p$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $\seeni,\seens \vdash p : S \resolve \d{x}$
+ \item[$(**)$] $p \in \istep{\_}{\_}^*\cdot  \dstep{\_}$
+\end{itemize}
+By rule $(V')$ we have that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(i)$] $\seeni,\seens \vdash p : S \reach \d{x}$
+ \item[$(ii)$] $p$ is a minimal path for $x$ under $\seeni,\seens$.
+\end{itemize}
+By case analysis on the first step of $p$: 
+\begin{enumerate}
+  \item Case $p =  \dstep{\d{x}}$: \\
+   $\d{x}$ is trivially in $\Env{D}{\seeni}{\seens}{S}$ and thus in $\Env{L}{\seeni}{\seens}{S}$.
+ \item Case $p = \istep{\r{y}}{\ds{y}{S'}}\cdot p'$:\\
+ By lemma \ref{lemma:tailres} and $(*)$ we have:\\
+\tab $\seeni,\{S\} \cup \seens \vdash p' : S' \resolve \d{x}$ \\
+Combining this with $(i)$  we have $p \in \paths{I}{\seeni}{\seens}{S}$ 
+so by induction on the class, $\d{x} \in \Env{I}{\seeni}{\seens}{S}$.
+Moreover, there is no $i$ with $\di{x}{i} \in \Env{D}{\seeni}{\seens}{S}$: if there were, 
+we would have a path $q = \dstep{\di{x}{i}}$ with $q < p$ and $\seeni,\seens \vdash q : S \reach \di{x}{i}$, contradicting $(ii)$.
+So $\d{x} \in\Env{L}{\seeni}{\seens}{S}$.
+\end{enumerate}
+
+\noindent \Case{V}
+We split the two directions:
+
+\Case{V.($\Rightarrow$)}\\ 
+$\d{x} \in \Env{V}{\seeni}{\seens}{S} \Rightarrow$ (by definition of $\Envu{L}$) \\
+$\d{x} \in \Env{L}{\seeni}{\seens}{S} \hiding \Env{P}{\seeni}{\seens}{S}$\\
+By case on the set $\d{x}$ comes from:
+\begin{enumerate}
+ \item If $\d{x} \in \Env{L}{\seeni}{\seens}{S}$ \\
+ then by induction on the class (since $L < V$) we get:\\
+ $\d{x} \in \defsof{\paths{L}{\seeni}{\seens}{S}}$\\
+By definition of $\pathx{L}$ there is a path $p$ in $\istep{\_}{\_}^*\cdot \dstep{\_}$ such that:\\
+ $\seeni,\seens \vdash p : S \resolve \d{x}$\\
+And we have the conclusion:\\
+ $\d{x} \in \defsof{\paths{V}{\seeni}{\seens}{S}}$
+
+\item If $\forall\ i,\ \di{x}{i} \notin \Env{L}{\seeni}{\seens}{S}$ and $\d{x} \in \Env{P}{\seeni}{\seens}{S}$ 
+then by the induction on the class (since $P < V$) we get that:
+ $\d{x} \in \defsof{\paths{P}{\seeni}{\seens}{S}}$.\\
+By definition of $\pathx{P}$ there exists $p'$ such that $p = \pstep \cdot p'$ and:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $ \seeni,\seens \vdash p : S \reach \d{x}$
+ \item[$(**)$] $ \seeni,\{S\} \cup \seens \vdash p' : \P{S} \resolve \d{x}$
+\end{itemize}
+Given $(*)$, to prove that $\d{x} \in \defsof{\paths{V}{\seeni}{\seens}{S}}$ it is sufficient to prove that $p$ is minimal:\\
+Assume for contradiction that there is a path $\bar{p}$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$ (\diamond)$] $ \seeni,\seens \vdash \bar{p} : S \reach \di{x}{i}$
+\end{itemize}
+and $\bar{p} < \pstep \cdot p'$. 
+Then we have 2 cases:
+\begin{itemize}[leftmargin=10mm]
+ \item $\bar{p} \in \istep{\_}{\_}^*\cdot \dstep{\_}$:\\
+  Then by $ (\diamond)$ and Lemma \ref{lemma:shadowexists} there is a path $\bar{p}'$ and a definition $\di{x}{i'}$ such that:
+  \begin{itemize}
+   \item[$(i)$]  $ \seeni,\seens \vdash \bar{p}' : S \resolve \di{x}{i'}$ 
+   \item[$(ii)$]$\bar{p}' \leq \bar{p}$
+  \end{itemize}
+  From $(ii)$ we know  $\bar{p}' \in \istep{\_}{\_}^*\cdot \dstep{\_}$ and thus $\bar{p}' \in \paths{L}{\seeni}{\seens}{S}$.
+By induction ($L < V$) we get that $\di{x}{i'} \in \Env{L}{\seeni}{\seens}{S}$: contradiction.
+
+ \item $\bar{p} = \pstep\cdot \bar{p}' \wedge \bar{p}' < p'$:\\
+  then by $(\diamond)$ and lemma \ref{lemma:tailreach}, we have that:\\
+  \tab $\seeni,\{S\} \cup \seens \vdash \bar{p}' : \P{S} \reach \di{x}{i'}$ \\
+  which contradicts $(**)$ since $\bar{p}' < p'$.\medskip
+\end{itemize}
+\end{enumerate}
+
+\Case{V.($\Leftarrow$)} Assume $\d{x} \in \defsof{\paths{V}{\seeni}{\seens}{S}}$ then there is a path $p$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $\seeni,\seens \vdash p : S \resolve \d{x}$
+\end{itemize}
+By rule $(V')$ we have that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(i)$] $\seeni,\seens \vdash p : S \reach \d{x}$
+ \item[$(ii)$] $p$ is a minimal path for $x$ under $\seeni,\seens$.
+\end{itemize}
+By case analysis on the first step on $p$: 
+\begin{enumerate}
+ \item Case $p \in \istep{\_}{\_}^*\cdot \dstep{\_}$: then $\d{x}$ is trivially in $\defsof{\paths{L}{\seeni}{\seens}{S}}$ and 
+thus in $\Env{L}{\seeni}{\seens}{S}$ by induction on class and thus in $\Env{V}{\seeni}{\seens}{S}$.
+
+ \item Case $p = \pstep \cdot p'$:\\
+ By lemma \ref{lemma:tailres} and $(*)$ we have:\\
+\tab $\seeni,\{S\} \cup \seens \vdash p' : \P{S} \resolve \d{x}$ \\
+From this and $(i)$ we know $p \in \paths{P}{\seeni}{\seens}{S}$ and by induction on the class, $\d{x} \in \Env{P}{\seeni}{\seens}{S}$.
+To show $\d{x} \in \Env{V}{\seeni}{\seens}{S}$, it suffices to show that
+$\Env{L}{\seeni}{\seens}{S}$ cannot contain a definition $\di{x}{i}$. 
+Suppose for contradiction that it does. 
+Then by induction on class there is a resolution path $\bar{p}$ for $\di{x}{i}$ in 
+$\paths{L}{\seeni}{\seens}{S}$.  By definition of $\pathx{L}$, $\bar{p}$ has the form
+$\istep{\_}{\_}^*\cdot \dstep{\_}$, so $\bar{p} < p$, contradicting $(ii)$.
+\end{enumerate}
+
+This last case concludes the proof. \qed
+\end{proof}
+
+\subsection{\a-equivalence}\label{subsection:aeqproof}
+
+We prove Lemma \ref{lemma:freevarclass} about the absence of declaration in the equivalence class of a free variable:
+\begin{lemma}[Lemma \ref{lemma:freevarclass}] The equivalence class of a free variable can not contain any other declaration:
+\begin{equation*}
+\forall \di{x}{i}, i \seq{\mtt{P}} \bar{x} \Longrightarrow i = \bar{x}
+\end{equation*}
+\end{lemma}
+\begin{proof}
+  First, since $\top$ is the only path to the free variable definition we have:\\ 
+  \tab$\forall\ \ri{x}{i}\ p,\ (\seeni \vdash p : \ri{x}{i} \resolve \di{x}{\bar{x}}) \Longrightarrow p = \top$\\
+  Then since $\top$ is less specific than any other path and using the $(V)$ rule we have: 
+  \tab$\forall\ \ri{x}{i},\ (\seeni \vdash \top : \ri{x}{i} \resolve \di{x}{\bar{x}}) \Longrightarrow \forall\ p\ i',\ \seeni \vdash p : \ri{x}{i} \resolve \di{x}{i'} \Longrightarrow i' = \bar{x}$\\
+  So if there is resolution to the free variable declaration, then it is the only possible resolution for the reference. Finally, we prove by induction on the equivalence relation $i \seq{\mtt{P}} i'$ that any term
+equivalent to $\bar{x}$ resolves to $\bar{x}$ or is $\bar{x}$ itself:
+  \begin{multline*}
+    \forall\ i\ j,\ i \seq{\mtt{P}} j \Longrightarrow\\
+    \begin{array}{rl}
+    ((j = \bar{x}\ \vee\ \seeni \vdash \top : \ri{x}{j} \resolve \di{x}{\bar{x}}) \Rightarrow (i = \bar{x}\ \vee\ \seeni \vdash \top : \ri{x}{i} \resolve \di{x}{\bar{x}})) & \wedge \\
+    ((i = \bar{x}\ \vee\ \seeni \vdash \top : \ri{x}{i} \resolve \di{x}{\bar{x}}) \Rightarrow (j = \bar{x}\ \vee\ \seeni \vdash \top : \ri{x}{j} \resolve \di{x}{\bar{x}}))
+    \end{array}
+  \end{multline*}
+Instantiating $j$ with $\bar{x}$ finishes the proof.\qed
+\end{proof}
+\endinput
+
+
+\endinput
+
+Let us now prove an equivalent definition of $\paths{V}{\seeni}{\seens}{S}$ stating that the paths in $\paths{V}{\seeni}{\seens}{S}$ are exactly
+the resolution paths from S:
+
+\begin{lemma}[Lemma~\ref{lemma:distr}]
+  \begin{multline*}
+\forall\ \seeni\ \seens\ S\ p\ \d{x}, p \cdot \dstep{\d{x}}\in\paths{V}{\seeni}{\seens}{S} \iff \seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x}    
+  \end{multline*}
+\end{lemma}
+
+Proof: We fix $\seeni$, $\seens$ and proceed by case analysis on the first step of $p$.\medskip\\
+($\Rightarrow$) Suppose $p \cdot \dstep{\d{x}}\in\pathx{V}$. By definition of $\pathx{V}$ and $\pathx{L}$
+sets we have 
+\begin{equation*}
+  p \cdot \dstep{\d{x}}\in \visible(\visible(\pathx{D} \cup \pathx{I}) \cup \pathx{P}) 
+\end{equation*}
+Depending on the first step of $p$, we know the set $\pathx{D}$, $\pathx{I}$ or $\pathx{P}$ which $p$ comes from:\medskip\\
+
+\noindent Case $p = []$:\\
+since $\dstep{\d{x}}\in \pathx{D}$, it is trivial by definition of $\pathx{D}$ since $\dstep{\_}$ is always minimal.\medskip
+
+\noindent Case $p \cdot \dstep{\di{x}{i}} = \istep{\r{y}}{\ds{y}{S'}}\cdot p'$: \\
+$p \in \pathx{I}$ and $\pathx{D}$ does not contain a resolution for $x$ (otherwise $p\cdot \dstep{\di{x}{i}}$ is not in the $\visible$).
+By definition of $\pathx{I}$ we have:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$]  $\seeni,\seens \vdash p\cdot \dstep{\di{x}{i}} : S \reach \di{x}{i}  $
+ \item[$(**)$]  $\seeni,\{S\}\cup\seens \vdash p' : S \resolve \di{x}{i}  $
+\end{itemize}
+Given $(*)$, to get the conclusion we need to prove that $p\cdot \dstep{\di{x}{i}}$ is minimal. Assume there is a path $\bar{p}$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$ (\diamond)$] $ \seeni,\seens \vdash \bar{p} : S \reach \di{x}{i'}$
+\end{itemize}
+and $\bar{p} < \istep{\r{y}}{\ds{y}{S'}}\cdot p'$. Then we have 2 cases:
+\begin{itemize}[leftmargin=10mm]
+ \item $\bar{p} = \dstep{\di{x}{i'}}$:\\
+  then by definition of $\pathx{D}$ it contains a resolution for $x$: contradiction
+ \item $\bar{p} = \istep{\r{y}}{\ds{y}{S'}}\cdot \bar{p}' \wedge \bar{p}' < p'$:\\
+  then by $(\diamond)$ and lemma \ref{lemma:tailreach}, we have that:\\
+  \tab $\seeni,\{S\} \cup \seens \vdash \bar{p}' : S' \reach \di{x}{i'}$ \\
+  which contradicts $(**)$ since $\bar{p}' < p'$.\medskip
+\end{itemize}
+
+\noindent Case $p \cdot \dstep{\di{x}{i}} = \pstep\cdot p'$:\\ 
+$p \in \pathx{P}$ and $\pathx{D} \cup \pathx{I}$ does not contain a resolution for $x$ (if not $p$ is not in the $\visible$).
+By definition of $\pathx{P}$ we have:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $ \seeni,\seens \vdash p\cdot \dstep{\di{x}{i}} : S \reach \di{x}{i}$
+ \item[$(**)$] $ \seeni,\{S\} \cup \seens \vdash p' : \P{S} \resolve \di{x}{i}$
+\end{itemize}
+Given $(*)$, to get the conclusion we need to prove that $p\cdot \dstep{\di{x}{i}}$ is minimal. Assume there is a path $\bar{p}$ such that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(\diamond)$] $ \seeni,\seens \vdash \bar{p} : S \reach \di{x}{i'}$
+\end{itemize}
+and $\bar{p} < p\cdot \dstep{\di{x}{i}}$ then we have 3 cases:
+\begin{itemize}[leftmargin=10mm]
+ \item $\bar{p} = \dstep{\di{x}{i'}}$:\\
+  then by definition of $\pathx{D}$ it contains a resolution for $x$: contradiction
+ \item $\bar{p} = \istep{\r{y}}{\ds{y}{S'}}\cdot \bar{p}'$:\\
+  then by $(\diamond)$ and lemma \ref{lemma:tailreach}, we have that:\\
+  \tab $\seeni,\{S\} \cup \seens \vdash \bar{p}' : S' \reach \di{x}{i'}$\\
+  Using lemma \ref{lemma:shadowexists}, we get a path $\bar{p}''$ and a definition $\di{x}{i''}$ such that:
+  \begin{itemize}[leftmargin=15mm]
+   \item[$(i)$] $ \seeni,\{S\} \cup \seens \vdash \bar{p}'' : S' \resolve \di{x}{i''}$
+   \item[$(ii)$] $\bar{p}'' < \bar{p}'$
+  \end{itemize}
+  Since $\bar{p}$ and $\bar{p}''$ are well-formed and using $(ii)$ then we have that:\\
+  \tab $\bar{p}'' \in \istep{\_}{\_}^*\cdot \dstep$\\
+  and thus:\\
+  \tab $WF(\istep{\r{y}}{\ds{y}{S'}}\cdot \bar{p}'')$\\
+  Therefore using $(i)$ and $(\diamond)$ we get:
+  \begin{itemize}[leftmargin=15mm]
+   \item[(iii)] $\seeni,\seens \vdash \istep{\r{y}}{\ds{y}{S'}}\cdot \bar{p}'' : S \reach \di{x}{i''}$
+  \end{itemize}
+  Then by $(i)$ and $(iii)$, $\bar{p}''$ is a resolution for $x$ in $\pathx{I}$ which is a contradiction.
+ \item $\bar{p} = \pstep \cdot \bar{p}' \wedge \bar{p}' < p'$:\\
+ then by $(\diamond)$ and lemma \ref{lemma:tailreach}, we have that:\\
+ \tab $\seeni,\{S\} \cup \seens \vdash \bar{p}' : \P{S} \reach \di{x}{i'}$ 
+ which contradicts $(**)$ since $\bar{p}' < p'$ 
+  \bigskip
+\end{itemize}
+
+\noindent ($\Leftarrow$) Suppose that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(*)$] $\seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x}$
+\end{itemize}
+By rule $(V')$ we have that:
+\begin{itemize}[leftmargin=15mm]
+ \item[$(i)$] $\seeni,\seens \vdash p \cdot \dstep{\d{x}} : S \reach \d{x}$
+ \item[$(ii)$] $p\cdot \dstep{\d{x}}$ is a minimal path for $x$ under $\seeni,\seens$.
+\end{itemize}
+By case analysis on the first step of $p$: \medskip
+
+\noindent Case $p = []$: \\
+then $p\cdot \dstep{\d{x}}$ is trivially in $\pathx{D}$ and thus in the $\visible$.\medskip
+
+\noindent Case $p\cdot \dstep{\d{x}} = \istep{\r{y}}{\ds{y}{S'}}\cdot p'$:\
+ by lemma \ref{lemma:tailres} and $(*)$ we have:\\
+\tab $\seeni,\{S\} \cup \seens \vdash p' : S' \resolve \d{x}$ \\
+So, using $(i)$, we have $p \cdot \dstep{\d{x}} \in \pathx{I}$ and by lemma \ref{lemma:notinf} $p\cdot \dstep{\d{x}} \in \visible(\pathx{I})$.\\
+If $\pathx{D}$ contains a path for $x$ then it is trivially smaller than $p\cdot \dstep{\d{x}}$ and thus $p\cdot \dstep{\d{x}}$ can not be minimal which contradicts $(ii)$. So $\pathx{D}$ does not contain a path for $x$ and therefore:\\
+\tab $p\cdot \dstep{\d{x}} \in \visible(\pathx{D} \cup \pathx{I})$.\\
+Therefore, using lemma \ref{lemma:min} for $\pathx{P}$, $p\cdot \dstep{\d{x}} \in \pathx{V}$.\medskip
+
+\noindent Case $p\cdot \dstep{\d{x}} = \pstep\cdot p'$: \\
+by lemma \ref{lemma:tailres} and $(*)$ we have:\\
+\tab $\seeni,\{S\} \cup \seens \vdash p' : \P{S} \resolve \d{x}$\\
+So, using $(i)$, we have $p \cdot \dstep{\d{x}} \in \pathx{P}$ and by lemma \ref{lemma:notinf} $p\cdot \dstep{\d{x}} \in \visible(\pathx{P})$.\\
+If $\pathx{D}$ or $\pathx{I}$ contains a path for $x$ then it is trivially smaller than $p\cdot \dstep{\d{x}}$ and thus $p\cdot \dstep{\d{x}}$ can not be minimal which contradicts $(ii)$. 
+Therefore, $\pathx{P}$, $p\cdot \dstep{\d{x}} \in \pathx{V})$.\qed \bigskip
+
+ \begin{lemma}\label{lemma:pathl} Similar to lemma \ref{lemma:distr} for $\pathx{L}$:\\
+$\forall\ \seeni\ \seens\ S\ p\ \d{x},
+ p \cdot \dstep{\d{x}}\in\paths{L}{\seeni}{\seens}{S} \iff \seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x} \wedge p \in \istep{\_}{\_}^*$
+ \end{lemma}
+ \begin{proof} Fix $\seeni$,\ $\seens$,\ $S$,\ $p$ and $\d{x}$
+
+\noindent ($\Rightarrow$) If $p \cdot \dstep{\d{x}} \in \paths{L}{\seeni}{\seens}{S}$ then $p \in \paths{V}{\seeni}{\seens}{S}$ since for all $p'$ in $\paths{P}{\seeni}{\seens}{S}$ we have $p \cdot \dstep{\d{x}} < p'$.
+Then by lemma \ref{lemma:distr}, we have that:\\
+\tab $\seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x}$\\
+We now need to prove that $p \in \istep{\_}{\_}^*$, we have 2 cases:
+\begin{itemize}
+ \item if $p \cdot\dstep{\d{x}}\in \paths{D}{\seeni}{\seens}{S}$ then $p=[]$ and thus $p\in \istep{\_}{\_}^*$
+ \item if $p \cdot\dstep{\d{x}}\in \paths{I}{\seeni}{\seens}{S}$ then:\\
+\tab $\exists\ \r{y}\ \d{y}\ p'\ s.t.\ p = \istep{\r{y}}{\d{y}}\cdot p'$\\
+and by inversion on:
+\tab $\seeni,\seens \vdash \istep{\r{y}}{\d{y}} \cdot p' \cdot\dstep{\d{x}}  : S \reach \d{x}$
+we have $WF(\istep{\r{y}}{\d{y}} \cdot p')$ and thus $\istep{\r{y}}{\d{y}} \cdot p' (= p) \in  \istep{\_}{\_}^*$.
+\end{itemize}\medskip
+
+\noindent ($\Leftarrow$) Assume:
+\tab $\seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x} \wedge p \in \istep{\_}{\_}^*$
+then by lemma \ref{lemma:distr}, $p \cdot \dstep{\d{x}} \in \paths{V}{\seeni}{\seens}{S}$. 
+Since $p$ in $\istep{\_}{\_}^*$ then $p$ can not be in $\paths{P}{\seeni}{\seens}{S}$ so $p$ has to be in $\paths{L}{\seeni}{\seens}{S}$.\qed
+ \end{proof}
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 
+

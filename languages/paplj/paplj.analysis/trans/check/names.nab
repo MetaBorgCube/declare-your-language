@@ -1,0 +1,14 @@
+module names
+
+imports 
+  src-gen/signatures/Programs-sig
+  src-gen/signatures/Expressions-sig
+  src-gen/signatures/Classes-sig
+
+namespaces Program Class Field Method Variable
+	
+binding rules
+
+  Program(name, _, _) :   
+  	defines Program name
+  	scopes Class, Variable

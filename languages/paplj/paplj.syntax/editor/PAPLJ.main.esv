@@ -1,0 +1,33 @@
+module PAPLJ.main
+
+imports
+  PAPLJ-Colorer
+  PAPLJ-Completions
+  PAPLJ-Folding
+  PAPLJ-Menus
+  PAPLJ-Refactorings
+  PAPLJ-References
+  PAPLJ-Syntax
+  PAPLJ-Views
+
+language General properties
+  
+  name:          PAPLJ
+  id:            paplj.syntax
+  extends:       Root
+  
+  description:   "Spoofax-generated editor for the PAPLJ language"
+  url:           http://strategoxt.org
+  
+  extensions:    pj
+  table:         include/PAPLJ.tbl
+  start symbols: Program
+  
+  provider:      include/paplj.ctree
+  provider:      include/paplj-java.jar
+  
+  observer:      editor-analyze (multifile)
+  
+  on save:       editor-save
+  
+  jvm opts:      -server -Xss8m -Xmx1024m

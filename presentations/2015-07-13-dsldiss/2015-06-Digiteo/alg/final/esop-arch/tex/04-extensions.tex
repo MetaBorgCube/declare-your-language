@@ -1,0 +1,86 @@
+\subsection{Variants}
+\sectionlabel{extensions}
+
+The resolution calculus presented so far reflects a number of binding policy decisions.
+For example, we enforce imports to be transitive and
+local declarations to be preferred over imports.
+However, not every language behaves like this. We now present how
+other common behaviors can easily be represented with slight modifications of
+the calculus.
+Indeed, the modifications do not have to be done on the calculus itself (the
+$\edge$, $\medge$, $\reach$ and $\resolve$ relations) but can simply be encoded
+in the $\WF$ predicate and the $<$ ordering on paths.
+
+\paragraph{Reachability policy.}
+
+Reachability policies define how a reference can access a particular
+definition, i.e. what rules can be used during the resolution. We 
+can change our reachability policy by modifying the $\WF$ predicate. 
+For example, if we want to rule out transitive imports, we can change $\WF$ to be
+\vspace*{-0.4\baselineskip}
+$$ \WF(p) \Leftrightarrow p \in \pstep^* \cdot \istep{\_}{\_}? \vspace*{-0.4\baselineskip}
+$$ 
+where $?$ denotes the \emph{at most one} operation on regular expressions.
+Therefore, an import can only be used once at the end of the chain of scopes.
+
+For a language that supports both transitive and non-transitive imports, we can add a
+label on references corresponding to imports.
+If $\r{x}$ is a reference representing a non-transitive import and $\tr{x}$
+a reference corresponding to a transitive import, then the $\WF$ predicate
+simply becomes:
+\vspace*{-0.4\baselineskip}
+$$ \WF(p) \Leftrightarrow p \in \pstep^* \cdot \istep{\tr{\_}}{\_}^*\cdot
+\istep{\r{\_}}{\_}? \vspace*{-0.4\baselineskip}$$ 
+
+\begin{wrapfigure}[7]{r}{0.2\textwidth}
+\vspace*{-0.7\baselineskip}
+\begin{lstlisting}[language=PCFM]
+module A$_1$ {
+  def x$_2$ = 3
+}
+module B$_3$ {
+  include A$_4$;
+  def x$_5$ = 6;
+  def z$_6$ = x$_7$
+} 
+\end{lstlisting}
+\vspace*{-0.7\baselineskip}
+\caption{Include}
+\label{fig:include}
+\end{wrapfigure}
+
+\noindent Now no import can occur after the use of a non-transitive one.
+
+Similarly, we can modify the rule to handle the \emph{Export} declaration in 
+Coq, which forces transitivity (a resolution can always use an exported module
+even after importing from a non-transitive one).
+Assume $\r{x}$ is a reference representing a non-transitive import and
+$\er{x}$ a reference corresponding to an export; then we can use the
+following predicate:
+
+\vspace*{-0.4\baselineskip}
+$$ \WF(p) \Leftrightarrow p \in \pstep^* \cdot \istep{\r{\_}}{\_}? \cdot
+\istep{\er{\_}}{\_}^*\vspace*{-0.4\baselineskip}
+ $$
+
+
+\paragraph{Visibility policy.}
+
+We can modify the visibility policy, i.e. how
+resolutions shadow each other, by changing the definition of the specificity ordering.
+For example, we might want imports to 
+act like textual inclusion, so the declarations in the included module have 
+the same precedence as local declarations. This is similar to Standard ML's \pcfmcode{include}
+mechanism.
+In the program in \Figure{include}, the reference \pcfmcode{x}$_7$ should be treated
+as having duplicate resolutions, to either \pcfmcode{x}$_5$ or \pcfmcode{x}$_2$;
+the former should not hide the latter.
+To handle this situation, we can drop the rule
+$\dstep{\_} < \istep{\_}{\_}$ so that definitions and references
+will get the same precedence, and a definition will not shadow an imported
+definition.
+To handle both \pcfmcode{include} and ordinary imports, we can once again differentiate
+the references, and define different ordering rules depending on the reference used
+in the import step.
+
+% export as in Coq

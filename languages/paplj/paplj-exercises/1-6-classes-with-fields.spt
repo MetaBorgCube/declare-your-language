@@ -1,0 +1,123 @@
+module ex1-6-classes-with-fields 
+
+language PAPLJ
+
+start symbol Program
+
+test default value [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       a.x
+     }
+]] parse to
+   Program(
+      "test"
+    , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+    , Let(
+        [Bind(ClassT("A"), "a", New("A"))]
+      , Do([Get(Var("a"), "x")])
+      )
+    )
+
+test set returns value [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       a.x = 4
+     }
+]] parse to
+   Program(
+      "test"
+    , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+    , Let(
+        [Bind(ClassT("A"), "a", New("A"))]
+      , Do([Set(Var("a"), "x", Num("4"))])
+      )
+    )
+
+test set changes field value [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       a.x = 4;
+       a.x + 3
+     }
+]] parse to
+  Program(
+      "test"
+    , [Class("A", NoExtends(), [Field(NumT(), "x")], [])]
+    , Let(
+        [Bind(ClassT("A"), "a", New("A"))]
+      , Do(
+          [ Set(Var("a"), "x", Num("4"))
+          , Add(Get(Var("a"), "x"), Num("3"))
+          ]
+        )
+      )
+    )
+
+test field of super class [[ 
+  program test 
+    class A { Num x }
+    class B extends A { }
+  run 
+    let B b = new B()
+     in {
+       b.x = 4;
+       b.x + 9
+     }
+]] parse to
+   Program(
+      "test"
+    , [ Class("A", NoExtends(), [Field(NumT(), "x")], [])
+      , Class("B", Extends("A"), [], [])
+      ]
+    , Let(
+        [Bind(ClassT("B"), "b", New("B"))]
+      , Do(
+          [ Set(Var("b"), "x", Num("4"))
+          , Add(Get(Var("b"), "x"), Num("9"))
+          ]
+        )
+      )
+   )
+
+test field of super class [[ 
+  program test 
+    class A { Num x }
+    class B extends A { Num x }
+  run 
+    let B b = new B()
+     in {
+       b.x = 4;
+       b.x + 9
+     }
+]] parse to
+   Program(
+      "test"
+    , [ Class("A", NoExtends(), [Field(NumT(), "x")], [])
+      , Class(
+          "B"
+        , Extends("A")
+        , [Field(NumT(), "x")]
+        , []
+        )
+      ]
+    , Let(
+        [Bind(ClassT("B"), "b", New("B"))]
+      , Do(
+          [ Set(Var("b"), "x", Num("4"))
+          , Add(Get(Var("b"), "x"), Num("9"))
+          ]
+        )
+      )
+    )
+
+

@@ -1,0 +1,15 @@
+\EqASubtype{\mathit{Rec}(\di{A}{1})}{\mathit{Rec}(\di{A}{1})}\\
+\EqCType{\di{x}{2}}{\mathit{Int}}\\
+\EqCType{\di{a}{3}}{\tau_{1}}\\
+\EqCResolve{\ri{A}{4}}{\delta_{1}}\\
+\EqCTeq{\tau_{1}}{\mathit{Rec}(\delta_{1})}\\
+\EqCResolve{\ri{x}{5}}{\delta_{2}}\\
+\EqCType{\delta_{2}}{\tau_{2}}\\
+\EqCSubtype{\tau_{3}}{\tau_{2}}\\
+\EqCTeq{\mathit{Int}}{\tau_{3}}\\
+\EqCType{\di{y}{6}}{\tau_{4}}\\
+\EqCResolve{\ri{a}{7}}{\delta_{4}}\\
+\EqCType{\delta_{4}}{\mathit{Rec}(\delta_{3})}\\
+\EqCAssoc{\delta_{3}}{s_{1}}\\
+\EqCResolve{\ri{x}{8}}{\delta_{5}}\\
+\EqCType{\delta_{5}}{\tau_{4}}

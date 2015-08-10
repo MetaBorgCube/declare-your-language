@@ -1,0 +1,15 @@
+We extend and combine two existing declarative formalisms, the scope graphs of Neron et al.
+and type constraint systems, to build a language-independent theory that can
+describe both name and type resolution for realistic languages with complex 
+scope and typing rules. Unlike conventional static semantics presentations, our
+approach maintains a clear separation between scoping and typing concerns, 
+while still being able to handle language constructs, such as class 
+field access, for which name and type resolution are necessarily intertwined.
+We define a constraint scheme that can express both typing 
+and name binding constraints, and give a formal notion of constraint satisfiability
+together with a sound algorithm for finding solutions in important special cases.
+We describe the details of constraint generation for a model language that
+illustrates many of the interesting resolution issues associated with modules,
+classes, and records. Our constraint generator and solver have been implemented and 
+will be submitted as artifacts to accompany the paper.
+

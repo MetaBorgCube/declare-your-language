@@ -1,0 +1,28 @@
+  
+\endinput
+
+\subsection{Objects in Scala}
+
+Names in Scala identify types, values, methods, and classes which are collectively called entities. 
+Names are introduced by local definitions and declarations, inheritance, import clauses, or package clauses 
+  which are collectively called bindings.
+Bindings of different kinds have a precedence defined on them:
+\begin{enumerate}
+  \item Definitions and declarations that are local, inherited, 
+    or made available by a package clause in the same compilation unit where the definition occurs 
+    have highest precedence.
+  \item Explicit imports have next highest precedence.
+  \item Wildcard imports have next highest precedence.
+  \item Definitions made available by a package clause not in the compilation unit 
+    where the definition occurs have lowest precedence.
+\end{enumerate}
+
+There are two different name spaces, one for types and one for terms. 
+The same name may designate a type and a term, depending on the context where the name is used.
+
+A binding has a scope in which the entity defined by a single name can be accessed using a simple name. 
+Scopes are nested. 
+A binding in some inner scope shadows 
+  bindings of lower precedence in the same scope as well as 
+  bindings of the same or lower precedence in outer scopes.
+

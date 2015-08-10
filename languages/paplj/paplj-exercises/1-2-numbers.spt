@@ -1,0 +1,48 @@
+module ex4-2-numbers 
+
+language PAPLJ
+
+start symbol Expr
+
+test number [[  
+  1
+]] parse to Num("1")
+
+test min [[  
+  - 889
+]] parse to Min(Num("889"))
+
+test add [[  
+  1 + 2
+]] parse to Add(Num("1"), Num("2"))
+
+test sub [[  
+  1 - 2
+]] parse to Sub(Num("1"), Num("2"))
+
+test mul [[  
+  11 * 29
+]] parse to Mul(Num("11"), Num("29"))
+
+// etc.
+
+
+test block [[
+  { 1 } + 6 
+]] parse to Add(Do([Num("1")]), Num("6"))
+
+test block [[
+  { 1; 2; 3; 5 }
+]] parse to Do([Num("1"), Num("2"), Num("3"), Num("5")])
+
+test block [[
+  { 1; 2; 3; 5; }
+]] parse to Do([Num("1"), Num("2"), Num("3"), Num("5"), Skip()])
+
+test block [[
+  { false; 5; }
+]] parse to Do([False(), Num("5"), Skip()])
+
+test block [[
+  { 5; false; }
+]] parse to Do([Num("5"), False(), Skip()])

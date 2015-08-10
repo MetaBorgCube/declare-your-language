@@ -1,0 +1,13 @@
+module desugar-rules
+imports src-gen/signatures/Expressions-sig
+
+rules
+	 
+  desugar-do :
+    Do([e]) -> e  where <not(?Skip())> e
+	
+	desugar-let = fail
+	
+	desugar-or = fail
+	
+	desugar-and = fail

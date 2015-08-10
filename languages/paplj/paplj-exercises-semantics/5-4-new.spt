@@ -1,0 +1,55 @@
+module ex5-4-new
+
+language PAPLJ
+
+start symbol Program
+
+test new 1 [[ 
+  program test 
+    class A{ }
+  run  
+    new A()
+]] run runprogram-value
+to ObjV("A"
+        , NoSuper()
+        , Map("FM", [])
+        , Map("MM", [])
+        )
+        
+test new 2 [[ 
+  program test 
+    class A{ }
+    class B extends A{ }
+  run  
+    new B()
+]] run runprogram-value
+to  ObjV("B"
+        , Super(
+            ObjV("A"
+            , NoSuper()
+            , Map("FM", [])
+            , Map("MM", [])
+            )
+          )
+        , Map("FM", [])
+        , Map("MM", [])
+        )
+        
+test new 3 [[ 
+  program test 
+    class A{ Num z }
+    class B extends A{ }
+  run  
+    new B()
+]] run runprogram-value
+to  ObjV("B"
+        , Super(
+            ObjV("A"
+            , NoSuper()
+            , Map("FM", [Bind("z", _)])
+            , Map("MM", [])
+            )
+          )
+        , Map("FM", [])
+        , Map("MM", [])
+        )

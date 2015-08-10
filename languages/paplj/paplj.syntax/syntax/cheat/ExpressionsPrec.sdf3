@@ -1,0 +1,39 @@
+module ExpressionsPrec
+
+imports Common
+
+context-free syntax
+  
+  Expr        = Expr6
+  
+  Expr0.Paren = [([Expr])] 
+  
+  Expr0.Ref   = [[ID]] 
+  
+  Expr0.True  = [true]
+  Expr0.False = [false]
+  
+  Expr0.Num   = INT
+      
+  Expr1       = Expr0
+  Expr1.Mul   = [[Expr1] * [Expr0]]
+  Expr1.Div   = [[Expr1] / [Expr0]]
+  
+  Expr2       = Expr1
+  Expr2.Add   = [[Expr2] + [Expr1]]
+  Expr2.Sub   = [[Expr2] - [Expr1]]
+  
+  Expr3       = Expr2
+  Expr3.Lt    = [[Expr2] <  [Expr2]]
+  Expr3.Geq   = [[Expr2] <= [Expr2]]
+  Expr3.Eq    = [[Expr2] == [Expr2]]
+  
+  Expr4       = Expr3
+  Expr4.Not   = [![Expr3]]
+  
+  Expr5       = Expr4 
+  Expr5.And   = [[Expr5] && [Expr4]]
+  
+  Expr6       = Expr5
+  Expr6.Or    = [[Expr6] || [Expr5]]
+  

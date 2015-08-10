@@ -1,0 +1,20 @@
+
+digraph { 
+rankdir=BT
+  "1" [shape="circle",label=<1>];
+  "x_1" [shape="square",label=<x<sub>1</sub>>];
+  "y_2" [shape="square",label=<y<sub>2</sub>>];
+  "1" -> "x_1"[arrowhead="normal",weight=1,constraint=true];
+  "1" -> "y_2"[arrowhead="normal",weight=1,constraint=true];
+  "x_3" [shape="square",label=<x<sub>3</sub>>];
+  "x_4" [shape="square",label=<x<sub>4</sub>>];
+  "x_3" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  "x_4" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+  
+   
+   
+}

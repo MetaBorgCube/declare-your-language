@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=13.5cm,paperheight=5.7cm,hmargin=.1cm,vmargin=.1cm]{geometry}
+
+\input{semantics}
+\input{resolution-calculus}
+
+\begin{document}
+\pagestyle{empty}
+\noindent
+\renewcommand{\S}{\mathcal{S}}
+\begin{minipage}{12.3cm}%\begin{boxedminipage}{12.3cm}
+$$
+\begin{array}{ll}
+  \Res{\seeni}{\ri{x}{i}} & := \{ \di{x}{j} \mid \exists S\ s.t.\ \ri{x}{i} \in \R{S} \wedge \di{x}{j} \in \Env{V}{\{\ri{x}{i}\} \cup \seeni}{\emptyset}{S} \} \smallskip  \\
+  \Env{V}{\seeni}{\seens}{S}  & := \Env{L}{\seeni}{\seens}{S} \triangleleft \Env{P}{\seeni}{\seens}{S} \smallskip\\
+ \Env{L}{\seeni}{\seens}{S} & := \Env{D}{\seeni}{\seens}{S} \triangleleft \Env{I}{\seeni}{\seens}{S} \smallskip\\
+ \Env{D}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \D{S}\smallskip\\
+    \end{array}
+ \right.\smallskip\\
+ \Env{I}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \mid \ri{y}{i} \in \I{S} \setminus 
+\seeni \wedge \dsi{y}{j}{S_y} \in \Res{\seeni}{\ri{y}{i}}\right\}\smallskip\\
+%       \bigcup \limits_{\r{y} \in \I{S} \setminus \seeni} 
+%          \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \mid \ds{y}{S_y} \in \Res{\seeni}{\r{y}}\right\}\smallskip\\
+    \end{array}
+ \right.\smallskip\\
+ \Env{P}{\seeni}{\seens}{S} & := \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \Env{V}{\seeni}{\{S\}\cup\seens}{\P{S}}
+    \end{array}
+ \right.\smallskip\\
+\end{array}\medskip
+$$
+
+
+\end{minipage}%\end{boxedminipage}
+
+
+
+
+\end{document}

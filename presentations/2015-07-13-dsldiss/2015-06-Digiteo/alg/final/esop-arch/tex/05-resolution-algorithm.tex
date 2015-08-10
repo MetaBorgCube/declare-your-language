@@ -1,0 +1,268 @@
+\section{Resolution Algorithm}
+\sectionlabel{resalg}
+
+The calculus of \Section{rescalc} gives a precise definition of resolution.
+In principle, we can search for derivations in the calculus 
+to answer questions such as ``Does this variable
+reference resolve to this declaration?'' or ``Which variable declarations
+does this reference resolve to?''  But automating this search process is not trivial, 
+because of the need for back-tracking and 
+because the paths in reachability derivations can have cycles (visiting
+the same scope more than once), and hence can grow arbitrarily long.
+
+In this section we describe a deterministic and terminating
+\emph{algorithm} for computing resolutions,
+which provides a practical basis for implementing tools based on scope graphs,
+and prove that it is sound and complete with respect to the calculus.
+This algorithm also connects the calculus, which talks about
+resolution of a single variable at a time, to more conventional descriptions of
+binding which use ``environments'' or ``contexts'' to describe \emph{all}
+the visible or reachable declarations accessible from a program location.
+
+For us, an \emph{environment} is just a set of declarations $\di{x}{i}$. 
+This can be thought of as a function from identifiers to (possible empty) 
+sets of declaration positions.  (In this paper, we leave the representation 
+of environments abstract; in practice, one would use a hash table or other
+dictionary data structure.) We construct an atomic environment corresponding
+to the declarations in each scope, 
+and then combine atomic environments to describe the sets of 
+reachable and visible declarations resulting from the parent and import 
+relations. The key operator for combining environments is {\it shadowing},
+which returns the union of the declarations in two environments restricted so
+that if a variable $x$ has any declarations in the first environment, no
+declarations of $x$ are included from the second environment.  More formally:
+
+
+\input{figures/resalg}
+
+% \vspace*{-0.3\baselineskip}
+
+\begin{definition}[Shadowing] For any environments $E_1$, $E_2$, we write:\\
+\centerline{$E_1 \hiding E_2 := E_1 \cup \{ \di{x}{i} \in E_2 \mid  \nexists\ \di{x}{i'} \in
+E_1\}$}
+\end{definition}
+
+%\vspace*{-.2\baselineskip}
+
+\noindent
+Figure~\ref{fig:resalg} specifies an algorithm $\Res{\seeni}{\ri{x}{i}}$
+for resolving a reference $\ri{x}{i}$
+to a set of corresponding declarations $\di{x}{j}$.
+Like the calculus,
+the algorithm avoids trying to use an import to resolve itself
+by maintaining a set $\seeni$ of ``already seen'' imports.
+The algorithm works by computing the full environment $\Env{V}{\seeni}{\seens}{S}$ 
+of declarations that are visible in the scope $S$ containing $\ri{x}{i}$, and 
+then extracting just the declarations for $x$. The full environment, in turn,
+is built from the more basic environments $\Envu{D}$ of immediate declarations,
+$\Envu{I}$ of imported declarations, and $\Envu{P}$ of lexically enclosing declarations,
+using the shadowing operator.  The order of construction matches both the $\WF$ restriction
+from the calculus, which prevents the use of parent after an import, and  the path ordering $<$,
+which prefers immediate declarations over imports and imports over 
+declarations from the parent scope.  
+(Note that the algorithm does \emph{not} work for the variants of $\WF$
+and $<$ described in \Section{extensions}.)
+%The algorithm is naturally implemented by 
+%constructing the various environments lazily. 
+A key difference from the calculus is that the shadowing operator is applied at
+each stage in environment construction, rather than applying the visibility 
+criterion just once at the ``top level'' as in calculus rule $V$. 
+This difference is a natural consequence of the fact that the algorithm computes
+sets of declarations rather than full derivation paths, so it does not maintain
+enough information to delay the visibility computation.
+
+\paragraph{Termination} The algorithm is terminating using the well-founded
+lexicographic measure  $(|\R{\G} \setminus \seeni|,|\S{\G} \setminus \seens|)$.
+Termination is straightforward by unfolding the calls to $Res$ in $\Envu{I}$ and then 
+inlining the definitions of $\Envu{V}$ and $\Envu{L}$: this gives an equivalent algorithm 
+% (presented in Appendix \refproofappendix~of \cite{TUD-SERG-2015-001-local}) 
+in which the measure strictly decreases at every recursive call.
+
+\subsection{Correctness of Resolution Algorithm}
+
+The resolution algorithm is sound and complete
+with respect to the calculus. 
+\begin{theorem}
+\label{theorem:correctness}
+$\forall\ \seeni, \ri{x}{i}, j, (\di{x}{j}\in \Res{\seeni}{\ri{x}{i}}) 
+\iff (\exists p\ s.t.\ \seeni \vdash p : \ri{x}{i} \resolve \di{x}{j})$.
+\end{theorem}
+
+We sketch the proof of this theorem here; 
+details of the supporting lemmas and proofs are in Appendix  \refproofappendix~of
+\cite{TUD-SERG-2015-001-local}.
+To begin with, we must deal with the fact that the calculus can
+generate reachability derivations with cycles,
+but the algorithm does not follow cycles.
+In fact, \emph{visibility} derivations cannot have cycles: 
+
+\begin{lemma}%[Resolution paths are cycle-free]
+\label{lemma:cycle-free}
+If $\seeni \vdash p : \ri{x}{i} \resolve \di{x}{j}$ then $p$ is cycle-free.
+\end{lemma}
+
+\input{figures/seencalculus}
+
+\noindent
+We therefore begin 
+% our attack on the proof of Theorem~\ref{theorem:correctness}
+by defining an alternative version of the calculus that
+prevents construction of cyclic paths.  This alternative calculus 
+consists of the original rules $(P),(I)$ from Figure~\ref{fig:rescalc} 
+together with the new rules $(N'),(T'),(R'),(V'),(X')$ 
+from Figure~\ref{fig:seencalc}.
+The new rules describe transitions that include a ``seen scopes'' component $\seens$ which
+is used to enforce acyclicity of paths. By inspection, this is the only difference 
+between the ``primed'' system and original one.
+Thus, by Lemma~\ref{lemma:cycle-free}, we have
+
+\begin{lemma}
+\label{lemma:primed}
+$\forall\seeni, \seens, \di{x}{i}, (\exists p\ s.t.\ \seeni \vdash p:S \resolve
+\di{x}{i})\!\iff\!(\exists p\ s.t.\ \seeni,\emptyset \vdash p:S \resolve \di{x}{i})$.
+\end{lemma}
+
+\noindent
+Hereinafter, we can work with the primed system.
+
+Next we define a family of sets $\pathx{}$ of derivable paths in the (primed) calculus. 
+\begin{definition}[Path Sets]\vspace*{-.3\baselineskip}
+  \begin{center}
+$
+\begin{array}{lll}
+  \paths{D}{\seeni}{\seens}{S} & := & \{ p \mid \exists\ \di{x}{i}\ s.t.\  p = \dstep{\di{x}{i}} \wedge \seeni,\seens \vdash p : S \reach \di{x}{i}\}\\
+  \paths{P}{\seeni}{\seens}{S} & := & \{ p \mid \exists\ p'\ \di{x}{i}\ s.t.\ p = \pstep \cdot p'\wedge \\
+  & & \tab\tab\tab \seeni,\seens \vdash p : S \reach \di{x}{i} \wedge \seeni,\{S\}\cup\seens \vdash p' : \P{S} \resolve \di{x}{i} \} \\
+  \paths{I}{\seeni}{\seens}{S} & := & \{ p \mid \exists\ p'\ \di{x}{i}\ \ri{y}{j}\ \dsi{y}{j'}{S'}\ s.t.\ p = \istep{\ri{y}{j}}{\dsi{y}{j'}{S'}}  \cdot p' \wedge \\
+  & & \tab\tab\tab\seeni,\seens \vdash p : S \reach \di{x}{i} \wedge \seeni,\{S\}\cup\seens \vdash p' : S' \resolve \di{x}{i} \}
+\\
+  \paths{L}{\seeni}{\seens}{S} & := &  \{ p \mid  \exists\ \di{x}{i}\ s.t.\ \seeni,\seens \vdash p : S \resolve \di{x}{i} \wedge p \in \istep{\_}{\_}^*\cdot \dstep{\_}\}\\
+  \paths{V}{\seeni}{\seens}{S} & := &  \{ p \mid  \exists\ \di{x}{i}\ s.t.\ \seeni,\seens \vdash p : S \resolve \di{x}{i} \}\\
+\end{array}
+$    
+  \end{center}
+\label{def:pathsets}
+\end{definition}
+\vspace*{-.4\baselineskip}
+These sets are designed to correspond to the various classes of environments $\Envu{C}$.
+$\pathx{D}$, $\pathx{P}$, and $\pathx{I}$ contain all reachability 
+derivations starting with a $\dstep{\_}$, $\pstep$, or $\istep{\_}{\_}$ respectively, 
+with the further condition that the \emph{tail} of each derivation is 
+a visibility derivation (i.e. is most specific among all reachability derivations).
+$\pathx{V}$ describes the set of all visibility derivations. ($\pathx{L}$ is similar, but omits paths including $\pstep$ steps, because well-formedness 
+prevents using these steps after an import step.) For compactness, we state the key result uniformly over all classes of sets:
+\begin{definition} For any path $p$, $\defof{p} := \di{x}{i}$ iff $\exists p'\ s.t.\ p = p' \cdot \dstep{\di{x}{i}}$
+and for any set of paths $P$, $\defsof{P} := \{ \defof{p} \mid p \in P\}$.
+\end{definition}
+
+\begin{lemma}
+\label{lemma:pathset-alg}
+For each class $C \in \{V,L,D,I,P\}$:\vspace*{-.3\baselineskip}
+$$ \forall\ \seeni\ \seens\ S, \Env{c}{\seeni}{\seens}{S} = \defsof{\paths{C}{\seeni}{\seens}{S}}$$
+\end{lemma}
+
+% One main difference between the calculus and the resolution algorithm is in the minimality check. The calculus first computes all the reachable definitions 
+% from a current scope before choosing the minimal ones as the visible ones whereas the calculus minimize at every step during the path computation. 
+% In order to bridge this gap we first prove that the tail of a visibility or reachability path is also a
+% valid path starting at the next scope.
+
+\begin{proof} 
+We first prove two auxiliary lemmas about reachability and visibility after one step:
+\begin{multline}\label{eqn:tailreach}\tag{$\lozenge$}
+   \forall\ \seeni\ \seens\ s\ p\ S\ \di{x}{i},
+   (\seeni,\seens \vdash s \cdot p\cdot\dstep{\di{x}{i}} : S \reach \di{x}{i} \Longrightarrow
+   \seeni,\{S\}\cup\seens \vdash s : S \edge S' \Longrightarrow\\ 
+   \seeni,\{S\}\cup\seens \vdash p\cdot\dstep{\di{x}{i}} : S' \reach \di{x}{i})    
+  \end{multline}\vspace*{-8mm}
+\begin{multline}\label{eqn:tailvis}\tag{$\blacklozenge$}
+  \forall\ \seeni\ \seens\ s\ p\ S\ \di{x}{i},
+  (\seeni,\seens \vdash s \cdot p : S \resolve \di{x}{i} \Longrightarrow 
+  \seeni,\{S\}\cup\seens \vdash s : S \edge S' \Longrightarrow\\ 
+  \seeni,\{S\}\cup\seens \vdash p : S' \resolve \di{x}{i})  
+\end{multline}
+Then we proceed by three nested inductions, 
+the outer one on $\seeni$ (or, more strictly, on \mbox{$|\R{\G} \setminus \seeni|$}, the number of references
+\emph{not} in $\seeni$), the second one on $\seens$ (more strictly, on \mbox{$|\S{\G} \setminus \seens|$}, the number of 
+scopes \emph{not} in $\seens$) and the third one on the class $C$ with the order $V > L > {P,I,D}$. Then we conclude using \ref{eqn:tailreach} and \ref{eqn:tailvis} and a number of other technical results. Details are in Appendix~\refproofappendix\ of \cite{TUD-SERG-2015-001-local}. \qed
+\end{proof}
+
+With these lemmas in hand we proceed to prove Theorem~\ref{theorem:correctness}.
+\begin{proof} Fix $\seeni$, $\ri{x}{i}$, and $j$. Given $S$, the (unique) scope such that $\ri{x}{i} \in \R{S}$:\smallskip\\
+\centerline{$\di{x}{j} \in \Res{\ri{x}{i}}{\seeni} \Leftrightarrow \di{x}{j} \in \Env{V}{\{\ri{x}{i}\} \cup \seeni}{\emptyset}{S}$\smallskip}
+By the $V$ case of Lemma~\ref{lemma:pathset-alg} and the definition of $\pathx{S}$, this is equivalent to\smallskip\\
+\centerline{$\exists p\ s.t.\ \{\ri{x}{i}\} \cup \seeni,\emptyset \vdash p : S \resolve \di{x}{j}$\smallskip}
+which, by Lemma~\ref{lemma:primed} and rule $X$, is equivalent to $\exists p\ s.t.\ \seeni \vdash p : \ri{x}{i} \resolve \di{x}{j}$. \qed 
+\end{proof}
+
+\endinput
+
+We have two key lemmas connecting the sets $\pathx{}$ with the calculus on the one hand
+and the algorithm on the other.  First, $\pathx{V}$ consists of exactly the resolution 
+paths described by the calculus:
+
+\begin{lemma}[Resolution and $\pathx{V}$ equivalence] 
+\label{lemma:distr}
+$$\forall\ \seeni\ \seens\ S\ p\ \d{x},
+ p \cdot \dstep{\d{x}}\in\paths{V}{\seeni}{\seens}{S} \iff \seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \resolve \d{x}$$
+\end{lemma}
+\begin{proof}\vspace*{-.3\baselineskip} 
+We first prove two auxiliary lemmas about reachability and visibility after one scope transition:
+\vspace*{-3mm}
+ \begin{multline}\label{eqn:tailreach}\tag{$\lozenge$}
+   \forall\ \seeni\ \seens\ s\ p\ S\ d\ s.t.\ 
+   \seeni,\seens \vdash s \cdot p\cdot\dstep{\d{x}} : S \reach \d{x} \Longrightarrow\\
+   \seeni,\{S\}\cup\seens \vdash s : S \edge S' \Longrightarrow 
+   \seeni,\{S\}\cup\seens \vdash p\cdot\dstep{\d{x}} : S' \reach \d{x}    
+  \end{multline}\vspace*{-9mm}
+\begin{multline}\label{eqn:tailvis}\tag{$\blacklozenge$}
+\forall\ \seeni\ \seens\ s\ p\ S\ d\ s.t.\ 
+\seeni,\seens \vdash s \cdot p : S \resolve \d{x} \Longrightarrow \\ 
+\seeni,\{S\}\cup\seens \vdash s : S \edge S' \Longrightarrow 
+\seeni,\{S\}\cup\seens \vdash p : S' \resolve \d{x}  
+\end{multline}
+Then we proceed by case analysis on the first step of $p = s\cdot p'$. 
+
+($\Rightarrow$) The first step $s$ tells which set among $\pathx{D}$,$\pathx{P}$,$\pathx{I}$ $p$ comes from.
+Thus we have $\seeni,\seens \vdash p \cdot \dstep{\d{x}}: S \reach \d{x}$ and must prove that $p$ is minimal.
+Assume $\bar{s}\cdot \bar{p} < s\cdot p'$. Then using definition of \visible\ and  \ref{eqn:tailreach} we can prove that $\bar{p}$ is a reachable path smaller than $p'$, contradicting the minimality of $p'$.\medskip
+
+($\Leftarrow$) The lemma \ref{eqn:tailvis} provides the resolution of the tail which allows us to place $p$ in
+the corresponding set $\pathx{D}$,$\pathx{P}$,$\pathx{I}$. Then knowing that $p$
+is minimal we lift it through the \visible\ calls to $\pathx{V}$. Details are in Appendix~\refproofappendix of \cite{TUD-SERG-2015-001-local}.
+
+\end{proof}
+
+\noindent
+Secondly, $\pathx{}$ sets correspond to $\Envu{}$ sets. For compactness, we state this result
+uniformly over all classes of sets:
+\begin{lemma}[Algorithm and path sets]
+\label{lemma:pathset-alg}
+For each class $C \in \{V,L,D,I,P\}$:\vspace*{-.3\baselineskip}
+$$ \forall\ \seeni\ \seens\ S, \Env{c}{\seeni}{\seens}{S} = \defsof{\paths{C}{\seeni}{\seens}{S}}$$
+\end{lemma}
+\begin{proof}{By two nested inductions, 
+the outer one on $\seeni$ (or, more strictly, on \mbox{$|\R{\G} \setminus \seeni|$}, the number of references
+\emph{not} in $\seeni$) and the inner one on $\seens$ (more strictly, on \mbox{$|\S{\G} \setminus \seens|$}, the number of 
+scopes \emph{not} in $\seens$).  We then proceed by cases on the class $C$, using
+Lemmas~\ref{lemma:min} and \ref{lemma:distr} and a number of other technical results. 
+Details are in Appendix~\refproofappendix of \cite{TUD-SERG-2015-001-local}.}
+\end{proof}
+
+\noindent
+% Proof of Theorem~\ref{theorem:correctness} is now straightforward by composing Lemmas \ref{lemma:pathset-alg}, \ref{lemma:distr} and \ref{lemma:primed}.
+With these lemmas in hand we proceed to prove Theorem~\ref{theorem:correctness} .
+\begin{proof} Fix $\seeni$,$\r{x}$, and $\d{x}$. Given $S$, the (unique) scope such that $\r{x} \in \R{S}$:\smallskip\\
+\centerline{$\d{x} \in \Res{\r{x}}{\seeni} \Leftrightarrow \d{x} \in \Env{V}{\{\r{x}\} \cup \seeni}{\emptyset}{S}$\smallskip}
+By the $V$ case of Lemma~\ref{lemma:pathset-alg} and definition of  this is equivalent to\smallskip\\
+\centerline{$\exists p\ s.t.\ p \cdot \dstep{\d{x}} \in \paths{S}{\{\r{x}\} \cup \seeni}{\emptyset}{S}$\smallskip}
+By Lemma~\ref{lemma:distr}, this is equivalent to:\smallskip\\
+\centerline{$\exists p\ s.t.\ \{\r{x}\} \cup \seeni,\emptyset \vdash p : S \resolve \d{x}$\smallskip}
+which, by Lemma~\ref{lemma:primed} and rule $X$, is equivalent to $\exists p\ s.t.\ \seeni \vdash p : \r{x} \resolve \d{x}$. \qed 
+\end{proof}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 
+

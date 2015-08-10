@@ -1,0 +1,21 @@
+\lstdefinelanguage{Stratego}{
+	morekeywords=[1]{all, bagof, constructors, end, extend, fail, id, imports, in, let, module, not, one, overlays, override, prim, rec, rules, script, signature, some, sorts, strategies, stratego, test, thread, where, with, if, then, else, switch, case, otherwise, depends, on},
+	alsoletter={-},
+	otherkeywords={<+,+>,?.!,*},
+	morestring=[b]",
+	morecomment=[l]{//},
+	morecomment=[n]{(*}{*)},
+	morecomment=[n]{/*}{*/},
+	literate=
+		{|[}{{\texttt{|$\!\!$[}}}2%
+		{]|}{{\texttt{]$\!\!$|}}}2%
+		{->}{$\rightarrow$~}2%
+		{=>}{$\Rightarrow$~}2,
+	sensitive=true,
+	mathescape=false,
+	keepspaces=true
+}[keywords,comments,strings]
+
+\newcommand{\strcode}[1]{\lstinline[language=Stratego,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\strcodebl}[1]{\lstinline[language=Stratego,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\Stratego}{\langname{Stratego}}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="pj"
+            description="PAPLJ"
+            language="PAPLJ"
+            derivedFrom="DynamicRoot"
+            validator="paplj.semantics.PAPLJValidator"
+            validatorClass="paplj.semantics.PAPLJValidator"
+      ></language>
+   </extension>
+   <extension
+         id="paplj.semantics.parser"
+         name="PAPLJ Parser"
+         point="org.eclipse.imp.runtime.parser">
+      <parser
+            class="paplj.semantics.PAPLJParseController"
+            language="PAPLJ">
+      </parser>
+   </extension>    
+</plugin>

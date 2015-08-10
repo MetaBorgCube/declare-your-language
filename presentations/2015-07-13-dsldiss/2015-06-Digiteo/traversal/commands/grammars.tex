@@ -1,0 +1,28 @@
+\newcommand{\cfg}{\ensuremath{G = (N, \Sigma, P, S)}}
+\newcommand{\symbols}{\ensuremath{\left(N \cup \Sigma\right)^*}}
+\newcommand{\derive}[1]{\ensuremath{\Rightarrow_{#1}}}
+\newcommand{\prule}[2]{\ensuremath{\left(#1,#2\right)}}
+
+\newcommand{\kw}[1]{\text{\lmrcodefig{#1}}}
+\newcommand{\sep}[1]{\text{\lmrcode{#1}}}
+\newcommand{\w}[1]{\ensuremath{\mathit{#1}}}
+\newcommand{\te}[1]{\ensuremath{\mathrm{#1}}}
+
+\newcounter{grammarrule}
+\newenvironment{grammar}
+{\small
+\setcounter{grammarrule}{0}
+\begin{math}\begin{array}{rrcl}}
+{\end{array}\end{math}}
+
+\newcommand{\sdn}[3]{#1 & \w{#2} & = & #3}
+\newcommand{\sdnn}[2]{\sdn{}{#1}{#2}}
+\newcommand{\sd}[2]{\stepcounter{grammarrule}\sdn{\pno{\arabic{grammarrule}}}{#1}{#2}}
+\newcommand{\mc}[2]{ & #1 &  & \mbox{#2}}
+
+\newcommand{\altf}[1]{\ |\ #1}
+\newcommand{\altn}[2]{\\ #1 & & | & #2}
+\newcommand{\altnn}[1]{\altn{}{#1}}
+\newcommand{\alt}{\stepcounter{grammarrule}\altn{\pno{\arabic{grammarrule}}}}
+\newcommand{\ks}[1]{\ensuremath{#1^*}}
+\newcommand{\opt}[1]{\ensuremath{#1?}}

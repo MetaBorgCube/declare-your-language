@@ -1,0 +1,2 @@
+def x$_1$ = 1
+def y$_2$ = if x$_3$ == 0 then 3 else x$_4$

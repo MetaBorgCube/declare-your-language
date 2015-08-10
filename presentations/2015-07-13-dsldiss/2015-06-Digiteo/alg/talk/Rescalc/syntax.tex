@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=6.7cm,paperheight=7.2cm,hmargin=.1cm,vmargin=.2cm]{geometry}
+
+\input{commands/main}
+
+\begin{document}
+\pagestyle{empty}\smallskip
+\noindent
+\hspace*{-3mm}\begin{grammar}
+\sdnn{\pcfmcode{program}}{\ks{\w{\pcfmcode{decl}}}}
+\\
+\sdnn{\pcfmcode{decl}}{\text{\pcfmcodemm{module}}\ \w{\pcfmcode{id \{}}\ \ks{\w{\pcfmcode{decl}}}\ \kw{\pcfmcode{\}}}}
+\altnn{\text{\pcfmcodemm{import}}\ \w{\pcfmcode{qid}}}
+\altnn{\text{\pcfmcodemm{def}}\ \w{\pcfmcode{id}}\ \kw{=}\ \w{\pcfmcode{exp}}}
+\\
+\sdnn{\pcfmcode{exp}}{\w{\pcfmcode{qid}}}
+%\altf{\kw{(}\ \w{exp}\ \w{)}}
+%\altf{\kw{ifz}\ \w{exp}\ \kw{then}\ \w{exp}\ \kw{else}\ \w{exp}}
+\altnn{\text{\pcfmcodemm{fun}}\ \w{\pcfmcode{id \{ exp \}}}}
+\altnn{\text{\pcfmcodemm{fix}}\ \w{\pcfmcode{id \{ exp \}}}}
+\altnn{\text{\pcfmcodemm{let}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altnn{\text{\pcfmcodemm{letrec}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altnn{\text{\pcfmcodemm{letpar}}\ \ks{\w{\pcfmcode{bind}}}\ \text{\pcfmcodemm{in}}\ \w{\pcfmcode{exp}}}
+\altnn{\w{\pcfmcode{exp}}\ \w{\pcfmcode{exp}}}
+\altnn{\w{\pcfmcode{exp}}\ \kw{\color{eclipse-keywords}\oplus}\ \w{\pcfmcode{exp}}}
+\altnn{\text{\pcfmcodecom{int}}}
+\\
+\sdnn{\pcfmcode{qid}}{\w{\pcfmcode{id}}}
+\altnn{\w{\pcfmcode{id}}\ \kw{.}\ \w{\pcfmcode{qid}}}
+\\
+\sdnn{\pcfmcode{bind}}{\w{\pcfmcode{id}}\ \kw{=}\ \w{\pcfmcode{exp}}}
+%\mc{id}{identifiers}
+%\\
+%\mc{int}{integer constants}
+\end{grammar}
+
+
+
+\end{document}
+

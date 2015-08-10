@@ -1,0 +1,201 @@
+% The sets that define a scope graph.
+\newcommand{\G}{\mathcal{G}} 
+\renewcommand{\S}[1]{\mathcal{S}(#1)}
+\newcommand{\SG}{\mathcal{S}(\G)}
+\newcommand{\D}[1]{\mathcal{D}(#1)}
+%\newcommand{\DG}[2]{\mathcal{D}_{#1}(#2)}
+\newcommand{\DG}{\mathcal{D}(\G )}
+\newcommand{\R}[1]{\mathcal{R}(#1)}
+%\newcommand{\RG}[2]{\mathcal{R}_{#1}(#2)}
+\newcommand{\RG}{\mathcal{R}(\G)}
+\newcommand{\I}[1]{\mathcal{I}(#1)}
+\newcommand{\IG}[2]{\mathcal{I}_{#1}(#2)}
+\newcommand{\IT}[1]{\mathcal{I}^t(#1)}
+\renewcommand{\P}[1]{\mathcal{P}(#1)}
+\newcommand{\PG}[2]{\mathcal{P}_{#1}(#2)}
+\newcommand{\IS}[1]{\mathcal{IS}(#1)}
+
+% References and declarations
+%\renewcommand{\r}[1]{r_{#1}}   % reference
+%\newcommand{\ri}[2]{r_{#1}^{\,#2}}  % reference with position
+%\renewcommand{\d}[1]{d_{#1}} % declaration
+%\newcommand{\di}[2]{d_{#1}^{\,#2}} % declaration with position
+%\newcommand{\ds}[2]{d_{#1}\!\!:\!\!{#2}} % declaration with scope
+%\newcommand{\dsi}[3]{d_{#1}^{\,#2}\!\!:\!\!{#3}} % declaration with position and scope
+%\newcommand{\dsio}[3]{d_{#1}^{\,#2}{\mbox{\it[$:\!\!{#3}$]}}} % declaration with position and scope
+% replace below with above to revert to old notation:
+\newcommand{\goodsize}{\scriptsize}
+\renewcommand{\r}[1]{{#1}^{\mbox{\goodsize\sf R}}}   % reference
+\newcommand{\tr}[1]{{#1}^{\mbox{\goodsize\sf TR}}}   % transitive import reference
+\newcommand{\er}[1]{{#1}^{\mbox{\goodsize\sf ER}}}   % export reference
+\newcommand{\ri}[2]{{#1}^{\mbox{\goodsize\sf R}}_{#2}}  % reference with position
+\renewcommand{\d}[1]{{#1}^{\mbox{\goodsize\sf D}}} % declaration
+\newcommand{\di}[2]{{#1}^{\mbox{\goodsize\sf D}}_{#2}} % declaration with position
+\newcommand{\ds}[2]{{#1}^{\mbox{\goodsize\sf D}}\!\!:\!\!{#2}} % declaration with scope
+\newcommand{\dsi}[3]{{#1}^{\mbox{\goodsize\sf D}}_{#2}\!\!:\!\!{#3}} % declaration with position and scope
+
+\newcommand{\scopeof}{\mathcal{S}c} % {\mathcal{S}c}
+\newcommand{\rscopeof}[2]{\scopeof(#1) = #2}% {\scopeof(#1) = #2} % Scope of a position or a reference
+\newcommand{\defscope}{\mathcal{DS}c}% {\scopeof(#1) = #2} % Scope of a p
+
+\newcommand{\stable}[2]{#1 \uparrow {#2}}
+
+% reference to reference in examples
+\newcommand{\re}[2]{\lstinline{#1}$_{_{#2}}$}
+
+\newcommand{\si}[1]{{#1}}
+\newcommand{\pos}[1]{#1^{\textsf{P}}}
+
+
+% Steps in paths:
+\newcommand{\dstep}[1]{\mbox{\rm\bf{D}}(#1)}
+\newcommand{\pstep}{\mbox{\rm\bf{P}}}
+\newcommand{\istep}[2]{\mbox{\rm\bf{I}}(#1,#2)}
+\newcommand{\sistep}[1]{\mbox{\rm\bf{I}}(#1)}
+
+% Seen sets
+\newcommand{\seeni}{\mathbb{I}}
+\newcommand{\seens}{\mathbb{S}}
+
+% Spacing stuff.
+\newcommand{\premsep}{\hspace*{0.5cm}}
+\newcommand{\tab}{\hspace*{0.3cm}}
+
+\usepackage{relsize}
+
+% Should be dead now, but temporarily used to define the next set of things
+\newcommand{\lra}{\ \mathlarger{\mathlarger{\rightarrowtail}}\ }
+\newcommand{\lrau}{\ \mathlarger{\mathlarger{\twoheadrightarrow}}\ }
+\newcommand{\scopea}[2]{\longrightarrow_{#1}^{#2}}
+\newcommand{\scopeau}[1]{\longrightarrow_{#1}}
+\newcommand{\resolveau}{\longmapsto}
+\newcommand{\resolvea}[1]{\longmapsto^{#1}}
+\renewcommand{\scopea}[1]{\stackrel{#1}{\longrightarrow}}
+
+% Resolution calculus relations
+\newcommand{\edge}{\scopea{}}
+\newcommand{\medge}{\lrau{}}  % multi-edge
+\newcommand{\reach}{\lra}
+\newcommand{\resolve}{\resolveau}
+
+% Well-formedness
+\newcommand{\WF}{\mbox{\it{WF}}}
+
+% Environments and resolution
+\newcommand{\Res}[2]{\mbox{\it{R}}[#1](#2)}
+\newcommand{\Resx}[4]{\mbox{\it{R}}_{#1}[#2,#3](#4)}
+\newcommand{\ResG}[2]{\mbox{\it{R}}_{#1}(#2)}
+\newcommand{\ResGx}[3]{\mbox{\it{R}}_{#1}[#2](#3)}
+\newcommand{\Env}[4]{\mbox{\it{Env}}_{#1}[#2,#3](#4)}
+\newcommand{\Envu}[1]{\mbox{\it{Env}}_{#1}}
+
+% Path sets
+\newcommand{\pathx}[1]{\mathbb{P}_{#1}}
+\newcommand{\paths}[4]{\mathbb{P}_{#1}[#2,#3](#4)}
+
+\newcommand{\defsof}[1]{\Delta(#1)}
+\newcommand{\defof}[1]{\delta(#1)}
+% \newcommand{\bndof}[1]{\chi(#1)}
+
+\newcommand{\hiding}{\triangleleft}
+
+\newcommand{\visible}{\mbox{\it{visible}}}
+
+% solver related commands
+\newcommand{\exception}{\textit{\textbf{exception}}}
+\newcommand{\where}{\textit{where }}
+\newcommand{\whand}{\textit{and }}
+\newcommand{\unify}[2]{\mathcal{U}(#1,#2)}
+\newcommand{\unifystar}[1]{\mathcal{U}^{*}(#1)}
+
+
+% Equivalence relation for alpha-eq
+\renewcommand{\a}{$\alpha$}
+\newcommand{\seq}[1]{\stackrel{#1}{\sim}}
+\newcommand{\mtt}[1]{\text{\tt #1}}
+\newcommand{\aeq}{\stackrel{\alpha}{\approx}}
+
+%Type constructors
+\newcommand{\TypeCons}{C_\mathcal{T}}
+
+%Command for constraints
+\newcommand{\teq}[2]{#1 \equiv #2}
+\newcommand{\Cassoc}{{\rightsquigarrow}}
+\newcommand{\Aassoc}{\leadsto}
+\newcommand{\extends}{{\triangleleft}}
+\newcommand{\msort}[1]{{\langle{#1}\rangle}}
+\newcommand{\mlit}[1]{{\mbox{\normalfont\ttfamily #1}}}
+\newcommand{\mul}[1]{{\overrightarrow{#1}}}
+\newcommand{\ground}[1]{{\text{fv}({#1}) = \emptyset}}
+\newcommand{\true}{\text{\sf True}}
+
+% color coding
+% palette is at http://en.wikibooks.org/wiki/LaTeX/Colors dvips 68 standard colors
+\newcommand{\assumpcolor}[1]{\textcolor{blue}{#1}}
+\newcommand{\subtypecolor}[1]{\textcolor{cyan}{#1}}
+\newcommand{\typconstraintcolor}[1]{\textcolor{Mahogany}{#1}}
+\newcommand{\resconstraintcolor}[1]{\textcolor{ForestGreen}{#1}}
+
+% Constraints macros
+%% Assumptions
+\newcommand{\undef}{\perp}
+\newcommand{\AParent}[2]{\assumpcolor{P({#1}):={#2}}} % {P({#1})\mbox{\it\ is }{#2}}
+%\newcommand{\AScopeof}[2]{\assumpcolor{\scopeof({#1}):={#2}}} %{\scopeof({#1})\mbox{\it\ is }{#2}}
+\newcommand{\AR}[2]{\assumpcolor{{#1} \in \R{#2}}}
+\newcommand{\AD}[2]{\assumpcolor{{#1} \in \D{#2}}}
+\newcommand{\ARImport}[2]{\assumpcolor{{#1} \in \I{#2}}}
+\newcommand{\ASImport}[2]{\assumpcolor{{#1} \in \IS{#2}}}
+\newcommand{\ASubtype}[2]{\subtypecolor{{#1} <: {#2}}}
+\newcommand{\AAssoc}[2]{\assumpcolor{{#1} \Aassoc {#2}}}
+\newcommand{\AScopeDef}[2]{\assumpcolor{{#1} :: {#2}}}
+
+%% Constraints
+\newcommand{\CTrue}{\text{\sf True}}  % don't use constraint color
+\newcommand{\CResolve}[2]{\resconstraintcolor{{#1} \mapsto {#2}}}
+\newcommand{\CTeq}[2]{\typconstraintcolor{\teq{#1}{#2}}}
+\newcommand{\CAnd}[2]{{#1} \wedge {#2}}    % don't use constraint color 
+\newcommand{\CAssoc}[2]{\resconstraintcolor{{#1} \Cassoc {#2}}}
+\newcommand{\CSubtype}[2]{\typconstraintcolor{{#1} \preceq {#2}}}
+\newcommand{\CType}[2]{\typconstraintcolor{{#1} : {#2}}}
+\newcommand{\CLub}[3]{\typconstraintcolor{#1\mbox{\it\ is } #2 \sqcup #3}}
+
+\newcommand{\lubsem}[2]{\sqcup_{#1} #2} 
+
+
+%% an alias for now
+\newcommand{\CEqtype}[2]{\CTeq{#1}{#2}}
+
+\newcommand{\var}[1]{\mathcal{V}(#1)}
+\newcommand{\lubred}[1]{\stackrel{#1}{\longrightarrow}}
+
+% Old stuff now unused
+%\newcommand{\Def}[1]{\mbox{\it D}(#1)}
+%\newcommand{\Ref}[1]{\tpl{#1}}%{\hbox{\it R}(#1)}
+%\newcommand{\Imp}[1]{\mbox{\it I}(#1)}
+%\newcommand{\Impp}[1]{I(#1)} % for use as subscript
+%\newcommand{\Lab}[1]{\hbox{(#1)}}
+
+%\newcommand{\Lex}{Lex}
+%\newcommand{\Loc}{Loc}
+
+%\newcommand{\Res}[2]{\hbox{\it R}_{#2}(#1)}
+
+
+%\newcommand{\nilscope}{\varnothing}
+%\newcommand{\shadowset}{\lhd}
+%\newcommand{\rootscope}{\top}
+%\newcommand{\ntrans}{\hbox{NT}}
+%\newcommand{\trans}{\hbox{T}}
+
+%\newcommand{\impset}{\mathcal{I}}
+%\newcommand{\scoset}{\mathcal{S}}
+
+%\renewcommand{\d}{\delta}
+
+%\newcommand{\longtwoheadrightarrow}{\mathrel{\longrightarrow\!\!\!\!\!\rightarrow}}
+%\newcommand{\lra}[1]{\stackrel{#1}{\longtwoheadrightarrow}}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 

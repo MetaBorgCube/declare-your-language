@@ -1,0 +1,40 @@
+module trans/check/conditional.generated
+
+imports
+  
+  lib/runtime/nabl/-
+  lib/runtime/task/-
+  lib/runtime/types/-
+  lib/runtime/properties/-
+  lib/runtime/relations/-
+
+
+signature constructors
+  
+  
+  
+rules // functions 
+  
+  type-func-least-upper-bound(|ctx) : 
+    False() -> False()
+  
+
+rules // relations
+  
+
+rules // rules
+  
+  create-type-task(|ctx) :
+    If(e1, e2, e3) -> <task-create-id(|ctx,[t])> t
+    where 
+      x520 := <type-task(|ctx)> e1;
+      eq64 := <type-match(|ctx, BoolT()); task-create-id(|ctx, [x520])> x520;
+      <task-create-error-on-failure(|ctx, eq64, "boolean expected")> e1;
+      t2 := <type-task(|ctx); task-create-id(|ctx, [eq64])> e2;
+      t3 := <type-task(|ctx); task-create-id(|ctx, [t2])> e3;
+      t := <type-func-least-upper-bound(|ctx); task-create-id(|ctx, [t3])> (t2, t3);
+      <task-create-error-on-failure(|ctx, t, ["Branches do not have a common super type: ", t3, " does not have a common super type with ", t2])> e3
+  
+
+rules // projections
+  

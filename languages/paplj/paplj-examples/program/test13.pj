@@ -1,0 +1,10 @@
+program test13 
+  class A{ 
+    Num x 
+    A init(Num y) {
+      this.x = y;
+      this
+    }
+  }
+run 
+  new A().init(8).x 

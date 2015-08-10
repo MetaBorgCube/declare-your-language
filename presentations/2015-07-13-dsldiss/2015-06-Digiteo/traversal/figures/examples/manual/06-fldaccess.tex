@@ -1,0 +1,108 @@
+\twoboxes{0.495\hsize}{0.495\hsize}{%
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle, frame=none]{figures/examples/06-fldaccess.lmr}
+}{%
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle, frame=none]{figures/examples/04-with-small.lmr}
+}
+
+\begin{boxedminipage}[t]{.495\hsize}
+\usebox{\boxone}
+\end{boxedminipage}
+\hfill
+\begin{boxedminipage}[t]{.495\hsize}
+  \usebox{\boxtwo}%
+  \vspace{\vdiff}
+\end{boxedminipage}%
+\twoboxes{0.495\hsize}{0.495\hsize}{%
+\small
+Scope graph
+
+\begin{center}
+\includegraphics[scale=.5]{figures/examples/manual/06-fldaccess}
+\end{center}
+
+\begin{mconstraints}{Declarations}
+\EqCType{\dic{x}{2}}{\intty{}} &
+\EqCType{\dic{a}{3}}{\tau_{1}}\\
+\EqCType{\dic{y}{6}}{\tau_{4}}
+\end{mconstraints}
+%
+\begin{mconstraints}{Reference constraints}
+\EqCResolve{\ric{A}{4}}{\delta_{1}}\\
+\EqCResolve{\ric{x}{5}}{\delta_{2}} &
+\EqCType{\delta_{2}}{\tau_{2}}\\
+\EqCResolve{\ric{a}{7}}{\delta_{4}} &
+\EqCType{\delta_{4}}{\recty{\delta_{3}}}\\
+\EqCAssoc{\delta_{3}}{\varsigma_{1}}\\
+\EqCResolve{\ric{x}{8}}{\delta_{5}} &
+\EqCType{\delta_{5}}{\tau_{4}}
+\end{mconstraints}% 
+\begin{mconstraints}{Type constraints}
+\EqCTeq{\tau_{1}}{\recty{\delta_{1}}} &
+\EqCSubtype{\tau_{3}}{\tau_{2}}\\
+\EqCTeq{\tau_{3}}{\intty{}}
+\end{mconstraints}%
+\begin{mconstraints}{Solution}
+\RCSubst{\delta_{1}}{\dic{A}{1}} &
+\RCSubst{\delta_{2}}{\dic{x}{2}}\\
+\RCSubst{\delta_{3}}{\dic{A}{1}} &
+\RCSubst{\delta_{4}}{\dic{a}{3}}\\
+\RCSubst{\delta_{5}}{\dic{x}{2}} &
+\RCSubst{\varsigma_{1}}{s_{2}}\\
+\TCSubst{\tau_{1}}{\recty{\dic{A}{1}}} &
+\TCSubst{\tau_{2}}{\intty{}}\\
+\TCSubst{\tau_{3}}{\intty{}} &
+\TCSubst{\tau_{4}}{\intty{}}
+\end{mconstraints}%
+}{%
+\small
+Scope graph
+
+\begin{center}
+\includegraphics[scale=.5]{figures/examples/manual/04-with}
+\end{center}
+
+\begin{mconstraints}{Declarations}
+\EqCType{\dic{x}{2}}{\intty{}} &
+\EqCType{\dic{a}{3}}{\tau_{1}}\\
+\EqCType{\dic{y}{6}}{\tau_{4}}
+\end{mconstraints}
+%
+\begin{mconstraints}{Reference constraints}
+\EqCResolve{\ric{A}{4}}{\delta_{1}} &
+\EqCResolve{\ric{x}{5}}{\delta_{2}}\\
+\EqCType{\delta_{2}}{\tau_{2}} &
+\EqCResolve{\ric{a}{7}}{\delta_{4}}\\
+\EqCType{\delta_{4}}{\recty{\delta_{3}}} &
+\EqCAssoc{\delta_{3}}{\varsigma_{1}}\\
+\EqCResolve{\ric{x}{8}}{\delta_{5}} &
+\EqCType{\delta_{5}}{\intty{}}
+\end{mconstraints}% 
+\begin{mconstraints}{Type constraints}
+\EqCTeq{\tau_{1}}{\recty{\delta_{1}}} &
+\EqCSubtype{\tau_{3}}{\tau_{2}} \\
+\EqCTeq{\tau_{3}}{\intty{}} &
+\EqCTeq{\tau_{4}}{\intty{}}
+\end{mconstraints}%
+\begin{mconstraints}{Solution}
+\RCSubst{\delta_{1}}{\dic{A}{1}}&
+\RCSubst{\delta_{2}}{\dic{x}{2}}\\
+\RCSubst{\delta_{3}}{\dic{A}{1}}&
+\RCSubst{\delta_{4}}{\dic{a}{3}}\\
+\RCSubst{\delta_{5}}{\dic{x}{2}}&
+\RCSubst{\varsigma_{1}}{s_{2}}\\
+\TCSubst{\tau_{1}}{\recty{\dic{A}{1}}}&
+\TCSubst{\tau_{2}}{\intty{}}\\
+\TCSubst{\tau_{3}}{\intty{}}&
+\TCSubst{\tau_{4}}{\intty{}}
+\end{mconstraints}%
+}
+\begin{boxedminipage}[t]{.495\hsize}
+\usebox{\boxone}
+\end{boxedminipage}
+\hfill
+\begin{boxedminipage}[t]{.495\hsize}
+  \usebox{\boxtwo}%
+  \vspace{\vdiff}
+\end{boxedminipage}
+
+\caption{Field Access and \cod{with} expression modeled by virtual scopes, reference, association, and type constraints.}

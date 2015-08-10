@@ -1,0 +1,39 @@
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+\centering
+$\begin{array}{cl}
+  \infrulenl{}{\extenv,\psi \models \CTrue}
+  & \labl{C-True}\\
+  \infrulenl{\extenv,\psi \models C_1 \tab \extenv,\psi \models C_2}
+  {\extenv,\psi \models \CAnd{C_1}{C_2}}
+  & \labl{C-And}\\
+  % \left( \infrulenl{\extenv,\psi,\phi[\vec\tau \mapsto \vec{t}, \vec\sigma \mapsto \vec{s}, \vec\iota \mapsto \vec{i}] \models C}
+  %   {\extenv,\psi \models \exists{\vec\tau \vec\sigma \vec\iota}.C}\right)
+  % & \labl{C-Exists} \\
+  \infrulenl{\psi(d) = T}
+  {\extenv,\psi \models \CType{d}{T} }
+  & \labl{C-TypeOf} \\
+  \infrulenl{\vdash_{\G} p : r \mapsto d}
+  {\extenv,\psi \models \CResolve{r}{d}}
+  & \labl{C-Resolve} \\
+  \infrulenl{\defscope(d) = S}
+  {\extenv,\psi \models \CAssoc{d}{S}}
+  & \labl{C-ScopeOf} \\
+  \infrulenl{t_1 = t_2}
+  {\extenv,\psi \models \CTeq{t_1}{t_2}}
+  & \labl{C-Eq} \\
+  \infrulenl{T_1 \leq T_2}
+  {\extenv,\psi \models \CSubtype{T_1}{T_2}}
+  & \labl{C-SubType} \\
+  \infrulenl{T = \lubsem{\leq}{\{T_1,T_2\}}}
+  {\extenv,\psi \models \CLub{T}{T_1}{T_2}}
+  & \labl{C-Lub} \\
+  % \infrulenl{\vdash_{\G} p : \phi(S) \mapsto x^D_{\phi(I)} & \mathbf{P} \not\in p}
+  % {\extenv,\psi \models S \xmapsto{X} I}
+  % & \labl{-ResolveIn} \\
+\end{array}$
+
+\end{boxedminipage}
+  \caption{Interpretation of pure constraints}
+  \label{fig:conssem}
+\end{figure}

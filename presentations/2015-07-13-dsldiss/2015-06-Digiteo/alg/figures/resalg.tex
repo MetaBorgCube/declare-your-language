@@ -1,0 +1,29 @@
+\begin{figure}[t]
+\renewcommand{\S}{\mathcal{S}}
+$$
+\begin{array}{ll}
+ \Env{D}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \D{S}\smallskip\\
+    \end{array}
+ \right.\\ \\
+ \Env{P}{\seeni}{\seens}{S} & := \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \Env{V}{\seeni}{\{S\}\cup\seens}{\P{S}}
+    \end{array}
+ \right.\\ \\
+ \Env{I}{\seeni}{\seens}{S} &:= \left\{
+    \begin{array}{l}
+      \emptyset  \text{ if } S\in\seens\\
+      \bigcup \left\{ \Env{L}{\seeni}{\{S\}\cup\seens}{S_y} \mid \ri{y}{i} \in \I{S} \setminus 
+\seeni \wedge \dsi{y}{j}{S_y} \in \Res{\seeni}{\ri{y}{i}}\right\}\smallskip\\
+    \end{array}
+ \right.\\ \\
+ \Env{L}{\seeni}{\seens}{S} & := \Env{D}{\seeni}{\seens}{S} \triangleleft \Env{I}{\seeni}{\seens}{S} \\ \\
+  \Env{V}{\seeni}{\seens}{S}  & := \Env{L}{\seeni}{\seens}{S} \triangleleft \Env{P}{\seeni}{\seens}{S} \\ \\
+  \Res{\seeni}{\ri{x}{i}} & := \{ \di{x}{j} \mid \exists S\ s.t.\ \ri{x}{i} \in \R{S} \wedge \di{x}{j} \in \Env{V}{\{\ri{x}{i}\} \cup \seeni}{\emptyset}{S} \}  \\
+\end{array}\medskip
+$$
+\end{figure}

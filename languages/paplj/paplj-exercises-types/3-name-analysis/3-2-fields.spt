@@ -1,0 +1,66 @@
+module ex3-2-fields
+
+language PAPLJ
+
+start symbol Program
+
+test resolve new [[ 
+  program test 
+    class [[A]]{ }
+  run 
+    new [[A]]()
+]] resolve #2 to #1 
+
+test resolve get [[ 
+  program test 
+    class A{ Num [[x]] }
+  run 
+    let A a = new A()
+     in {
+       a.[[x]]
+     }
+]] resolve #2 to #1
+
+test resolve get [[ 
+  program test 
+    class A { Num [[x]] }
+    class B extends A { }
+  run 
+    let A a = new B()
+     in {
+       a.[[x]]
+     }
+]] resolve #2 to #1
+
+test consider static type of receiver (1) [[ 
+  program test 
+    class A { Num [[x]] }
+    class B extends A { Bool x}
+  run 
+    let A a = new B()
+     in {
+       a.[[x]]
+     }
+]] resolve #2 to #1
+
+test consider static type of receiver (2) [[ 
+  program test 
+    class A { Num x }
+    class B extends A { Bool [[x]]}
+  run 
+    let B b = new B()
+     in {
+       b.[[x]]
+     }
+]] resolve #2 to #1
+
+test resolve set [[ 
+  program test 
+    class A{ Num [[x]] }
+  run 
+    let A a = new A()
+     in {
+       a.[[x]] = 1;
+     }
+]] resolve #2 to #1
+

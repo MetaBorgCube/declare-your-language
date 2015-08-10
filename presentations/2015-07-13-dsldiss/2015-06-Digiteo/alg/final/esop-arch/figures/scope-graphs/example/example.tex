@@ -1,0 +1,47 @@
+\begin{figure}[t]
+%\begin{boxedminipage}{\hsize}
+\begin{lstlisting}
+module A {      // module definition
+  import B      // import of content of module
+  import C      // import through import
+  def a = 0      
+  def b = a  
+  def b = b + c // access imported definition
+}
+module B {
+  module C {
+    def c = D.f(3) // qualified access
+  }
+  module D {
+    def f = 
+      fix f {      // shadowing 
+        fun n {    // m
+          ifz n then 1 else n * (f (n - 1))
+        } 
+      }
+  }
+}
+// todo: no def-before-use
+// todo: transitive import
+// todo: let binding
+\end{lstlisting}
+% module C {
+%   import B
+%   ...
+% }
+% module B {
+%   import A
+%   def x = 1
+%   def x =2
+% }
+% module A {
+%   def y = 5
+% }
+% module C {
+%   import B
+%   def z = x + y
+% }
+%\end{boxedminipage}
+\caption{Example LM program.}
+\figurelabel{example-program}
+\end{figure}

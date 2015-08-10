@@ -1,0 +1,56 @@
+module ex5-2-numbers 
+
+language PAPLJ
+
+start symbol Program
+
+test number [[  
+  program tst run
+  1 
+]] run runprogram-value 
+to NumV("1")
+
+test min [[  
+  program tst run
+  - 889 
+]] run runprogram-value 
+to NumV("-889")
+
+test add [[ 
+  program tst run 
+  1 + 2
+]] run runprogram-value 
+to NumV("3")
+
+test sub [[  
+  program tst run
+  1 - 2
+]] run runprogram-value 
+to NumV("-1")
+
+test mul [[  
+  program tst run
+  11 * 29
+]] run runprogram-value 
+to NumV("319")
+
+// etc.
+
+
+test block [[
+  program tst run
+  { 1 }
+]] run runprogram-value
+to NumV("1")
+
+test block [[
+  program tst run
+  { 1; 2; 3; 5 }
+]] run runprogram-value
+to NumV("5")
+
+test block [[
+  program tst run
+  { 1; 2; 3; 5; }
+]] run runprogram-value
+to NumV("5")

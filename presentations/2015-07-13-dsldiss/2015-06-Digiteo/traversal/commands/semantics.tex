@@ -1,0 +1,146 @@
+
+% Judgements
+\newcommand{\firstdec}[1]{\emph{#1}\medskip}
+\newcommand{\firstdecj}[2]{\emph{#1}\hfill\framebox{\framebox{#2}}\medskip}
+\newcommand{\dec}[1]{\medskip\emph{#1}\medskip}
+\newcommand{\decj}[2]{\medskip\emph{#1}\hfill\framebox{\framebox{#2}}\medskip}
+\newcommand{\wfj}[2]{\ensuremath{#1\ \vdash #2}}
+\newcommand{\wtsj}[4]{\ensuremath{#1\ \vdash #2#3 #4}}
+\newcommand{\wtj}[3]{\wtsj{#1}{#2}{\,:\,}{#3}}
+\newcommand{\wfji}[3]{\ensuremath{#2\ \vdash_{#1} #3}}
+\newcommand{\wtjsi}[5]{\ensuremath{#2\ \vdash_{#1} #3#4 #5}}
+\newcommand{\wtji}[4]{\wtsj{#1}{#2}{#3}{\,:\,}{#4}}
+\newcommand{\ioj}[3]{\ensuremath{#1\ \vdash #2 \Downarrow #3}}
+\newcommand{\iouj}[4]{\ensuremath{#2\ \vdash_{#1} #3 \Downarrow #4}}
+\newcommand{\applyj}[3]{\ensuremath{\applyf{#1}{#2} = #3}}
+\newcommand{\applyf}[2]{\ensuremath{#1\!\left(#2\right)}}
+\newcommand{\domj}[2]{#2 \not\in \applyf{\mathit{dom}}{#1}}
+
+\newcommand{\proj}[2]{\applyf{\pi_{#2}}{#1}}
+\newcommand{\fst}[1]{\proj{#1}{1}}
+\newcommand{\snd}[1]{\proj{#1}{2}}
+% tuple
+\newcommand{\tpl}[1]{\ensuremath{\langle\,#1\,\rangle}}
+
+% rule name
+\newcommand{\tg}[1]{{[}\ensuremath{\mathsf{#1}}{]}}
+
+% axiom
+\newcommand{\ax}[2]{\ensuremath{%
+\begin{array}[b]{c}
+#2
+\end{array}\hfill
+\begin{tabular}[c]{r}\vspace{.5em}{\tg{#1}}
+\end{tabular}\medskip
+}}
+
+% inference rule
+\newcommand{\ir}[3]{\ensuremath{%
+\begin{array}[b]{c}
+#2
+\\ \midrule
+#3
+\end{array}\hfill
+\begin{tabular}[b]{r}\vspace{.5em}\tg{#1}
+\end{tabular}\bigskip
+}}
+
+
+\newcommand{\infrule}[3]{\ensuremath{%
+\hfill\dfrac{
+  \displaystyle #2
+}{
+  \displaystyle #3
+} \hfill\makebox[0pt][r]{(\ensuremath{#1})}
+}}
+\newcommand{\infruleL}[3]{\ensuremath{%
+\makebox[0pt][l]{(\ensuremath{#1})}\hfill\dfrac{
+  \displaystyle #2
+}{
+  \displaystyle #3
+}\hfill
+}}
+\newcommand{\infrulenl}[2]{\ensuremath{%
+\dfrac{
+  \displaystyle #1
+}{
+  \displaystyle #2
+}\hfill}}
+
+
+\newcommand{\labeled}[2]{\ensuremath{%
+\hfill\ensuremath{\displaystyle #2}\hfill\makebox[0pt][r]{(\ensuremath{#1})}
+}}
+\newcommand{\labeledL}[2]{\ensuremath{%
+\makebox[0pt][r]{(\ensuremath{#1})}\hfill\ensuremath{\displaystyle #2}\hfill
+}}
+
+\newcommand{\display}[1]{
+\bigskip #1 \bigskip
+}
+
+% axiom as inference rule
+\newcommand{\axr}[2]{\ir{#1}{}{#2}}
+
+% premises
+\newcommand{\psep}{\wedge} % change for implicit conjunctions
+\newcommand{\pno}[1]{\ensuremath{\mathsf{(#1)}}}
+\newcommand{\sps}[1]{\begin{array}{lll}&#1\end{array}}
+\newcommand{\np}{\\\psep&}
+\newcommand{\nsps}[2]{\begin{array}{rcll}\!\!\!\!\pno{#1}&&#2\end{array}}
+\newcommand{\nnsps}[1]{\begin{array}{ccll}&&#1\end{array}}
+\newcommand{\nnp}[1]{\\\!\!\pno{#1}&\psep&}
+\newcommand{\nnnp}{\\&\psep&}
+\newcommand{\dnp}{\ \ \psep\ \ }
+
+% \newcommand{\prf}[1]{\ensuremath{\begin{array}{crll}&&#1\end{array}}}
+% \newcommand{\iffnn}{&\Leftrightarrow\\&&}
+% \newcommand{\iffn}[1]{&\Leftrightarrow\\&&&}
+% \newcommand{\andnn}{\\&\wedge&}
+% \newcommand{\andn}[1]{\\(#1) &\wedge&}
+% \newcommand{\nmb}[1]{\\(#1) &&}
+
+\newcommand{\prf}[1]{\begin{displaymath}\begin{array}{ccrll}&&&#1\end{array}\end{displaymath}}
+\newcommand{\lbrk}{\\&&&\qquad}
+\newcommand{\iffnn}{\\\Leftrightarrow&&&}
+\newcommand{\iffn}[1]{\\\Leftrightarrow&(#1)&&}
+\newcommand{\ifnn}{\\\Rightarrow&&&}
+\newcommand{\ifn}[1]{\\\Rightarrow&(#1)&&}
+\newcommand{\andnn}{\\&&\wedge&}
+\newcommand{\andn}[1]{\\&(#1) &\wedge&}
+\newcommand{\nmb}[1]{\\&(#1) &&}
+\newcommand{\vds}{\\\vdots&&&}
+\newcommand{\avds}{\\&&\vdots&}
+
+% Commands used in nabl-semantics
+% Shortcut for the semantic interpretation
+\newcommand{\semop}[1]{[\![ #1 ]\!]}
+\newcommand{\sem}[2]{\semop{#1}(#2)}
+% LMR code for math mode
+\newcommand{\semcode}[1]{\text{\lmrcodefig{#1}}}
+% Formula for regular interpretation translation
+\newcommand{\semf}[4]{
+ $\semop{#1}(#2) = #3$\\
+\smallskip
+\qquad$\text{\textsf{where}} \ #4 $
+}
+\newcommand{\semfs}[4]{
+$\sems{#1}{#2} = #3$\\
+\smallskip
+\qquad$\text{\textsf{where}} \ #4 $
+}
+\newcommand{\semfp}[5]{
+$\semp{#1}{#2}{#3} = #4$\\
+\smallskip
+\qquad$\text{\textsf{where}} \ #5 $
+}
+
+\newcommand{\semfline}[4]{
+ $\semop{#1}(#2) = #3 \quad\text{\textsf{where}} \ #4 $
+}
+
+\newcommand{\semp}[3]{\semop{#1}^p(#2,#3)}
+\newcommand{\sems}[2]{\semop{#1}^s(#2)}
+
+\newcommand{\sappend}{\ \text{+=}\ }
+\newcommand{\sdefine}{\text{:=}}

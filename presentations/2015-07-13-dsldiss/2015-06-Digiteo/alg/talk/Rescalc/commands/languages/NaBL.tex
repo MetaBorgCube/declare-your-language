@@ -1,0 +1,16 @@
+\lstdefinelanguage{NaBL} {
+  morekeywords={module, namespaces, properties, binding, rules, implicitly, defines, unique, of, in, current, subsequent, scope, scopes, refers, to, enclosing, best, conformant, imports, imported, from, as, into, where, has, otherwise, and, or, by, minimal, distance, filters, disambiguates, else, with, error, surrounding},
+  otherkeywords={non-unique,non-transitively},
+  morekeywords=[2]{}, %% Namespaces
+  morekeywords=[3]{}, %% Properties
+  morestring=[b]"
+	morecomment=[l]{//},
+	morecomment=[n]{/*}{*/},
+  literate={...}{$\ldots$}2,
+  sensitive=true,
+  mathescape=false
+}
+
+\newcommand{\nablcode}[1]{\lstinline[language=NaBL,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\nablcodebl}[1]{\lstinline[language=NaBL,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\NaBL}{\langname{NaBL}}

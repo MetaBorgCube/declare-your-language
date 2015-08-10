@@ -1,0 +1,8 @@
+program let-in-let
+run  
+  let 
+     Num x = 2 
+     Num y = let Num x = 8 + x in 3 + x
+  in x + y
+  
+ 

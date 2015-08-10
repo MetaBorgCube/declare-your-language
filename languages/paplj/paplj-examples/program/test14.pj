@@ -1,0 +1,9 @@
+program test14
+
+run
+  let 
+     Bool x = 2  
+     Num y = let Num x = 8 in 3 + x
+   in 0 + y
+   
+   

@@ -1,0 +1,77 @@
+module ex1-5-object-expressions
+
+language PAPLJ
+
+start symbol Expr
+
+test new [[ 
+  new A() 
+]] parse to New("A")
+
+test this [[ 
+  this
+]] parse to This()
+
+test get [[ 
+  x.f
+]] parse to Get(Var("x"), "f")
+
+test new field access [[ 
+  new B().g
+]] parse to Get(New("B"), "g")
+
+test chain [[ 
+  new B().g.h.i
+]] parse to Get(Get(Get(New("B"), "g"), "h"), "i")
+
+
+
+test set [[ 
+  x.f = 1
+]] parse to Set(Var("x"), "f", Num("1"))
+
+test set with expression [[ 
+  this.g = 1 + x
+]] parse to Set(This(), "g", Add(Num("1"), Var("x")))
+
+test chain set [[ 
+  new B().g.h.i = this.x
+]] parse to
+    Set(
+      Get(Get(New("B"), "g"), "h")
+    , "i"
+    , Get(This(), "x")
+    )
+
+
+test method call [[ 
+  x.f()
+]] parse to Call(Var("x"), "f", [])
+
+test method call [[ 
+  this.g(5, x + 7, true)
+]] parse to    
+    Call(
+      This()
+    , "g"
+    , [Num("5"), Add(Var("x"), Num("7")), True()]
+    )
+
+test method call [[ 
+  new B().g(x).h().i(y) + 5 == 9
+]] parse to
+    Eq(
+      Add(
+        Call(
+          Call(
+            Call(New("B"), "g", [Var("x")])
+          , "h"
+          , []
+          )
+        , "i"
+        , [Var("y")]
+        )
+      , Num("5")
+      )
+    , Num("9")
+    )

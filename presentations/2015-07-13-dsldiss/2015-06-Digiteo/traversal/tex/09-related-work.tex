@@ -1,0 +1,105 @@
+\section{Related Work}
+
+There are several ideas and efforts that deal directly or indirectly with the
+interaction between typing and name binding. These efforts are usually in the
+context of a specific language or formalism.
+We have not found a \emph{language-independent} approach to formalizing the
+interaction.
+A proposal to add type-directed name resolution \cite{HaskellTDNR} to Haskell
+identifies the dependency between type inference and name resolution as a
+possible problem. Introduction of a name-resolution constraint in the type
+checker to defer name resolution is mentioned as a possible solution.
+In Java, member names are resolved based on nominal types. In formal treatments
+for Java-like languages such as Jinja \cite{KleinN06} and Featherweight Java
+\cite{IgarashiPW01}, this is done by building a type-members mapping and using a
+lookup function in the typing rules. In our approach a custom mechanism is
+unnecessary, member resolution is just a special case of a uniform approach to
+handling name resolution.
+The JastAdd Java compiler \cite{EkmanH06} uses reference attribute grammars to
+express the name analysis of Java programs. While the attribute definitions
+provide clean design patterns for complex name binding problems, they do not
+provide reusable language-independent abstractions. Indeed, the patterns for
+tree traversal for name look-up in JastAddJ, provided some of the inspiration
+for the scope graph and resolution calculus abstraction.
+
+
+% uses a different approach , instead of
+% abstracting away from the AST, they store all type and name resolution
+% information in the AST using reference attribute grammars.
+% The approaches are comparable in that attribute definition and constraint
+% collection are specified in a syntax-directed way, and those are calculated or
+% solved using a language-independent algorithm. The explicit about how well they
+% think this approach applies to other languages.
+
+% \paragraph{Formalisms and Tools for Type Systems}
+% 
+% TinkerType \cite{LevinP03}
+% 
+% Ruler \cite{DijkstraS06}
+% 
+% Typical: Taking the Tedium Out of Typing \cite{GrimmHarrisLe2007}
+% 
+% Ott \cite{SewellNOPRSS07}
+% 
+% Lem \cite{MulliganOGRS14}
+% 
+% A generator for type checkers \cite{GastThesis2004}
+% 
+% 
+% 
+% state-of-the-art in language workbenches \cite{ErdwegSV13}
+
+
+
+% \paragraph{Type Inference Algorithms} The origin of type inference using constraints
+% and the corresponding algorithm W goes back to Damas and Milner in \cite{Milner78:0,DamasM82}.
+% This algorithm 
+% 
+% Algorithm M Wand   \cite{Wand87a}
+% 
+% ML with Records Remy \cite{Remy92:0}
+% 
+% Subtyping constrained types \cite{TrifonovS96}
+% 
+% HM(X) : Type Inference with Constrained Types \cite{OderskySW99}
+% Pottier And Remy \cite{Pottier-Remy/emlti}
+% 
+% Pierce Local type inference \cite{PierceT-TOPLAS-2000}
+% 
+% Inference and GADT \cite{SimonetP07,SchrijversJSV09}
+% 
+% OutsideIn(X) Modular type inference with local assumptions (type classes and GADT)
+% \cite{VytiniotisJSS11}
+% 
+% Efficient local type inference for java \cite{BellamyAMS08}
+% 
+% Presentation of more complicated type systems but always on simple languages, question how the scope graph formalization would fit in more complex type systems
+% 
+% \paragraph{Applications}
+% 
+% future work: a generic framework for refactoring following the
+% approach of constraint-based refactoring \cite{SteimannP12}
+
+\paragraph{Type Inference Algorithms} The origin of type inference using
+constraints and the corresponding algorithm W goes back to Damas and Milner in
+\cite{Milner78:0,DamasM82}. Wand simplified it in  \cite{Wand87a} and it has
+then been extended to support more complex type systems including records
+\cite{Remy92:0}, constrained types to handle subtyping
+ \cite{TrifonovS96}, GADTs \cite{SimonetP07,SchrijversJSV09} and
+type classes \cite{VytiniotisJSS11}.
+The HM(X) system \cite{OderskySW99} is a generalization of the Hindley/Milner
+system parameterized in the constraint domain X, it is thoroughly described by
+Pottier and Remy in \cite{Pottier-Remy/emlti}.
+However, all of these constraint systems are often presented in an extension of
+the lambda calculus with relatively simplistic name binding constructs.
+Our current presentation does not support any kind of generalization over type
+variables. In future work we would like to lift our connection between types and
+name binding to handle more complex type systems such as the ones listed above,
+combining the power of name resolution using scope graphs and the expressivity
+of these type systems.
+
+% 
+% \paragraph{Applications}
+% 
+% future work: a generic framework for refactoring following the
+% approach of constraint-based refactoring \cite{SteimannP12}

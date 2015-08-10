@@ -1,0 +1,16 @@
+\lstdefinelanguage{PCFM} {
+	morekeywords={module, import, include, def, fun, let, letrec, letpar, in, fix,
+	ifz, then, else}, morestring=[b]",
+	morecomment=[l]{//},
+	morecomment=[n]{/*}{*/},
+  sensitive=true,
+  mathescape=true
+}
+
+
+\newcommand{\pcfmcode}[1]{\lstinline[language=PCFM,basicstyle=\lstinlinestyle,breaklines=false]{#1}}
+\newcommand{\pcfmcodefig}[1]{\lstinline[language=PCFM,basicstyle=\lstfigurestyle,breaklines=false]{#1}}
+\newcommand{\pcfmcodebl}[1]{\lstinline[language=PCFM,basicstyle=\lstinlinestyle,breaklines=true]{#1}}
+\newcommand{\PCFM}{\langname{PCFM}}
+\newcommand{\pcfmcodemm}[1]{\lstinline[language=PCFM,basicstyle={\fontfamily{pcr}\fontsize{9pt}{11pt}\selectfont},breaklines=true]{#1}}
+

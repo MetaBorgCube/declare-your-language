@@ -1,0 +1,502 @@
+\section{Scope Graphs and Resolution Paths}
+\label{sec:scope-graphs}
+
+\endinput
+
+\newcommand{\inlinegraphics}[1]{$\vcenter{\hbox{\includegraphics[scale=0.7]{#1}}}$}
+
+Abstract syntax trees 
+  contain many details which are irrelevant for name binding,
+  but capture the scope structure of programs only implicitly.
+In this section we introduce \emph{scope graphs}, 
+  which capture information relevant for name binding explicitly.
+
+The identifiers and scopes of a program form the nodes in its scope graph.
+Each instance of an identifier \smcode{i} is represented by a box node \inlinegraphics{figures/scope-graphs/legend/identifier}.
+Each scope is represented by a circle node \inlinegraphics{figures/scope-graphs/legend/scope}.
+Directed edges describe the various relations between identifiers and scopes.
+
+% \begin{itemize}
+%   \item two different kinds of edges
+%   \begin{enumerate}
+%     \item scope resolution (white tip)
+%     \begin{itemize}
+%       \item identifier $i$ to identifier $i'$: $i$ needs to be resolved in a scope associated with $i'$, $i'$ identifies resolution scopes for $i$
+%       \item identifier $i$ to scope $s$: $s$ is named $i$, $i$ is associated with scope $s$ 
+%       \item scope $s$ to identifier $i$: $s$ imports definitions from scopes associated with $i$, $i$ identifies import scopes for $s$
+%     \end{itemize}
+%   \end{enumerate}
+% \end{itemize}
+% 
+% well-formedness:
+% 
+% \begin{itemize}
+%   \item no black tips from identifiers to identifiers
+%   \item no white tips from scopes to scopes
+%   \item subgraph of scope nodes is acyclic
+% \end{itemize}
+
+
+% resolution:
+% 
+% \begin{itemize}
+%   \item lexical resolution path: from identifier $i$ to scope $s_0$ to scope $s_1$ \ldots to scope $s_n$ to identifier $i$, only black tips
+%   \item scope resolution: resolution path from identifier $i$ to identifier $i$, followed by white tip edge to scope $s$
+%   \item qualified resolution path: white tip edge from identifier $i$ to identifier $i'$, followed by scope resolution path from $i'$ to $s$, followed from (local) resolution path to identifier $i$
+% \end{itemize}
+
+
+\paragraph{Example language}
+
+Throughout this paper we use a small example language PCFM (`PCF with Modules') to demonstrate the adequacy of our approach.
+PCFM extends PCF~\cite{Mitchell1996} with a module system and 
+  covers typical, but non-trivial, idioms of name binding in programming languages.
+
+\input{figures/scope-graphs/pcfm}
+  
+\Figure{pcfm:grammar} provides a syntax definition for the language and numbers language constructs relevant for name binding.
+A program~(1) provides a global scope for its declarations.
+A \kw{module} declaration~(2) binds a module name and scopes its declarations.
+Declarations inside a program or inside a module are unordered and can be mutually recursive.
+An \kw{import} declaration~(3) refers to a module name and 
+  imports declarations from this module into the scope of the declaration.
+Thereby, local declarations can hide imported declarations.
+In contrast, an \kw{include} declaration~(4) also imports declarations from another module,
+  but local declarations conflict with included ones.
+Both \kw{import} and \kw{include} declarations can be cyclic.
+A variable declaration~(5) binds a variable name in the scope of the declaration.
+As a consequence, the declared variable will be visible in its defining expression as well.
+
+In expressions, variables can be accessed either by unqualified~(6) or qualified~(7) names.
+Both \kw{fun}~(8) and \kw{fix}~(9) expressions bind a variable name in their argument expression.
+All three variants of let expressions bind variable names in their expression, 
+  but bind names differently inside their bindings~(13).
+The parallel variant \kw{letpar}~(12) binds 
+  each variable only in the body of the let expression, but not in its bindings.
+The sequential \kw{let} variant~(10), 
+  binds each variable name only in subsequent bindings.
+The recursive \kw{letrec} variant~(11),
+  binds each variable name in all its bindings.
+
+%\subsection{Scope Graphs and Resolution Graphs by Example}
+
+\paragraph{Bindings}
+
+A program typically contains several instances of the same identifier.
+For example, 
+  the program in \Figure{global} contains 
+    two instances of identifier \smcode{a}, 
+    three instances of identifier \smcode{b}, 
+    and a single instance of \smcode{c}.
+The corresponding scope graph in \Figure{global}
+  represents these instances as box nodes 
+    \inlinegraphics{figures/scope-graphs/global/referring}
+    \inlinegraphics{figures/scope-graphs/global/binding}.
+We use subscripts in programs and graphs to distiguish different instances of same identifiers.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics{figures/scope-graphs/global/example}
+  \caption{%
+    Program with variable declarations and references~(left), 
+    corresponding scope graph~(center), and resolution graphs~(right).}
+  \figurelabel{global}
+\end{center}
+\end{figure}
+
+Depending on their syntactical position,
+  instances have different roles in name binding.
+A \emph{binding instance} introduces a new binding for the identifier in a certain scope.
+In scope graphs, a directed edge \inlinegraphics{figures/scope-graphs/legend/definition} 
+  connects a scope \inlinegraphics{figures/scope-graphs/legend/scope} 
+  with a binding instance \inlinegraphics{figures/scope-graphs/legend/identifier} of that scope.
+A \emph{referring instance} refers to a, potentially non-existing, binding instance of the same name in a certain scope.
+If such a binding instance exists, the referring instance is a \emph{bound instance},
+  otherwise it is a \emph{free instance}.
+In scope graphs, a directed edge \inlinegraphics{figures/scope-graphs/legend/reference} 
+  connects a referring instance \inlinegraphics{figures/scope-graphs/legend/identifier} 
+  to its scope \inlinegraphics{figures/scope-graphs/legend/scope}.
+In the example from \Figure{global},   
+  all instances occur in the global scope \inlinegraphics{figures/scope-graphs/global/scopes} of the program
+  which has incoming edges from referring instances \inlinegraphics{figures/scope-graphs/global/referring}
+  and outgoing edges to its binding instances \inlinegraphics{figures/scope-graphs/global/binding}.
+  
+% \paragraph{Local resolution}
+% 
+% With scope graphs, name resolution corresponds to 
+%   finding \emph{resolution paths} from referring instances to binding instances of the same name.
+% In the scope graph from \Figure{global},
+%   we cannot find a resolution path for \inlinegraphics{figures/scope-graphs/global/referring-c}.
+% Thus, this instance is a free instance. 
+% In contrast, 
+%   we can find resolution paths to resolve 
+%   \inlinegraphics{figures/scope-graphs/global/referring-a} and
+%   \inlinegraphics{figures/scope-graphs/global/referring-b}, 
+%   which makes those instances bound instances.
+% So far, we only consider local resolution paths.
+
+
+
+\newtheorem{definition}{Definition}
+\begin{definition}[Local resolution path]
+  A \emph{local resolution path for \smcode{i}} is
+  a path \inlinegraphics{figures/scope-graphs/legend/local-resolution}
+  from a referring instance %\inlinegraphics{figures/scope-graphs/legend/identifier} 
+  to a binding instance %\inlinegraphics{figures/scope-graphs/legend/identifier} 
+  of the same identifier \smcode{i}
+  in the same scope \smcode{s}.
+\end{definition}
+
+%\paragraph{Local ambiguities}
+%\paragraph{Local ambiguities.}
+
+We can construct the \emph{resolution graph} of a particular instance,
+  by restricting a scope graph to the nodes and edges from resolution paths of that instance.
+\Figure{global} shows the resolution graphs for \inlinegraphics{figures/scope-graphs/global/referring-a} and
+  \inlinegraphics{figures/scope-graphs/global/referring-b}.
+Since their is only a single resolution path for \inlinegraphics{figures/scope-graphs/global/referring-a},
+  its resolution graph is linear.
+In contrast, the resolution graph for \inlinegraphics{figures/scope-graphs/global/referring-b} branches,
+  since we can find paths to different binding instances \inlinegraphics{figures/scope-graphs/global/binding-b}.
+We call such resolutions \emph{ambigous}.
+In this case, the ambiguity is caused by 
+  two conflicting binding instances \inlinegraphics{figures/scope-graphs/global/binding-b}
+  in the same scope.
+With scope graphs, we can define such conflicts in terms of paths:
+
+\begin{definition}[Local conflict]
+A binding instance \inlinegraphics{figures/scope-graphs/legend/definition} 
+  \emph{conflicts locally}
+  with another binding instance \inlinegraphics{figures/scope-graphs/legend/definition} 
+  of the same identifier \smcode{i}
+  in the same scope \smcode{s}.
+\end{definition}
+
+\paragraph{Lexical scoping}
+
+A program typically defines several scopes.
+For example, 
+  the \kw{fix} and \kw{fun} expressions in the program in \Figure{lexical} 
+  introduce two scopes for their argument expressions.
+The corresponding scope graph in \Figure{lexical}
+  represents these scopes as circle nodes 
+    \inlinegraphics{figures/scope-graphs/lexical/fix-scope}
+    \inlinegraphics{figures/scope-graphs/lexical/fun-scope}.
+Scopes can be nested.
+In scope graphs, a directed edge \inlinegraphics{figures/scope-graphs/legend/lexical} 
+  connects a nested scope \inlinegraphics{figures/scope-graphs/legend/nested} 
+  to its surrounding parent scope \inlinegraphics{figures/scope-graphs/legend/parent}.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[trim=0.175cm 0cm 0cm 0cm]{figures/scope-graphs/lexical/example}
+  \caption{%
+    Lexical scopes in a function declaration~(left), 
+    corresponding scope graph~(center), and resolution graphs~(right).}
+  \figurelabel{lexical}
+\end{center}
+\end{figure}
+
+In the example from \Figure{lexical},
+  three scopes form a linear nesting hierarchy \inlinegraphics{figures/scope-graphs/lexical/nested}.
+The two top-level variable declarations introduce two binding instances 
+  \inlinegraphics{figures/scope-graphs/lexical/binding-f0}
+  \inlinegraphics{figures/scope-graphs/lexical/binding-n0}
+and a referring instance 
+  \inlinegraphics{figures/scope-graphs/lexical/referring-f0}
+in global scope \inlinegraphics{figures/scope-graphs/lexical/global-scope}.
+The \kw{fix} expression introduces another binding instance 
+  \inlinegraphics{figures/scope-graphs/lexical/binding-f1}
+  in a new scope \inlinegraphics{figures/scope-graphs/lexical/fix-scope}
+  which is nested in the global scope \inlinegraphics{figures/scope-graphs/lexical/global-scope}.
+Finally, the \kw{fun} expression introduces another binding instance
+  \inlinegraphics{figures/scope-graphs/lexical/binding-n2}
+  and four referring instances 
+  \inlinegraphics{figures/scope-graphs/lexical/referring-n2}
+  \inlinegraphics{figures/scope-graphs/lexical/referring-f2}
+  in a new scope \inlinegraphics{figures/scope-graphs/lexical/fun-scope}
+  which is nested in the scope \inlinegraphics{figures/scope-graphs/lexical/fix-scope} of the fix expression.
+ 
+
+%\paragraph{Lexical resolution}
+
+A referring instance can be resolved either in its local scope or
+  in one of its surrounding parent scopes.
+Thus, we need to extend Definition~1 to allow chains of nested scopes.
+
+\begin{definition}[Lexical resolution path]
+A \emph{lexical resolution path for \smcode{i}} is
+  a path \inlinegraphics{figures/scope-graphs/legend/lexical-resolution}
+  from a referring instance 
+  to a binding instance  
+  of the same identifier \smcode{i}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a \emph{lexical scope path}.
+Thereby, a \emph{lexical scope path} is either
+a (degenerated) path \inlinegraphics{figures/scope-graphs/legend/scope}, or 
+a path \inlinegraphics{figures/scope-graphs/legend/lexical-induct}
+  from a nested scope \inlinegraphics{figures/scope-graphs/legend/nested-induct}
+  to its ancestor scope \inlinegraphics{figures/scope-graphs/legend/parent}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a lexical scope path.
+\end{definition}
+
+\Figure{lexical} provides the resolution graphs according to the scope graph from the same figure.
+First, \inlinegraphics{figures/scope-graphs/lexical/referring-f0} can be resolved locally.
+Second, \inlinegraphics{figures/scope-graphs/lexical/referring-n2} can be resolved 
+  either locally to \inlinegraphics{figures/scope-graphs/lexical/binding-n2} 
+  or to \inlinegraphics{figures/scope-graphs/lexical/binding-n0} in the outermost surrounding scope.
+Finally, \inlinegraphics{figures/scope-graphs/lexical/referring-f2} cannot be resolved locally but to
+  \inlinegraphics{figures/scope-graphs/lexical/binding-f1} and
+  \inlinegraphics{figures/scope-graphs/lexical/binding-f0} in its two surrounding scopes.
+
+
+%\paragraph{Lexical ambiguities}
+
+Hierarchies of nested lexical scopes introduce another source for ambiguous resolutions.
+A referring instance can not only be resolved to conflicting binding instances in the same scope,
+but also to conflicting binding instances in different scopes in the scope hierarchy.
+Both ambiguities in the example from \Figure{lexical} are caused by the latter.
+In the case of \inlinegraphics{figures/scope-graphs/lexical/referring-n2},
+  the local binding instance \inlinegraphics{figures/scope-graphs/lexical/binding-n2}
+  conflicts with \inlinegraphics{figures/scope-graphs/lexical/binding-n0}
+  from the global scope.
+In the case of \inlinegraphics{figures/scope-graphs/lexical/referring-f2},
+  no local binding instance is involved.
+  Instead, the conflict arises in the parent scope,
+  where
+    \inlinegraphics{figures/scope-graphs/lexical/binding-f1}
+    conflicts with \inlinegraphics{figures/scope-graphs/lexical/binding-f0}
+    from the global scope.
+
+Such conflicts are typically resolved in favour of binding instances
+  in scopes closer to the referring instances.
+Binding instances in a nested scope \emph{shadow} 
+  binding instances of the same name from surrounding scopes.
+Similar to local conflicts, we can define shadowing in terms of paths in a scope graph.
+
+\begin{definition}[Lexical shadowing]
+A binding instance \inlinegraphics{figures/scope-graphs/legend/shadowing}
+  \emph{shadows} 
+  another binding instance \inlinegraphics{figures/scope-graphs/legend/shadowed} 
+    of the same identifier \smcode{i}
+  \emph{in scope \smcode{sn}},
+  iff there exist a lexical scope path \inlinegraphics{figures/scope-graphs/legend/lexical-path}.
+\end{definition}
+
+With shadowing, name resolution corresponds to 
+  finding paths from referring instances to unshadowed binding instances of the same name.
+The ambiguities in the example from \Figure{lexical} are
+  resolved in favour of the more local binding instances 
+    \inlinegraphics{figures/scope-graphs/lexical/binding-n2} and
+    \inlinegraphics{figures/scope-graphs/lexical/binding-f1}.
+
+\paragraph{Alternative lexical scope hierarchies}
+
+Similar syntactic structures can introduce different lexical scope hierarchies.
+For example, 
+  the programs in \Figure{let} employ different kinds of \kw{let} expressions,
+    resulting in different scoping hierarchies for syntactically equivalent binding parts.
+The \kw{letpar} expression introduces only a single scope \inlinegraphics{figures/scope-graphs/lets/body-scope} 
+  for the body of the expression.
+Binding instances \inlinegraphics{figures/scope-graphs/lets/par-bind} 
+  from the binding parts are connected to the new scope.
+As a consequence, referring instances \inlinegraphics{figures/scope-graphs/lets/par-bind-refer} 
+  from the binding parts resolve to binding instances \inlinegraphics{figures/scope-graphs/lets/global-bind} 
+  in the global scope.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[trim=0.7cm 0cm 0cm 0cm]{figures/scope-graphs/lets/par}
+  \includegraphics[trim=0.7cm 0cm 0cm 0cm]{figures/scope-graphs/lets/rec}
+  \includegraphics{figures/scope-graphs/lets/seq}
+  \caption{Different kinds of let expressions and corresponding lexical scope hierarchies.}
+  \figurelabel{let}
+\end{center}
+\end{figure}
+
+The \kw{letrec} expression also introduces a single scope \inlinegraphics{figures/scope-graphs/lets/body-scope},
+  but includes the binding parts in this scope.
+This way, referring instances \inlinegraphics{figures/scope-graphs/lets/rec-bind-refer}
+  from the binding parts now resolve to binding instances \inlinegraphics{figures/scope-graphs/lets/par-bind}
+  from the binding parts.
+Together with a disambiguation strategy which prefers local bindings, 
+  binding parts can shadow other bindings in the whole \kw{letrec} expression.
+Finally, the sequential \kw{let} expression introduces nested scopes \inlinegraphics{figures/scope-graphs/lets/scopes} 
+  for each binding part.
+These scopes include subsequent binding parts and the body of the \kw{let} expression.
+In contrast to \kw{letrec} expressions,
+  the same \kw{let} expression can bind instances of the same identifier multiple times,
+  where new bindings shadow previous bindings.
+Though, binding parts in \kw{let} expressions can only shadow bindings in subsequent binding parts and in the body,
+  while binding parts in \kw{letrec} expressions can shadow bindings in preceding binding parts as well.
+Hence, \inlinegraphics{figures/scope-graphs/lets/c2} resolves to \inlinegraphics{figures/scope-graphs/lets/c1}
+  in global scope and not to \inlinegraphics{figures/scope-graphs/lets/c3} in a subsequent binding part.
+  
+
+% \begin{figure}[htb]
+% \begin{center}
+%   \includegraphics[trim=0.7cm 0cm 0cm 0cm]{figures/scope-graphs/lets/par}
+%   \includegraphics[trim=0.7cm 0cm 0cm 0cm]{figures/scope-graphs/lets/rec}
+%   \includegraphics{figures/scope-graphs/lets/seq}
+%   \caption{Scoping in different kinds of let expressions.}
+%   \figurelabel{let}
+% \end{center}
+% \end{figure}
+
+\paragraph{Named scopes and qualified names}
+
+Language constructs might associate names with corresponding scopes.
+For example, each module in the program in \Figure{qualified}
+  associates a module name with the scope of the module, 
+    which captures the declarations of the module.
+We call such scopes \emph{named scopes}.
+Binding instances in named scopes can be accessed from other scopes via the name of the scope.
+For example, the program in \Figure{qualified} uses \emph{qualified names} to access declarations of a module from another module.
+
+We introduce a second kind of edges, to model named scopes and qualified names.
+A directed edge \inlinegraphics{figures/scope-graphs/legend/named} connects 
+  a binding instance \inlinegraphics{figures/scope-graphs/legend/identifier} 
+  to its associated named scope \inlinegraphics{figures/scope-graphs/legend/scope}.
+A complementary directed edge \inlinegraphics{figures/scope-graphs/legend/qualified} connects 
+  a qualified referring instance \inlinegraphics{figures/scope-graphs/legend/identifier} 
+  to a qualifying referring instance \inlinegraphics{figures/scope-graphs/legend/qualifier}.
+  
+With qualified names, we can resolve to binding instances in a named scope, 
+  even if these instances are not in the lexical scope of the referring instance.
+In the example program in \Figure{qualified}, \inlinegraphics{figures/scope-graphs/qualified/b2} resolves to
+  \inlinegraphics{figures/scope-graphs/qualified/b1}, which is not in the lexical scope of module \smcode{C}.
+The corresponding resolution path includes the resolution path of the qualifier, 
+  which is surrounded by two \inlinegraphics{figures/scope-graphs/legend/edge2} edges.
+The opening edge  \inlinegraphics{figures/scope-graphs/qualified/opening} 
+  is provided by the qualified name, 
+  while the closing edge \inlinegraphics{figures/scope-graphs/qualified/closing} 
+  is provided by a named scope.
+The resolution path is completed by the binding instance \inlinegraphics{figures/scope-graphs/qualified/finish}.
+%
+The resolution of \inlinegraphics{figures/scope-graphs/qualified/b3} illustrates resolution of nested qualifiers.
+In general, each nested qualifier needs to be resolved in the named scope of its preceeding qualifier, 
+  before we can resolve the qualified name in the named scope of the last qualifier.
+  
+\begin{figure}[t]
+\begin{center}
+  %\includegraphics[trim=0.175cm 0cm 0cm 0cm]{figures/scope-graphs/qualified/example}
+  \includegraphics[trim=0.175cm 0cm 0cm 0cm]{figures/scope-graphs/qualified/example2}
+  \vspace{0.35cm}
+  
+  \includegraphics{figures/scope-graphs/qualified/resolution2}
+  \caption{Named module scopes and qualified name access~(left), corresponding scope graph~(right) and resolution graphs~(bottom).}
+  \figurelabel{qualified}
+\end{center}
+\end{figure}
+
+
+\begin{definition}[Qualified resolution path]
+  A path \inlinegraphics{figures/scope-graphs/legend/qualified-resolution}
+  from a referring instance \inlinegraphics{figures/scope-graphs/legend/identifier} 
+  to a binding instance \inlinegraphics{figures/scope-graphs/legend/identifier} of the same name
+  is a \emph{qualified resolution path for \smcode{i}}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/qualifier-resolution} is 
+      a lexical or qualified resolution path for \emph{\smcode{q}}.
+\end{definition}
+
+\paragraph{Imports}
+
+Import directives introduce binding instances from a named scope into another scope.
+In scope graphs, a directed edge \inlinegraphics{figures/scope-graphs/legend/import} connects 
+  an importing scope \inlinegraphics{figures/scope-graphs/legend/scope}
+  with a reference \inlinegraphics{figures/scope-graphs/legend/identifier} to the imported scope.
+During resolution, these edges enable scope paths from importing scopes to imported scopes,
+  making binding instances in the imported scope reachable for the importing scope.
+This is orthogonal to lexical scoping, where scope paths from nested scopes to surrounding scopes
+  make binding instances available to the nested scopes.  
+Though, lexical scoping and importing cannot be combined arbitrarily.
+While resolution should consider imports in surrounding scopes,
+  it should not consider surrounding scopes of imported scopes.
+This leads to the following definition of resolution paths:
+
+\begin{definition}[Resolution path]
+A \emph{resolution path for \smcode{i}} is either
+  a path \inlinegraphics{figures/scope-graphs/legend/lexical-resolution}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a \emph{scope path}, or
+  a path \inlinegraphics{figures/scope-graphs/legend/qualified-resolution},
+    iff \inlinegraphics{figures/scope-graphs/legend/qualifier-resolution} is a resolution path for \emph{\smcode{q}}.
+
+Thereby, a \emph{scope path} is either
+  a (degenerated) path \inlinegraphics{figures/scope-graphs/legend/scope}, or 
+  a path \inlinegraphics{figures/scope-graphs/legend/lexical-induct}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a scope path, or
+  a path \inlinegraphics{figures/scope-graphs/legend/import-induct}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a scope path and
+    \inlinegraphics{figures/scope-graphs/legend/import-resolution} is a resolution path for \emph{\smcode{j}}.
+\end{definition}
+
+\Figure{includes} shows an example program with three modules.
+To resolve \inlinegraphics{figures/scope-graphs/imports/vb1} in \inlinegraphics{figures/scope-graphs/imports/s2},
+  we need to consider the import of \inlinegraphics{figures/scope-graphs/imports/B1},
+  which resolves to \inlinegraphics{figures/scope-graphs/imports/B2}.
+In its associated scope \inlinegraphics{figures/scope-graphs/imports/s3},
+  we find \inlinegraphics{figures/scope-graphs/imports/vb2} 
+  and another import \inlinegraphics{figures/scope-graphs/imports/C1},
+  which resolves to \inlinegraphics{figures/scope-graphs/imports/C2}.
+In its associated scope \inlinegraphics{figures/scope-graphs/imports/s4}, 
+  we find \inlinegraphics{figures/scope-graphs/imports/vb3}. 
+%   
+This ambigous resolution is caused by a conflict between 
+  the local binding instance \inlinegraphics{figures/scope-graphs/imports/vb2}
+  and the imported binding instance \inlinegraphics{figures/scope-graphs/imports/vb3}.
+In general, a conflict occurs, 
+if two local or imported binding instances have the same name.
+
+\begin{definition}[Conflict]
+A binding instance \inlinegraphics{figures/scope-graphs/legend/conflict1}
+  \emph{conflicts in scope} \inlinegraphics{figures/scope-graphs/legend/scope}  with 
+  another binding instance \inlinegraphics{figures/scope-graphs/legend/conflict2} of the same name,
+  iff there exist local scope paths 
+    \inlinegraphics{figures/scope-graphs/legend/conflict3} and
+    \inlinegraphics{figures/scope-graphs/legend/conflict-4}.
+
+\noindent Thereby, a \emph{local scope path} is either
+  a (degenerated) path \inlinegraphics{figures/scope-graphs/legend/scope}, or 
+  a path \inlinegraphics{figures/scope-graphs/legend/import-induct}, 
+    iff \inlinegraphics{figures/scope-graphs/legend/lexical-path} is a local scope path and
+    \inlinegraphics{figures/scope-graphs/legend/import-resolution} is a resolution path for \emph{\smcode{j}}.
+\end{definition}
+
+\begin{figure}[t]
+\begin{center}
+  \includegraphics[trim=0.175cm 0cm 0cm 0cm]{figures/scope-graphs/imports/include}
+  \caption{Includes of modules.}
+  \figurelabel{includes}
+  \bigskip
+  \includegraphics[trim=0.175cm 0cm 0cm 0cm]{figures/scope-graphs/imports/imports}
+  \caption{Imports of modules.}
+  \figurelabel{imports}
+\end{center}
+\end{figure}
+
+\paragraph{Alternative import scope hierarchies}
+
+Earlier in this section, we showed that similar syntactic constructs might yield different lexical scope hierarchies.
+This also holds for import scope hierarchies.
+For example, the program in \Figure{imports} is a variant of the previous program from \Figure{includes},
+  where local declarations can hide imported declarations and local imports hide transitive imports.
+Each module now introduces two nested scopes.
+Import edges connect only to the outer scope.
+This way, local declarations can hide imported declarations.
+For example, 
+  the resolution of \inlinegraphics{figures/scope-graphs/imports/vb1} in \Figure{imports} 
+  does no longer has a conflict between a local declaration and an imported declaration.
+Though, the resolution is still ambigous.
+The ambiguity is caused by module names which are now associated with two scopes.
+This is needed to still allow for transitive imports, 
+  where both local declarations and imported declarations can be imported.
+The ambiguity can be resolved by an explicit order of scopes associated with names.
+In the case of \kw{import} directives, we want to prefer the inner scope of a module (for local definitions) 
+  over its outer scope (for imports).
+
+% \begin{definition}[Shadowing]
+% A binding instance \inlinegraphics{figures/scope-graphs/legend/identifier}
+%   \emph{shadows} another binding instance \inlinegraphics{figures/scope-graphs/legend/shadowed} of the same name
+%   \emph{in scope \smcode{sn}},
+%   iff there exist a local scope path \ldots 
+%   and a scope path \inlinegraphics{figures/scope-graphs/legend/lexical-path}.
+% \end{definition}

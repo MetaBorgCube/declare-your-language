@@ -1,0 +1,75 @@
+\begin{figure*}[t]
+%\begin{boxedminipage}[t]{\hsize}
+\small
+$\begin{array}{rclr}
+\sema{\w{prog}}{\w{ds}}{} & 
+\sdefine &
+\AParent{S}{\perp} \cand \sema{\ks{\w{decl}}}{\w{ds}}{S}
+& \new{S} 
+\\[1.5ex]
+\sema{\w{decl}}{\kw{module}\ X_i\ \sep{\{} \w{ds} \sep{\}}}{s} & \sdefine &  %
+\AD{\dsi{X}{i}{S'}}{s}
+\cand  \AParent{S'}{s}
+\cand \sema{\ks{\w{decl}}}{\w{ds}}{S'}
+& \new{S'} 
+\\[1.5ex]
+\sema{\w{decl}}{\kw{import}\ \w{Xs}\sep{.} X_i}{s} & 
+\sdefine &
+\multicolumn{2}{l}{
+\ARImport{\ri{X}{i}}{s}  
+\cand \sema{\w{qid}}{\w{Xs}\sep{.} X_i}{s} 
+}
+\\[1.5ex]
+\sema{\w{decl}}{\kw{def}\ b}{s} & 
+\sdefine &
+\sema{\w{bind}}{b}{s,s}
+\\[1.5ex]
+\sema{\w{bind}}{x_i\ \sep{=}\ e}{s_r,s_d} & 
+\sdefine &
+\AD{\di{x}{i}}{s_d}
+\cand  \sema{\w{exp}}{e}{s_r}  
+\\[1.5ex]
+\sema{\w{qid}}{x_i}{s} & 
+\sdefine &
+\AR{\ri{x}{i}}{s} 
+%\\[1.5ex]
+%\sema{\w{qid}}{\w{Xs} \sep{.} X_j \sep{.} x_i}{s} & 
+%\sdefine &
+%\AR{\ri{x}{i}}{S'} 
+%\cand \AParent{S'}{\undef} 
+%\cand \ARImport{\ri{X}{j}}{S'}
+%\cand \sema{\w{qid}}{\w{Xs} \sep{.} X_j}{s} 
+%& \new{S'} 
+\\[1.5ex]
+\sema{\w{exp}}{\kw{fun}\ \sep{(} x_i \sep{:} t \sep{)} \sep{\{} e \sep{\}}}{s} & 
+\sdefine &
+\AParent{S'}{s}
+\cand \AD{\di{x}{i}}{S'} 
+\cand \sema{\w{exp}}{e}{S'}  
+& \new{S'}
+\\[1.5ex]
+\sema{\w{exp}}{\kw{letrec}\ \w{bs}\ \kw{in}\ e}{s} & 
+\sdefine &
+\AParent{S'}{s} 
+\cand \sema{\ks{\w{bind}}}{\w{bs}}{S',S'} 
+\cand \sema{\w{exp}}{e}{S'} 
+& \new{S'} 
+\\[1.5ex]
+\sema{\w{exp}}{\kw{letpar}\ \w{bs}\ \kw{in}\ e}{s} & 
+\sdefine &
+\AParent{S'}{s}
+\cand  \sema{\ks{\w{bind}}}{\w{bs}}{S,S'} 
+\cand \sema{\w{exp}}{e}{S'} 
+& \new{S'}
+\\[1.5ex]
+\sema{\w{exp}}{\w{Xs}\sep{.} x_i}{s} & 
+\sdefine &
+\sema{\w{qid}}{\w{Xs}\sep{.} x_i}{s} 
+\\[1.5ex]
+\sema{\w{exp}}{e_1\ e_2}{s} & 
+\sdefine &
+\sema{\w{exp}}{e_1}{s}
+\cand \sema{\w{exp}}{e_2}{s} 
+\end{array}$
+%\end{boxedminipage}
+\end{figure*}

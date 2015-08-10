@@ -1,0 +1,23 @@
+module semantics/runtime/store
+
+imports trans/semantics/runtime/values
+imports trans/semantics/runtime/primitives
+
+signature
+  semantic components
+    Store -> Map<Int, V> 
+  variables 
+    S : Store
+  constructors
+    allocate : V --> Int
+    write    : Int * V --> V
+    read     : Int --> V      
+    
+rules
+
+  allocate(v) --> loc
+  where fresh => loc; write(loc, v) --> _.
+
+  write(loc, v) :: S --> v :: Store {loc |--> v, S}.
+  
+  read(loc) :: S --> S[loc] :: S.

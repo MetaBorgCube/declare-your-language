@@ -1,0 +1,35 @@
+\section{Glossary}
+
+\begin{description}
+\item[Binding instance] synonym for \emph{declaration}
+\item[Binding occurrence] synonym for \emph{reference}
+\item[Declaration] introduction of a name
+\item[Global scope] 
+\item[Reference]
+\item[Root scope]
+\item[Scope] We could be more explicit that the basic building block of our
+scheme -- what we are calling a "scope" -- corresponds to a letrec block (or a
+module), i.e. a group of mutually recursive bindings.  This is unusual, hence
+interesting (if we can motivate it properly).
+\end{description}
+
+
+* The general approach in Section 2 seems good to me.
+Some clarification of terminology could still be helpful.
+
+-We could be more explicit that the basic building
+block of our scheme -- what we are calling a "scope" --
+corresponds to a letrec block (or a module), i.e. a group
+of mutually recursive bindings.  This is unusual, hence interesting
+(if we can motivate it properly).
+
+- Relationship between our (abstract) notion of scope and
+the traditional idea of a  AST subterm is still a bit confused.
+For example, I don't like using the term "nested scope" because that
+is really an artifact of the AST view.
+
+- We need to get to imports earlier than p. 9, because they
+are the major novelty in our work. Maybe in the intro.
+
+- We need to find the right place to discuss the entirety of
+Fig. 5/6 -- in particular to argue why these relations are well-founded.

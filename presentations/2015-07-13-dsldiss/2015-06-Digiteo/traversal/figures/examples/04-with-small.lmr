@@ -1,0 +1,3 @@
+record A$_1$ { x$_2$: Int }
+def a$_3$= new A$_4${ x$_5$=1 }
+def y$_6$= with a$_7$ do x$_8$+1

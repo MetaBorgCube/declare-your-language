@@ -10,3 +10,14 @@ decl-your-lang/questions
 ebooks
 languages/LanguageE/editor/java/ds/generated
 languages/ExerciseE/editor/java/ds/generated/interpreter
+languages/paplj/paplj-exercises/.cache
+languages/paplj/paplj-examples/.cache
+
+types.generated.str
+*.aterm
+languages/paplj/paplj-exercises-semantics/.cache
+languages/paplj/paplj-exercises-types/.cache
+languages/paplj/paplj-exercises-names/.cache
+
+sub.generated.str
+languages/paplj/paplj-spoofax.zip

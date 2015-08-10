@@ -1,0 +1,17 @@
+\lstdefinelanguage{LMR} {
+	morekeywords={module, import, include, def, fun, let, letrec, letpar, in, fix,
+	if, then, else, record, extends, Int, Bool, with, do, new, true, false},
+	morestring=[b]", morecomment=[l]{//},
+	morecomment=[n]{/*}{*/},
+	literate={->}{$\rightarrow$}2,
+  sensitive=true,
+  mathescape=true
+}
+
+
+\newcommand{\lmrcode}[1]{\lstinline[language=LMR,basicstyle=\lstinlinestyle,breaklines=false]!#1!}
+\newcommand{\lmrcodefig}[1]{\lstinline[language=LMR,basicstyle=\lstfigurestyle,breaklines=false]!#1!}
+\newcommand{\lmrcodebl}[1]{\lstinline[language=LMR,basicstyle=\lstinlinestyle,breaklines=true]!#1!}
+\newcommand{\LMR}{\langname{LMR}}
+\newcommand{\lmrcodemm}[1]{\lstinline[language=LMR,basicstyle={\fontfamily{pcr}\fontsize{9pt}{11pt}\selectfont},breaklines=true]!#1!}
+

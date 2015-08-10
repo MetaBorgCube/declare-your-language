@@ -1,0 +1,12 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdftex 2013.10.16)  16 JAN 2015 17:43
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**\input document.tex
+
+! Emergency stop.
+<*> \input document.tex
+                       
+*** (job aborted, file error in nonstop mode)
+
+!  ==> Fatal error occurred, no output PDF file produced!

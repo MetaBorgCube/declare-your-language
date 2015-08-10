@@ -2,6 +2,7 @@ module desugar
 imports src-gen/signatures/Expressions-sig
 imports desugar/desugar-rules
 imports desugar/desugar-types
+imports desugar/resugar-rules
 
 strategies
 	
@@ -9,7 +10,8 @@ strategies
   	innermost(desugar-let <+ desugar-do)
 	
   post-desugar =
-    innermost(desugar-do <+ desugar-get <+ desugar-set)
+    innermost(desugar-do <+ desugar-get <+ desugar-set);
+    resugar
     
   desugar-all = 
     innermost(desugar-or <+ desugar-and 

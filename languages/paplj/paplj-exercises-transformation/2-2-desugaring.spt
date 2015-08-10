@@ -1,0 +1,78 @@
+module ex2-2-desugaring
+
+// solve in: trans/desugar/desugar-rules.str
+
+language PAPLJ
+
+start symbol Expr
+
+
+test and 1 [[
+  true && false
+]] parse
+to And(True(), False())
+ 
+test and 2 [[
+  let Bool x = true Bool y = false in x && y
+]] run desugar-all-test 
+to      Let(
+          [Bind(BoolT(), "x", True())]
+        , Let(
+            [Bind(BoolT(), "y", False())]
+          , If(Var("x"), Var("y"), False())
+          )
+        )
+
+
+      
+test or 1 [[
+  let Bool x = true Bool y = false in x || y 
+]] parse
+to  Let(
+      [Bind(BoolT(), "x", True()), Bind(BoolT(), "y", False())]
+    , Or(Var("x"), Var("y"))
+    )
+
+test or 2 [[ 
+  let Bool x = true Bool y = false in x || y 
+]] run desugar-all-test 
+to      Let(
+          [Bind(BoolT(), "x", True())]
+        , Let(
+            [Bind(BoolT(), "y", False())]
+          , If(Var("x"), True(), Var("y"))
+          )
+        )
+  
+
+test let 1 [[
+  let Num x = 1 Num y = 2 Num z = 3 in x + y + z
+]] parse
+to  Let(
+      [ Bind(NumT(), "x", Num("1"))
+      , Bind(NumT(), "y", Num("2"))
+      , Bind(NumT(), "z", Num("3"))
+      ]
+    , Add(Add(Var("x"), Var("y")), Var("z"))
+    )
+
+test let 2 [[
+  let Num x = 1 Num y = 2 Num z = 3 in x + y + z
+]] run desugar-all-test 
+to      Let(
+          [Bind(NumT(), "x", Num("1"))]
+        , Let(
+            [Bind(NumT(), "y", Num("2"))]
+          , Let(
+              [Bind(NumT(), "z", Num("3"))]
+            , Add(Add(Var("x"), Var("y")), Var("z"))
+            )
+          )
+        )
+        
+        
+  
+
+      
+     
+      

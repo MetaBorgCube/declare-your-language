@@ -1,0 +1,50 @@
+module ex3-1-variables
+
+language PAPLJ
+
+test resolve var [[ 
+  program tst run 
+  let Num [[x]] = 2 in [[x]] + 2
+]] resolve #2 to #1
+
+test let [[  
+  program tst run 
+  let 
+    Num [[x]] = 2 
+    Num y = 3
+   in [[x]] + y
+]] resolve #2 to #1
+
+test let [[ 
+  program tst run 
+  let 
+    Num [[x]] = 2 
+    Num y = 3 + [[x]]
+   in x + y
+]] resolve #2 to #1
+
+test let [[ 
+  program tst run 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in let Num [[x]] = 6
+       in [[x]] + y
+]] resolve #2 to #1 
+
+test let [[ 
+  program tst run 
+  let 
+     Num x = 2 
+     Num y = let Num [[x]] = 8 in 3 + [[x]]
+   in x + y
+]] resolve #2 to #1
+
+test let [[ // problem 
+  program tst run 
+  let 
+     Num x = 2 
+     Num y = let Num [[x]] = 8 + [[x]] in 3 + x
+   in x + y
+]] resolve #2 to #1
+

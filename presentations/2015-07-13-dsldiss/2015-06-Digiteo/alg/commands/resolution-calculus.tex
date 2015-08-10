@@ -1,0 +1,121 @@
+% The sets that define a scope graph.
+\newcommand{\G}{\mathcal{G}} 
+\renewcommand{\S}[1]{\mathcal{S}(#1)}
+\newcommand{\D}[1]{\mathcal{D}(#1)}
+\newcommand{\DG}[2]{\mathcal{D}_{#1}(#2)}
+\newcommand{\R}[1]{\mathcal{R}(#1)}
+\newcommand{\RG}[2]{\mathcal{R}_{#1}(#2)}
+\newcommand{\I}[1]{\mathcal{I}(#1)}
+\newcommand{\IG}[2]{\mathcal{I}_{#1}(#2)}
+\newcommand{\IT}[1]{\mathcal{I}^t(#1)}
+\renewcommand{\P}[1]{\mathcal{P}(#1)}
+\newcommand{\PG}[2]{\mathcal{P}_{#1}(#2)}
+
+% References and declarations
+%\renewcommand{\r}[1]{r_{#1}}   % reference
+%\newcommand{\ri}[2]{r_{#1}^{\,#2}}  % reference with position
+%\renewcommand{\d}[1]{d_{#1}} % declaration
+%\newcommand{\di}[2]{d_{#1}^{\,#2}} % declaration with position
+%\newcommand{\ds}[2]{d_{#1}\!\!:\!\!{#2}} % declaration with scope
+%\newcommand{\dsi}[3]{d_{#1}^{\,#2}\!\!:\!\!{#3}} % declaration with position and scope
+%\newcommand{\dsio}[3]{d_{#1}^{\,#2}{\mbox{\it[$:\!\!{#3}$]}}} % declaration with position and scope
+% replace below with above to revert to old notation:
+\newcommand{\goodsize}{\scriptsize}
+\renewcommand{\r}[1]{{#1}^{\mbox{\goodsize\sf R}}}   % reference
+\newcommand{\tr}[1]{{#1}^{\mbox{\goodsize\sf TR}}}   % transitive import reference
+\newcommand{\er}[1]{{#1}^{\mbox{\goodsize\sf ER}}}   % export reference
+\newcommand{\ri}[2]{{#1}^{\mbox{\goodsize\sf R}}_{#2}}  % reference with position
+\renewcommand{\d}[1]{{#1}^{\mbox{\goodsize\sf D}}} % declaration
+\newcommand{\di}[2]{{#1}^{\mbox{\goodsize\sf D}}_{#2}} % declaration with position
+\newcommand{\ds}[2]{{#1}^{\mbox{\goodsize\sf D}}\!\!:\!\!{#2}} % declaration with scope
+\newcommand{\dsi}[3]{{#1}^{\mbox{\goodsize\sf D}}_{#2}\!\!:\!\!{#3}} % declaration with position and scope
+% reference to reference in examples
+\newcommand{\re}[2]{\lstinline{#1}$_{_{#2}}$}
+
+% Steps in paths:
+\newcommand{\dstep}[1]{\mbox{\rm\bf{D}}(#1)}
+\newcommand{\pstep}{\mbox{\rm\bf{P}}}
+\newcommand{\istep}[2]{\mbox{\rm\bf{I}}(#1,#2)}
+
+% Seen sets
+\newcommand{\seeni}{\mathbb{I}}
+\newcommand{\seens}{\mathbb{S}}
+
+% Spacing stuff.
+\newcommand{\premsep}{\hspace*{0.5cm}}
+\newcommand{\tab}{\hspace*{0.3cm}}
+
+\usepackage{relsize}
+
+% Should be dead now, but temporarily used to define the next set of things
+\newcommand{\lra}{\ \mathlarger{\mathlarger{\rightarrowtail}}\ }
+\newcommand{\lrau}{\ \mathlarger{\mathlarger{\twoheadrightarrow}}\ }
+\newcommand{\scopea}[2]{\longrightarrow_{#1}^{#2}}
+\newcommand{\scopeau}[1]{\longrightarrow_{#1}}
+\newcommand{\resolveau}{\longmapsto}
+\newcommand{\resolvea}[1]{\longmapsto^{#1}}
+\renewcommand{\scopea}[1]{\stackrel{#1}{\longrightarrow}}
+
+% Resolution calculus relations
+\newcommand{\edge}{\scopea{}}
+\newcommand{\medge}{\lrau{}}  % multi-edge
+\newcommand{\reach}{\lra}
+\newcommand{\resolve}{\resolveau}
+
+% Well-formedness
+\newcommand{\WF}{\mbox{\it{WF}}}
+
+% Environments and resolution
+\newcommand{\Res}[2]{\mbox{\it{Resolve}}[#1](#2)}
+\newcommand{\Env}[4]{\mbox{\it{E}}_{#1}[#2,#3](#4)}
+\newcommand{\Envu}[1]{\mbox{\it{E}}_{#1}}
+
+% Path sets
+\newcommand{\pathx}[1]{\mathbb{P}_{#1}}
+\newcommand{\paths}[4]{\mathbb{P}_{#1}[#2,#3](#4)}
+
+\newcommand{\defsof}[1]{\Delta(#1)}
+\newcommand{\defof}[1]{\delta(#1)}
+% \newcommand{\bndof}[1]{\chi(#1)}
+
+\newcommand{\hiding}{\triangleleft}
+
+\newcommand{\visible}{\mbox{\it{visible}}}
+
+% Equivalence relation for alpha-eq
+\renewcommand{\a}{$\alpha$}
+\newcommand{\seq}[1]{\stackrel{#1}{\sim}}
+\newcommand{\mtt}[1]{\text{\tt #1}}
+\newcommand{\aeq}{\stackrel{\alpha}{\approx}}
+
+% Old stuff now unused
+%\newcommand{\Def}[1]{\mbox{\it D}(#1)}
+%\newcommand{\Ref}[1]{\tpl{#1}}%{\hbox{\it R}(#1)}
+%\newcommand{\Imp}[1]{\mbox{\it I}(#1)}
+%\newcommand{\Impp}[1]{I(#1)} % for use as subscript
+%\newcommand{\Lab}[1]{\hbox{(#1)}}
+
+%\newcommand{\Lex}{Lex}
+%\newcommand{\Loc}{Loc}
+
+%\newcommand{\Res}[2]{\hbox{\it R}_{#2}(#1)}
+
+
+%\newcommand{\nilscope}{\varnothing}
+%\newcommand{\shadowset}{\lhd}
+%\newcommand{\rootscope}{\top}
+%\newcommand{\ntrans}{\hbox{NT}}
+%\newcommand{\trans}{\hbox{T}}
+
+%\newcommand{\impset}{\mathcal{I}}
+%\newcommand{\scoset}{\mathcal{S}}
+
+%\renewcommand{\d}{\delta}
+
+%\newcommand{\longtwoheadrightarrow}{\mathrel{\longrightarrow\!\!\!\!\!\rightarrow}}
+%\newcommand{\lra}[1]{\stackrel{#1}{\longtwoheadrightarrow}}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../document"
+%%% End: 

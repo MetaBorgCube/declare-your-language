@@ -1,0 +1,68 @@
+\twoboxes{0.495\hsize}{0.495\hsize}{%
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle, frame=none]{figures/examples/03-imports.lmr}
+}{%
+  \lstinputlisting[language=LMR,basicstyle=\lstfigurestyle, frame=none]{figures/examples/05-qualified.lmr}
+}
+
+\begin{boxedminipage}[t]{.495\hsize}
+\usebox{\boxone}
+\end{boxedminipage}
+\hfill
+\begin{boxedminipage}[t]{.495\hsize}
+  \usebox{\boxtwo}%
+  \vspace{\vdiff}
+\end{boxedminipage}%
+\twoboxes{0.495\hsize}{0.495\hsize}{%
+\small
+Scope graph
+
+\begin{center}
+\includegraphics[scale=.5]{figures/examples/manual/03-imports}
+\end{center}
+
+\begin{mconstraints}{Declarations and constraints}
+\EqCType{\dic{a}{2}}{\tau_{1}} & 
+\EqCType{\dic{b}{5}}{\tau_{2}} \\
+\EqCResolve{\ric{a}{6}}{\delta_{1}} &
+\EqCType{\delta_{1}}{\intty{}}\\
+\EqCTeq{\tau_{1}}{\intty{}} &
+\EqCTeq{\tau_{2}}{\intty{}}
+\end{mconstraints}%
+\begin{mconstraints}{Solution}
+\RCSubst{\delta_{1}}{\dic{a}{2}}\\
+\TCSubst{\tau_{1}}{\intty{}} &
+\TCSubst{\tau_{2}}{\intty{}}
+\end{mconstraints}%
+}{%
+\small
+Scope graph
+
+\begin{center}
+\includegraphics[scale=.5]{figures/examples/manual/05-qualified}
+\end{center}
+
+\begin{mconstraints}{Declarations and constraints}
+\EqCType{\dic{x}{2}}{\tau_{1}} &
+\EqCType{\dic{y}{3}}{\tau_{2}}
+\\
+\EqCResolve{\ric{x}{5}}{\delta_{1}} &
+\EqCType{\delta_{1}}{\tau_{2}}
+\\
+\EqCTeq{\tau_{1}}{\intty{}}
+\end{mconstraints}%
+\begin{mconstraints}{Solution}
+\RCSubst{\delta_{1}}{\dic{x}{2}}\\
+\TCSubst{\tau_{1}}{\intty{}} &
+\TCSubst{\tau_{2}}{\intty{}}
+\end{mconstraints}%
+}
+\begin{boxedminipage}[t]{.495\hsize}
+\usebox{\boxone}
+\end{boxedminipage}
+\hfill
+\begin{boxedminipage}[t]{.495\hsize}
+  \usebox{\boxtwo}%
+  \vspace{\vdiff}
+\end{boxedminipage}
+
+\caption{Module imports and qualified names with example programs, scope graphs, and constraints.}

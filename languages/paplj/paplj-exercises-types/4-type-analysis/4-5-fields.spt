@@ -1,0 +1,62 @@
+module ex4-5-fields 
+
+language PAPLJ
+
+start symbol Program
+
+test default value [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       [[a]].x
+     }
+]] run get-type-na to ClassT("A") 
+
+// test set returns value [[ 
+//   program test 
+//     class A{ Num x }
+//   run 
+//     let A a = new A()
+//      in {
+//        [[a.x = 4]]
+//      }
+// ]] run get-type-na to NumT()
+
+test set changes field value [[ 
+  program test 
+    class A{ Num x }
+  run 
+    let A a = new A()
+     in {
+       a.x = 4;
+       [[a.x + 3]]
+     }
+]] run get-type to NumT()
+
+test field of super class [[ 
+  program test 
+    class A { Num x }
+    class B extends A { }
+  run 
+    let B b = new B()
+     in {
+       b.x = 4;
+       [[b]].x + 9
+     }
+]] run get-type-na to ClassT("B")
+
+// test field of super class [[ 
+//   program test 
+//     class A { Num x }
+//     class B extends A { Num x }
+//   run 
+//     let B b = new B()
+//      in {
+//        [[b.x]] = 4;
+//        b.x + 9
+//      }
+// ]] run get-type-na to NumT()
+
+

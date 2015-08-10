@@ -1,0 +1,77 @@
+module ex1-4-disambiguation
+language PAPLJ
+start symbol Expr
+
+test true literal [[ 
+  true 
+]] parse to True()
+
+test false literal [[ 
+  false 
+]] parse to False()
+
+test not over and priority [[ 
+  !x && y 
+]] parse to And(Not(Var("x")), Var("y"))
+
+test not over or priority [[ 
+  !x || y 
+]] parse to Or(Not(Var("x")), Var("y"))
+ 
+test not over or priority [[ 
+  x || !y 
+]] parse to Or(Var("x"), Not(Var("y")))
+
+test add assoc [[ 
+  x + y + z
+ ]] parse to Add(Add(Var("x"), Var("y")), Var("z"))
+ 
+test add sub assoc [[ 
+  x - y + z
+]] parse to Add(Sub(Var("x"), Var("y")), Var("z"))
+ 
+test mul over add priority [[ 
+  x + y * z
+]] parse to Add(Var("x"), Mul(Var("y"), Var("z")))
+ 
+test mul over sub priority [[ 
+  x - y * z
+]] parse to Sub(Var("x"), Mul(Var("y"), Var("z")))
+
+test add and sub same priority [[
+  x + y - z
+]] parse to Sub(Add(Var("x"), Var("y")), Var("z"))
+
+test sub and add same priority [[
+  x - y + z
+]] parse to Add(Sub(Var("x"), Var("y")), Var("z"))
+
+test lt over add priority [[
+  x < y + z 
+]] parse to Lt(Var("x"), Add(Var("y"), Var("z")))
+
+test lt over and priority [[
+  w < x && y < z 
+]] parse to  And(
+                Lt(Var("w"), Var("x"))
+              , Lt(Var("y"), Var("z"))
+             )
+             
+test and over or priority [[ 
+  x || y && z
+]] parse to Or(Var("x"), And(Var("y"), Var("z")))
+
+test operators combined  [[
+  v1 + v2 - v3 * v4 + v5 == y 
+]] parse to 
+   Eq(
+      Add(
+        Sub(
+          Add(Var("v1"), Var("v2"))
+        , Mul(Var("v3"), Var("v4"))
+        )
+      , Var("v5")
+      )
+    , Var("y")
+    )
+    

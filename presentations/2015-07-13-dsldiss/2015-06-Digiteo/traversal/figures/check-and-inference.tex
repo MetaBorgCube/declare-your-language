@@ -1,0 +1,162 @@
+\begin{figure}
+\begin{boxedminipage}{0.495\hsize}
+\begin{lstlisting}[language=LMR,basicstyle=\lstfigurestyle,breaklines=true,frame=none]
+def f$_1$:Int->Int =
+  fix f$_2$:Int->Int {
+    fun n$_3$:Int {
+      ifz n$_4$ then 1
+      else n$_5$*f$_6$(n$_7$-1)
+    }
+  }
+def n$_8$:Int = f$_9$ 5
+\end{lstlisting}
+\end{boxedminipage}\hfill
+\begin{boxedminipage}{0.495\hsize}
+\begin{lstlisting}[language=LMR,basicstyle=\lstfigurestyle,breaklines=true,frame=none]
+def f$_1$ =
+  fix f$_2$ {
+    fun n$_3$ {
+      ifz n$_4$ then 1
+      else n$_5$*f$_6$(n$_7$-1)
+    }
+  }
+def n$_8$ = f$_9$ 5
+\end{lstlisting}
+\end{boxedminipage}
+
+\begin{boxedminipage}{\hsize}
+\small
+\center{scope graph}
+\[
+\begin{array}{llll}
+\froot{1}\\
+\fdec{f}{1}{1} & \fpar{2}{1} \\
+\fdec{f}{2}{2} & \fpar{3}{2} \\
+\fdec{n}{3}{3} \\
+\fref{n}{4}{3} & \fref{n}{5}{3} & \fref{f}{6}{3} & \fref{n}{7}{3} \\
+\fdec{n}{8}{3} & \fref{f}{9}{1}
+\end{array}
+\]
+\end{boxedminipage}
+\begin{boxedminipage}{\hsize}
+\small
+\center{resolution constraints}
+\[
+\begin{array}{llll}
+\cresolves{n}{4}{1} & \cresolves{n}{5}{2} & 
+\cresolves{f}{6}{3} & \cresolves{n}{7}{4} \\
+\cresolves{f}{9}{5}
+\end{array}
+\]
+\end{boxedminipage}
+\begin{boxedminipage}{0.495\hsize}
+\small
+\center{type assumptions}
+\[
+\begin{array}{llll}
+\fdecty{f}{1}{\usebox{\boxint} \rightarrow \usebox{\boxint}} \\
+\cty{\usebox{\boxfix}}{\usebox{\boxint} \rightarrow \usebox{\boxint}}\\
+%
+\fdecty{f}{2}{\usebox{\boxint} \rightarrow \usebox{\boxint}} \\
+\cty{\usebox{\boxfun}}{\usebox{\boxint} \rightarrow \usebox{\boxint}}\\
+%
+\fdecty{n}{3}{\usebox{\boxint}} \\
+\cty{\usebox{\boxifz}}{\vty{3}}\\
+%
+\cty{\ri{n}{4}}{\vty{4}}\\
+\cty{\usebox{\boxone}}{\vty{3}}\\
+\cty{\usebox{\boxexp}}{\vty{3}}\\
+%
+\cty{\ri{n}{5}}{\usebox{\boxint}}\\
+\cty{\usebox{\boxapp}}{\usebox{\boxint}}\\
+%
+\cty{\ri{f}{6}}{\vty{5}\rightarrow \usebox{\boxint}}\\
+\cty{\usebox{\boxarg}}{\vty{5}}\\
+%
+\cty{\ri{n}{7}}{\usebox{\boxint}}\\
+\end{array}
+\]
+\center{type constraints}
+\[
+\begin{array}{llll}
+\ceq{\vty{2} \rightarrow \vty{3}}{\usebox{\boxint} \rightarrow \usebox{\boxint}}\\
+%
+\cty{\vdec{1}}{\vty{4}} \\
+\ceq{\vty{4}}{\usebox{\boxint}}\\
+%
+\ceq{\usebox{\boxint}}{\vty{3}}\\
+%
+%\ceq{\usebox{\boxint}}{\vty{3}}\\
+%
+\cty{\vdec{2}}{\usebox{\boxint}}\\
+%
+\cty{\vdec{3}}{\vty{5}\rightarrow \usebox{\boxint}}\\
+%
+\ceq{\usebox{\boxint}}{\vty{5}}\\
+\cty{\vdec{4}}{\usebox{\boxint}}\\
+\cty{\usebox{\boxone}}{\usebox{\boxint}}\\
+\end{array}
+\]
+\end{boxedminipage}\hfill
+\begin{boxedminipage}{0.495\hsize}
+\small
+\center{type assumptions}
+\[
+\begin{array}{llll}
+\fdecty{f}{1}{\vty{1}} \\
+\cty{\usebox{\boxfix}}{\vty{1}}\\
+%
+\fdecty{f}{2}{\vty{1}} \\
+\cty{\usebox{\boxfun}}{\vty{1}}\\
+%
+\fdecty{n}{3}{\vty{2}} \\
+\cty{\usebox{\boxifz}}{\vty{3}}\\
+%
+\cty{\ri{n}{4}}{\vty{4}}\\
+\cty{\usebox{\boxone}}{\vty{3}}\\
+\cty{\usebox{\boxexp}}{\vty{3}}\\
+%
+\cty{\ri{n}{5}}{\usebox{\boxint}}\\
+\cty{\usebox{\boxapp}}{\usebox{\boxint}}\\
+%
+\cty{\ri{f}{6}}{\vty{5}\rightarrow \usebox{\boxint}}\\
+\cty{\usebox{\boxarg}}{\vty{5}}\\
+%
+\cty{\ri{n}{7}}{\usebox{\boxint}}\\
+\end{array}
+\]
+\center{type constraints}
+\[
+\begin{array}{llll}
+\ceq{\vty{2} \rightarrow \vty{3}}{\vty{1}}\\
+%
+\cty{\vdec{1}}{\vty{4}} \\
+\ceq{\vty{4}}{\usebox{\boxint}}\\
+%
+\ceq{\usebox{\boxint}}{\vty{3}}\\
+%
+%\ceq{\usebox{\boxint}}{\vty{3}}\\
+%
+\cty{\vdec{2}}{\usebox{\boxint}}\\
+%
+\cty{\vdec{3}}{\vty{5}\rightarrow \usebox{\boxint}}\\
+\ceq{\usebox{\boxint}}{\vty{5}}\\
+\cty{\vdec{4}}{\usebox{\boxint}}\\
+\cty{\usebox{\boxone}}{\usebox{\boxint}}\\
+\end{array}
+\]
+\end{boxedminipage}
+\begin{boxedminipage}{\hsize}
+\small
+\center{solution to constraints}
+\[
+\begin{array}{lllll}
+\sdec{1}{n}{3} & \sdec{2}{n}{3} & \sdec{3}{f}{2} & \sdec{4}{n}{3}
+& \sdec{5}{f}{1}
+\end{array}
+\]
+\end{boxedminipage}
+\label{fig:lexical-scope}
+\caption{Lexical scoping modeled by edges between scopes.}
+\end{figure}
+

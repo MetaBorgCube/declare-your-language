@@ -1,0 +1,55 @@
+
+digraph { 
+rankdir=BT
+  "4" [shape="circle",label=<4>];
+  
+  
+  "x_8" [shape="square",label=<x<sub>8</sub>>];
+  "x_8" -> "4"[arrowhead="normal",weight=1,constraint=true];
+  "4" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  "4" -> "s1?"[arrowhead="empty",weight=1,constraint=true];
+  "s1?" [shape="circle",label=<&sigmaf;<sub>1</sub>>];
+  
+  "1" [shape="circle",label=<1>];
+  "A_1" [shape="square",label=<A<sub>1</sub>>];
+  "a_3" [shape="square",label=<a<sub>3</sub>>];
+  "y_6" [shape="square",label=<y<sub>6</sub>>];
+  "1" -> "A_1"[arrowhead="normal",weight=1,constraint=true];
+  "1" -> "a_3"[arrowhead="normal",weight=1,constraint=true];
+  "1" -> "y_6"[arrowhead="normal",weight=1,constraint=true];
+  "A_4" [shape="square",label=<A<sub>4</sub>>];
+  "a_7" [shape="square",label=<a<sub>7</sub>>];
+  "A_4" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  "a_7" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+  
+  
+  "3" [shape="circle",label=<3>];
+  
+  
+  "x_5" [shape="square",label=<x<sub>5</sub>>];
+  "x_5" -> "3"[arrowhead="normal",weight=1,constraint=true];
+  
+  "A_4" [shape="square",label=<A<sub>4</sub>>];
+  "3" -> "A_4"[arrowhead="empty",weight=1,constraint=true];
+  
+  
+  
+  "2" [shape="circle",label=<2>];
+  "x_2" [shape="square",label=<x<sub>2</sub>>];
+  "2" -> "x_2"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  "2" -> "1"[arrowhead="normal",weight=1,constraint=true];
+  
+  
+  
+  
+   
+  "A_1" -> "2"[arrowhead="empty",weight=1,constraint=true]; 
+}

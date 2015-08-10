@@ -1,0 +1,24 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=3.5cm,paperheight=2.4cm,hmargin=.1cm,vmargin=.2cm]{geometry}
+
+\input{semantics}
+\input{resolution-calculus}
+
+\begin{document}
+\pagestyle{empty}
+\noindent
+\renewcommand{\S}{\mathcal{S}}$$
+\begin{array}{c}
+\dfrac{x : \tau_1, \Gamma \vdash e : \tau_2}{\Gamma \vdash \lambda x.e : \tau_1 \rightarrow \tau_2}\bigskip\\
+\dfrac{\Gamma(x) = \tau}{\Gamma \vdash x : \tau}
+\end{array}
+$$
+
+
+
+
+\end{document}
+

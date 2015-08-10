@@ -1,0 +1,61 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=14cm,paperheight=4.7cm,hmargin=.1cm,vmargin=.1cm]{geometry}
+
+\input{semantics}
+\input{resolution-calculus}
+\newcommand{\infrulee}[3]{\begin{minipage}{4.6cm}
+	\infrule{#1}{#2}{#3} 
+	\end{minipage}}
+\newcommand{\infruleee}[3]{\begin{minipage}{4.2cm}
+	\infrule{#1}{#2}{#3} 
+	\end{minipage}}
+
+\begin{document}
+\pagestyle{empty}
+\noindent
+\begin{boxedminipage}{13.8cm}
+
+\textbf{Well-formed paths}
+
+\[
+	   \WF(p) \Leftrightarrow p \in \pstep^* \cdot \istep{\_}{\_}^* 
+\bigskip\]
+	
+\textbf{Specificity ordering on paths}
+\begin{center}
+\noindent
+	\infruleee{DI}{}{
+		\dstep{\_} < \istep{\_}{\_}
+	}
+	\infruleee{IP}{}{
+		\istep{\_}{\_} < \pstep 
+	}
+	\infruleee{DP}{}{
+		 \dstep{\_} < \pstep
+	}
+
+\medskip
+
+    \infrulee{Lex1}{
+		s_1 < s_2
+	}{ 
+		s_1\cdot p_1 < s_2 \cdot p_2
+	}
+	\infrulee{Lex2}{
+		p_1 < p_2
+	}{ 
+		s \cdot p_1 < s \cdot p_2
+	}
+
+\smallskip
+\end{center}
+
+\end{boxedminipage}
+
+
+
+
+\end{document}

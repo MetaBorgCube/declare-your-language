@@ -1,0 +1,26 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{boxedminipage}
+\usepackage[paperwidth=12.5cm,paperheight=1.7cm,hmargin=.1cm,vmargin=.1cm]{geometry}
+
+\input{semantics}
+\input{resolution-calculus}
+
+\begin{document}
+\pagestyle{empty}
+\noindent
+\begin{minipage}{12.3cm}%\begin{boxedminipage}{12.3cm}
+\medskip
+      $$
+      \infrulenl{  \vdash p : \ri{x}{i} \resolveau{} \di{x}{i'}}{ i \seq{\text{\tt P}} i'} \tab\tab\tab\tab
+      \infrulenl{ i' \seq{\text{\tt P}} i}{ i \seq{\text{\tt P}} i'}\tab\tab\tab\tab  
+      \infrulenl{ i \seq{\text{\tt P}} i' \tab i' \seq{\text{\tt P}} i''}{ i \seq{\text{\tt P}} i''} \tab\tab\tab\tab 
+      \infrulenl{}{i \seq{\text{\tt P}} i}\bigskip
+      $$
+\end{minipage}%\end{boxedminipage}
+
+
+
+
+\end{document}

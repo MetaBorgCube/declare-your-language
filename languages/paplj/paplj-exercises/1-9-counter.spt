@@ -1,0 +1,96 @@
+module ex1-9-counter
+
+language PAPLJ
+
+start symbol Program
+
+test counter [[
+  program CounterOrg
+  
+  class Counter {
+    Num count // default value 0    
+    Num next() {
+      this.count = this.count + 1
+    }  
+    Counter init() {
+      this.count = 1; this
+    }   
+    Counter reset(Num i) {
+      this.count = i; this
+    }
+  }
+
+run
+
+  let Counter c1 = new Counter()
+      Counter c2 = new Counter().init()
+      Counter c3 = new Counter()
+   in 
+  {
+     c1.next(); 
+     c2.next();
+     c2.next();
+     c2.next();
+     c1.reset(c2.count);
+     c1.count
+   }
+]] parse to
+    Program(
+      "CounterOrg"
+    , [ Class(
+          "Counter"
+        , NoExtends()
+        , [Field(NumT(), "count")]
+        , [ Method(
+              NumT()
+            , "next"
+            , []
+            , Do(
+                [Set(
+                   This()
+                 , "count"
+                 , Add(Get(This(), "count"), Num("1"))
+                 )]
+              )
+            )
+          , Method(
+              ClassT("Counter")
+            , "init"
+            , []
+            , Do([Set(This(), "count", Num("1")), This()])
+            )
+          , Method(
+              ClassT("Counter")
+            , "reset"
+            , [Param(NumT(), "i")]
+            , Do([Set(This(), "count", Var("i")), This()])
+            )
+          ]
+        )
+      ]
+    , Let(
+        [ Bind(ClassT("Counter"), "c1", 
+         New("Counter"))
+        , Bind(
+            ClassT("Counter")
+          , "c2"
+          , Call(New("Counter"), "init", [])
+          )
+        , Bind(ClassT("Counter"), "c3", 
+         New("Counter"))
+        ]
+      , Do(
+          [ Call(Var("c1"), "next", [])
+          , Call(Var("c2"), "next", [])
+          , Call(Var("c2"), "next", [])
+          , Call(Var("c2"), "next", [])
+          , Call(
+              Var("c1")
+            , "reset"
+            , [Get(Var("c2"), "count")]
+            )
+          , Get(Var("c1"), "count")
+          ]
+        )
+      )
+    )

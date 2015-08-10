@@ -1,0 +1,39 @@
+
+\begin{figure}[t]
+\begin{boxedminipage}{\hsize}
+  \begin{align*}
+& \begin{array}{rlll}
+  \sort{A} := & \AScopeof{\sort{R}}{\sort{S}} 
+  & \mid \AAssoc{\sort{D}}{\sort{S}}  
+  & \mid \ARImport{\sort{S}}{\sort{S}}\\ 
+  \mid & \AScopeof{\sort{D}}{\sort{S}}
+  & \mid \AParent{\sort{S}}{\sort{S}} 
+  & \mid \ASImport{\sort{S}}{\sort{S}} \\
+  \mid & \ASubtype{\sort{T}}{\sort{T}} \\
+   % & \mid \AScopeDef{\sort{D}}{\sort{S}}\\
+  \\
+  \sort{C} := & \CTrue
+  & \mid \CResolve{\sort{R}}{\sort{D}} 
+  & \mid \CTeq{\sort{T}}{\sort{T}} \\
+  \mid & \CAnd{\sort{C}}{\sort{C}} 
+  & \mid \CAssoc{\sort{D}}{\sort{S}}
+  & \mid \CSubtype{\sort{T}}{\sort{T}} \\
+  \mid & \CType{\sort{D}}{\sort{T}} 
+  & \mid \CLub{\sort{T}}{\sort{T}}{\sort{T}}
+  & \mid \sort{A}
+  % \mid  \exists\vec{\tau}\vec{\sigma}\vec{\iota}. \sort{C} \\
+\end{array}\\
+& \begin{array}{rlllrllll} 
+\multicolumn{2}{l}{\sort{D} :=  \delta  \mid \di{x}{i}\tab \tab} 
+& \multicolumn{6}{l}{\sort{S} := \varsigma  \mid S_i \mid \bot }
+\smallskip\\
+\multicolumn{2}{l}{\sort{R} := \rho \mid \ri{x}{i}} 
+& \multicolumn{6}{l}{\sort{T} := \tau \mid
+c({\sort{T},...,\sort{T}}) \hbox{ with } c \in \TypeCons}\smallskip\\
+%\sort{I} :=  & \iota  & \mid i & \mid \pos{\sort{D}} & \mid \pos{\sort{R}} \smallskip\
+\end{array}
+\end{align*}
+\end{boxedminipage}
+  \caption{Syntax of constraints}
+  \label{fig:constraintsyntax}
+\end{figure}

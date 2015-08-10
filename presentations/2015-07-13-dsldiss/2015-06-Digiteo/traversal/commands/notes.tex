@@ -1,0 +1,21 @@
+\newcommand{\mynote}[2]
+     %%{\sorrynotesaredisallowedatthispoint}
+     {{\bfseries\sffamily\scriptsize#1~{\small$\blacktriangleright$\textsf{\emph{#2}}$\blacktriangleleft$}}}
+
+\newcommand\TODO[1]{\mynote{TODO}{#1}}
+
+\newcommand{\AP}[1]{\mynote{AP}{#1}}
+\newcommand{\EV}[1]{\mynote{EV}{#1}}
+\newcommand{\PN}[1]{\mynote{PN}{#1}}
+\newcommand{\APT}[1]{\mynote{APT}{#1}}
+\newcommand{\GW}[1]{\mynote{GW}{#1}}
+\newcommand{\HvA}[1]{\mynote{HvA}{#1}}
+
+\newcommand{\mymnote}[2]{
+  \text{\begin{minipage}{.7\linewidth}
+    \mynote{#1}{#2}
+  \end{minipage}}\ \hspace*{-.35\linewidth}\\
+}
+
+\newcommand{\mPN}[1]{\mymnote{PN}{#1}}
+\newcommand{\mHvA}[1]{\mymnote{HvA}{#1}}

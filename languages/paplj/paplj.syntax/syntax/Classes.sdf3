@@ -1,0 +1,9 @@
+module Classes
+
+imports Expressions Common
+
+context-free syntax
+
+  Class.Class = [class]
+  
+  

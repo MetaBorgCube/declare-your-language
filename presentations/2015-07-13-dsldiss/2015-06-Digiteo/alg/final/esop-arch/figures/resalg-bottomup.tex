@@ -1,0 +1,32 @@
+\begin{figure}[p]
+\begin{verbatim}
+input: scope graph
+output: visibleScopes : Scope -> Set<Scope>
+output: resolution : Map<Ref, Dec>
+
+for each scope S :
+    visibleScopes[S] := {}
+
+while changes :
+   for each scope S :
+      closure(S)
+
+procedure closure(S1) :
+    visible := {S1} + filter(wf, visibleScopes[parent(S1)])
+
+    visibleScopes[S1] := visible
+
+    for each r_x in I(S1) :
+       d_x^S2 := resolve r_x in visible
+       visibleScopes[S1] += I : S1 -> S2
+
+    if visibleScopes is complete
+       for each r_x in S1 :
+          resolve r_x in visibleScopes[S1]
+
+function resolve r_x in visible :
+    for each S in visible order by specificity :
+       if d_x in D(S) then return d_x
+\end{verbatim}
+\caption{Resolution algorithm}
+\end{figure}

@@ -1,0 +1,73 @@
+We thank the reviewers for their feedback.  We have a few responses:  
+
+Reviewer A:
+
+"WHAT IS IT THE AUTHORS PROPOSE THAT CAN'T BE DONE ... WITH [REFERENCE] ATTRIBUTE GRAMMARS?"
+References in RAGs allow links to be made in the AST, i.e. attribute values 
+can be cross-references in the AST. However, the computation of these values is done using code in
+a general-purpose language to traverse the AST. Our goal is a framework 
+that _restricts_ the expressivity of reasoning about name and type resolution so that we can 
+derive several artifacts automatically. (Incidentally, if Knuth proposed RAGs, we'd like to 
+see the reference.)
+
+"Scope graphs as introduced up to here seem to be little more than nested environments." 
+Scope graphs presented here corresponds to their definition in [8]; they can encode a large set of features 
+including lexical scoping, module systems, class hierarchy and partial classes for example. 
+
+“Palsberg and Schwartzbach’s work on object-oriented type constraints”
+The 1992 paper by Palsberg and Schwartzbach completely ignores name resolution and relies on unique names.
+
+“I found the definition of well-foundedness counterintuitive. Are circular relationships allowed?” 
+The parent relation models lexical scoping (nested scopes), which are _not_ allowed to be circular. 
+Imports are used to model relations such as module imports and class inheritance; these can be circular.
+
+“It came as a surprise to me to see the restrictions on the generated constraints.”
+This is exactly the advantage of a domain-specific treatment over using a general-purpose constraint solving 
+engine. By understanding the restrictions we can pose on constraints, we can optimize the implementation. 
+Our goal is _not_ to maximize expressiveness, but rather to find the minimal formalism that allows as wide 
+a range of name + type systems to be expressed in a principled way.
+
+Reviewer D:
+
+About "language-independence":
+Of course we do not intend to claim our approach covers covers *all* existing and 
+future programming languages. We acknowledge that the scope of our work should 
+be stated more clearly in the paper's introduction, in particular the restriction to statically typed languages.
+However, even if "each type system is meticulously a part of a specific language", we still believe that some 
+generality can be achieved in a framework and that the type system of a particular language can be seen 
+as a parameter of the framework (like the HM(X) framework for type inference is parameterized by the constraint domain X).    
+
+"Couldn't you just...consider type resolution a higher-level process that uses name resolution in the leaves...?"
+No; as explained in the intro (Fig. 1) and in section 2.5, the case of field access introduces a mutual dependency 
+between type inference and name resolution, so name resolution can not be restricted to appear "in the leaves".  
+
+"p1c2 'minimal program regions that behave uniformly with respect to resolution'" with example and problematic points:
+(1) we do not require regions to be contiguous ("sets of locations" might be more precise terminology)
+(2) indeed, a nested scope is created for these smaller regions
+(3) indeed, bar is declared in its own scope (basically `foo._` opens a new scope in which `bar` is placed)
+(4) we don't define scopes like that
+
+"p1c1[sic] 'sound and complete \emph{resolution algorithm}'":
+We just mean "sound and complete" with respect to the resolution calculus just mentioned.
+We're not claiming completeness for the model (the scope graph abstraction) wrt/ all possible languages.
+
+"p3c1, 'associating type information with identifier declarations'":
+In the example given by the reviewer one can consider that the "var i{0...9}" sub-term actually declares the 10 identifiers 
+in the corresponding scope. Identifier declarations are identified by both the name they define 
+and the position, so declaring multiple names with the same position is fine. 
+% Similarly, when modelling Java, 
+%with each class declaration, a declaration of a "this" variable is added to the class scope in the corresponding scope graph.
+
+"p4c1, 'parent scopes': You seem to assume that this concept covers the given scope rules.":
+No, the parent concept is only intended to handle lexical scoping.  We do not attempt to
+handle dynamic scoping (the introduction says "lexically-scoped langauges").  Inheritance
+is modeled using the "import" mechanism.
+
+"Fig. 5: .. module names get special treatment..." 
+Imports and modules (scopes associated with a declaration) are one of the base components of the scope graph formalism
+(with declaration, scopes, parent relationship and reference). They are used to not only model usual module/import but 
+also classes and records, which therefore do not need additional "special treatment". 
+
+"Scope graph figures: ... Did I overlook the definition of the notation?"
+See p4c2.
+
