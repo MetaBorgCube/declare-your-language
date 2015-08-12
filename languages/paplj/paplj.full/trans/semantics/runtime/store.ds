@@ -4,8 +4,8 @@ imports trans/semantics/runtime/values
 imports trans/semantics/runtime/primitives
 
 signature
-  semantic components
-    Store -> Map<Int, V> 
+  aliases
+    Store : Map<Int, V> 
   variables 
     S : Store
   constructors

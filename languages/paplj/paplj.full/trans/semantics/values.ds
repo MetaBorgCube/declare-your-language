@@ -16,13 +16,13 @@ signature // basic values
 // of method table?
  
 signature // representation of Class at run-time 
-  semantic components
-    C -> Map<String, Class>
+  aliases
+    ClassMap : Map<String, Class>
   constructors    
     loadClass   : String --> Class
-    initClasses : List(Class) --> C
+    initClasses : List(Class) --> ClassMap
   variables
-    C : C 
+    C : ClassMap
     
 rules
 
@@ -33,9 +33,9 @@ rules
 
 signature // object values
   sorts Obj Super FieldSet 
-  semantic components
-    FM -> Map<String, Int> 
-    MM -> Map<String, Method>   
+  aliases
+    FM : Map<String, Int> 
+    MM : Map<String, Method>   
   variables
     FM : FM
     MM : MM
