@@ -88,52 +88,52 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
     }
   }
 
-  public R_default_Int exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_Int exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     this.specializeChildren(0);
-    final A_This this_in19800 = _1;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_in27900 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_in27900 = _3;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_in27900 = _4;
-    final A_Obj lifted_19380000 = this._1;
-    final String c23700000 = this._2;
-    final String f9100000 = this._3;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_in23400 = _1;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_in25600 = _2;
+    final A_This this_in22300 = _3;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_in25600 = _4;
+    final A_Obj lifted_44130000 = this._1;
+    final String c2115000000 = this._2;
+    final String f1202000000 = this._3;
     { 
-      final A_This this_120700 = this_in19800;
-      final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_128400 = env_in27900;
-      final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_133300 = c_in27900;
-      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_128400 = store_in27900;
-      final ObjV_4 $tmp564 = lifted_19380000.match(ObjV_4.class);
-      if($tmp564 != null)
+      final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_124400 = l_string_class_in23400;
+      final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_125900 = l_string_v_in25600;
+      final A_This this_123100 = this_in22300;
+      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_125900 = l_int_v_in25600;
+      final ObjV_4 $tmp1028 = lifted_44130000.match(ObjV_4.class);
+      if($tmp1028 != null)
       { 
-        final String c17300000 = $tmp564.get_1();
-        final A_Super sup6200000 = $tmp564.get_2();
-        final com.github.krukow.clj_ds.PersistentMap<String, Integer> fs5900000 = $tmp564.get_3();
-        final com.github.krukow.clj_ds.PersistentMap<String, A_Method> lifted_18470000 = $tmp564.get_4();
-        if(c17300000 != null && c17300000.equals(c23700000))
+        final String c1269000000 = $tmp1028.get_1();
+        final A_Super sup231000000 = $tmp1028.get_2();
+        final com.github.krukow.clj_ds.PersistentMap<String, Integer> fs225000000 = $tmp1028.get_3();
+        final com.github.krukow.clj_ds.PersistentMap<String, A_Method> lifted_43300000 = $tmp1028.get_4();
+        if(c1269000000 != null && c1269000000.equals(c2115000000))
         { 
-          final int lifted_19370000 = fs5900000.get(f9100000);
-          final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_out27900 = store_128400;
-          final int result_out27900 = lifted_19370000;
-          return new R_default_Int(result_out27900, store_out27900);
+          final int lifted_44120000 = fs225000000.get(f1202000000);
+          final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_out25500 = l_int_v_125900;
+          final int result_out53300 = lifted_44120000;
+          return new R_default_Int(result_out53300, l_int_v_out25500);
         }
         else
         { 
-          if(c17300000 != null && c17300000.equals(c23700000))
+          if(c1269000000 != null && c1269000000.equals(c2115000000))
           { }
           else
           { 
-            final Super_1 $tmp565 = sup6200000.match(Super_1.class);
-            if($tmp565 != null)
+            final Super_1 $tmp1029 = sup231000000.match(Super_1.class);
+            if($tmp1029 != null)
             { 
-              final A_Obj o9100000 = $tmp565.get_1();
-              final lookupField_3 lifted_19390000 = new lookupField_3(this.getSourceInfo(), o9100000, c23700000, f9100000);
-              final R_default_Int $tmp566 = lifted_19390000.exec_default(this_120700, env_128400, c_133300, store_128400);
-              final int lifted_2111000 = $tmp566.value;
-              final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_220300 = $tmp566.get_1();
-              final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_out27900 = store_220300;
-              final int result_out27900 = lifted_2111000;
-              return new R_default_Int(result_out27900, store_out27900);
+              final A_Obj o605000000 = $tmp1029.get_1();
+              final lookupField_3 lifted_44140000 = new lookupField_3(this.getSourceInfo(), o605000000, c2115000000, f1202000000);
+              final R_default_Int $tmp1030 = lifted_44140000.exec_default(l_string_class_124400, l_string_v_125900, this_123100, l_int_v_125900);
+              final int lifted_4577000 = $tmp1030.value;
+              final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_219200 = $tmp1030.get_1();
+              final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_out25500 = l_int_v_219200;
+              final int result_out53300 = lifted_4577000;
+              return new R_default_Int(result_out53300, l_int_v_out25500);
             }
             else
             { }
@@ -165,7 +165,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("lookupField", 3), _1.toStrategoTerm(factory), factory.makeString(_2), factory.makeString(_3));
+    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("lookupField", 3), _1.toStrategoTerm(factory), TermUtils.termFromString(_2, factory), TermUtils.termFromString(_3, factory));
     if(getSourceInfo() != null)
     { 
       getSourceInfo().apply(term);

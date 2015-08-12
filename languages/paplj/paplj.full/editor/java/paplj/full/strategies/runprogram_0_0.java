@@ -15,8 +15,8 @@ public class runprogram_0_0 extends Strategy {
 	@Override
 	public IStrategoTerm invoke(Context context, IStrategoTerm program) {
 
-		return new Generic_A_Program(null, program).exec_default(null,
-				PersistentTreeMap.EMPTY, PersistentTreeMap.EMPTY, PersistentTreeMap.EMPTY)
-				.toStrategoTerm(context.getFactory());
+		return new Generic_A_Program(null, program).exec_default(
+				PersistentTreeMap.EMPTY, PersistentTreeMap.EMPTY, null,
+				PersistentTreeMap.EMPTY).toStrategoTerm(context.getFactory());
 	}
 }

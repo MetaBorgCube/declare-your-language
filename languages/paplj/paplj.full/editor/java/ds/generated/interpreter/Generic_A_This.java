@@ -4,6 +4,7 @@ import org.metaborg.meta.interpreter.framework.*;
 import org.spoofax.interpreter.terms.*;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.interpreter.core.Tools;
+import java.util.Objects;
 
 @SuppressWarnings("unused") public class Generic_A_This extends A_This implements IGenericNode
 { 
@@ -11,6 +12,7 @@ import org.spoofax.interpreter.core.Tools;
 
   public Generic_A_This (INodeSource source, IStrategoTerm term) 
   { 
+    Objects.requireNonNull(term);
     this.setSourceInfo(source);
     this.aterm = term;
   }
@@ -36,18 +38,21 @@ import org.spoofax.interpreter.core.Tools;
       final IStrategoAppl term = (IStrategoAppl)aterm;
       final String name = term.getName();
       final INodeSource source = NodeSource.fromStrategoTerm(term);
+      if(name.equals("T") && term.getSubtermCount() == 1)
+      { 
+        A_This replacement = replace(new T_1(source, new Generic_A_Obj(NodeSource.fromStrategoTerm(term.getSubterm(0)), term.getSubterm(0)).specialize(1)));
+        if(depth > 0)
+        { 
+          replacement.specializeChildren(depth - 1);
+        }
+        return replacement;
+      }
     }
-    IGenericNode replacement = null;
     try
     { 
-      if(replacement != null)
-      { 
-        replacement.replace(this);
-      }
-      replacement = new Generic_A_Obj(getSourceInfo(), aterm);
-      return replace(new T_1(getSourceInfo(), (A_Obj)replacement.specialize(1)));
+      return replace(new T_1(getSourceInfo(), new Generic_A_Obj(NodeSource.fromStrategoTerm(aterm), aterm).specialize(1)));
     }
-    catch(RewritingException m_111703)
+    catch(RewritingException f_353500)
     { }
     throw new RewritingException(aterm.toString());
   }

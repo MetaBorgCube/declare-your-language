@@ -4,6 +4,7 @@ import org.metaborg.meta.interpreter.framework.*;
 import org.spoofax.interpreter.terms.*;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.interpreter.core.Tools;
+import java.util.Objects;
 
 @SuppressWarnings("unused") public class Generic_A_Seq extends A_Seq implements IGenericNode
 { 
@@ -11,6 +12,7 @@ import org.spoofax.interpreter.core.Tools;
 
   public Generic_A_Seq (INodeSource source, IStrategoTerm term) 
   { 
+    Objects.requireNonNull(term);
     this.setSourceInfo(source);
     this.aterm = term;
   }
@@ -45,18 +47,21 @@ import org.spoofax.interpreter.core.Tools;
         }
         return replacement;
       }
+      if(name.equals("expr2seq") && term.getSubtermCount() == 1)
+      { 
+        A_Seq replacement = replace(new expr2seq_1(source, new Generic_A_Expr(NodeSource.fromStrategoTerm(term.getSubterm(0)), term.getSubterm(0)).specialize(1)));
+        if(depth > 0)
+        { 
+          replacement.specializeChildren(depth - 1);
+        }
+        return replacement;
+      }
     }
-    IGenericNode replacement = null;
     try
     { 
-      if(replacement != null)
-      { 
-        replacement.replace(this);
-      }
-      replacement = new Generic_A_Expr(getSourceInfo(), aterm);
-      return replace(new expr2seq_1(getSourceInfo(), (A_Expr)replacement.specialize(1)));
+      return replace(new expr2seq_1(getSourceInfo(), new Generic_A_Expr(NodeSource.fromStrategoTerm(aterm), aterm).specialize(1)));
     }
-    catch(RewritingException p_111703)
+    catch(RewritingException i_353500)
     { }
     throw new RewritingException(aterm.toString());
   }

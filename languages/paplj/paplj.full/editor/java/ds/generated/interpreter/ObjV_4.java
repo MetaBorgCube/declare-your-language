@@ -125,7 +125,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("ObjV", 4), factory.makeString(_1), _2.toStrategoTerm(factory), AutoMapUtils.toStrategoTerm_FM(_3, factory), AutoMapUtils.toStrategoTerm_MM(_4, factory));
+    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("ObjV", 4), TermUtils.termFromString(_1, factory), _2.toStrategoTerm(factory), AutoMapUtils.map_String_int2aterm(_3, factory), AutoMapUtils.map_String_A_Method2aterm(_4, factory));
     if(getSourceInfo() != null)
     { 
       getSourceInfo().apply(term);

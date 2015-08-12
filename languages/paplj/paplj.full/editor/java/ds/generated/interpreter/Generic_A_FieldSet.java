@@ -4,6 +4,7 @@ import org.metaborg.meta.interpreter.framework.*;
 import org.spoofax.interpreter.terms.*;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.interpreter.core.Tools;
+import java.util.Objects;
 
 @SuppressWarnings("unused") public class Generic_A_FieldSet extends A_FieldSet implements IGenericNode
 { 
@@ -11,6 +12,7 @@ import org.spoofax.interpreter.core.Tools;
 
   public Generic_A_FieldSet (INodeSource source, IStrategoTerm term) 
   { 
+    Objects.requireNonNull(term);
     this.setSourceInfo(source);
     this.aterm = term;
   }
@@ -37,7 +39,6 @@ import org.spoofax.interpreter.core.Tools;
       final String name = term.getName();
       final INodeSource source = NodeSource.fromStrategoTerm(term);
     }
-    IGenericNode replacement = null;
     throw new RewritingException(aterm.toString());
   }
 

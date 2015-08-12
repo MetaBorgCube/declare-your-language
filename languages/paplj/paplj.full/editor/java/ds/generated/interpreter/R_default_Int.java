@@ -19,7 +19,7 @@ public class R_default_Int  implements IConvertibleToStrategoTerm
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    return factory.makeAppl(factory.makeConstructor("R_default_Int", 2), factory.makeInt(value), AutoMapUtils.toStrategoTerm_Store(_1, factory));
+    return factory.makeAppl(factory.makeConstructor("R_default_Int", 2), TermUtils.termFromInt(value, factory), AutoMapUtils.map_int_A_V2aterm(_1, factory));
   }
 
   public com.github.krukow.clj_ds.PersistentMap<Integer, A_V> get_1()
