@@ -56,6 +56,11 @@ import java.util.Objects;
     return aterm;
   }
 
+  public R_init_V exec_init()
+  { 
+    return specialize(1).exec_init();
+  }
+
   public R_default_V exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     return specialize(1).exec_default(_1, _2, _3, _4);
