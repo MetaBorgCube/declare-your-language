@@ -77,39 +77,39 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
     }
   }
 
-  public R_default_V exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_V exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     this.specializeChildren(0);
-    final A_This this_in21400 = _1;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_in29400 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_in29400 = _3;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_in29400 = _4;
-    final A_Expr lifted_19990000 = this._1;
-    final A_Expr lifted_20010000 = this._2;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_in24700 = _1;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_in26900 = _2;
+    final A_This this_in23800 = _3;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_in26900 = _4;
+    final A_Expr lifted_44720000 = this._1;
+    final A_Expr lifted_44730000 = this._2;
     { 
-      final A_This this_122400 = this_in21400;
-      final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_129900 = env_in29400;
-      final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_135100 = c_in29400;
-      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_129900 = store_in29400;
-      final R_default_V $tmp595 = lifted_19990000.exec_default(this_122400, env_129900, c_135100, store_129900);
-      final A_V lifted_2146000 = $tmp595.value;
-      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_221500 = $tmp595.get_1();
-      final NumV_1 $tmp596 = lifted_2146000.match(NumV_1.class);
-      if($tmp596 != null)
+      final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_125800 = l_string_class_in24700;
+      final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_127300 = l_string_v_in26900;
+      final A_This this_124600 = this_in23800;
+      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_127300 = l_int_v_in26900;
+      final R_default_V $tmp1059 = lifted_44720000.exec_default(l_string_class_125800, l_string_v_127300, this_124600, l_int_v_127300);
+      final A_V lifted_4609000 = $tmp1059.value;
+      final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_220200 = $tmp1059.get_1();
+      final NumV_1 $tmp1060 = lifted_4609000.match(NumV_1.class);
+      if($tmp1060 != null)
       { 
-        final int i6800000 = $tmp596.get_1();
-        final R_default_V $tmp597 = lifted_20010000.exec_default(this_122400, env_129900, c_135100, store_221500);
-        final A_V lifted_2145000 = $tmp597.value;
-        final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_313600 = $tmp597.get_1();
-        final NumV_1 $tmp598 = lifted_2145000.match(NumV_1.class);
-        if($tmp598 != null)
+        final int i512000000 = $tmp1060.get_1();
+        final R_default_V $tmp1061 = lifted_44730000.exec_default(l_string_class_125800, l_string_v_127300, this_124600, l_int_v_220200);
+        final A_V lifted_4608000 = $tmp1061.value;
+        final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_312800 = $tmp1061.get_1();
+        final NumV_1 $tmp1062 = lifted_4608000.match(NumV_1.class);
+        if($tmp1062 != null)
         { 
-          final int j4500000 = $tmp598.get_1();
-          final boolean lifted_20030000 = ds.manual.interpreter.Natives.eqI_2(i6800000, j4500000);
-          final BoolV_1 lifted_20020000 = new BoolV_1(this.getSourceInfo(), lifted_20030000);
-          final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_out29400 = store_313600;
-          final A_V result_out29400 = lifted_20020000;
-          return new R_default_V(result_out29400, store_out29400);
+          final int j264000000 = $tmp1062.get_1();
+          final boolean lifted_44750000 = ds.manual.interpreter.Natives.eqI_2(i512000000, j264000000);
+          final BoolV_1 lifted_44740000 = new BoolV_1(this.getSourceInfo(), lifted_44750000);
+          final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_out26800 = l_int_v_312800;
+          final A_V result_out54600 = lifted_44740000;
+          return new R_default_V(result_out54600, l_int_v_out26800);
         }
         else
         { }

@@ -88,31 +88,31 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
     }
   }
 
-  public R_default_V exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_V exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     this.specializeChildren(0);
-    final A_This this_in19600 = _1;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_in27700 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_in27700 = _3;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_in27700 = _4;
-    final A_Obj o8800000 = this._1;
-    final String c16700000 = this._2;
-    final String f8800000 = this._3;
-    final A_This this_120500 = this_in19600;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_128200 = env_in27700;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_133100 = c_in27700;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_128200 = store_in27700;
-    final lookupField_3 lifted_18890000 = new lookupField_3(this.getSourceInfo(), o8800000, c16700000, f8800000);
-    final R_default_Int $tmp560 = lifted_18890000.exec_default(this_120500, env_128200, c_133100, store_128200);
-    final int lifted_2083000 = $tmp560.value;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_220100 = $tmp560.get_1();
-    final read_1 lifted_18880000 = new read_1(this.getSourceInfo(), lifted_2083000);
-    final R_default_V $tmp561 = lifted_18880000.exec_default(this_120500, env_128200, c_133100, store_220100);
-    final A_V lifted_2085000 = $tmp561.value;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_312700 = $tmp561.get_1();
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_out27700 = store_312700;
-    final A_V result_out27700 = lifted_2085000;
-    return new R_default_V(result_out27700, store_out27700);
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_in23200 = _1;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_in25400 = _2;
+    final A_This this_in21900 = _3;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_in25400 = _4;
+    final A_Obj o603000000 = this._1;
+    final String c1264000000 = this._2;
+    final String f1200000000 = this._3;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_124200 = l_string_class_in23200;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_125700 = l_string_v_in25400;
+    final A_This this_122800 = this_in21900;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_125700 = l_int_v_in25400;
+    final lookupField_3 lifted_43700000 = new lookupField_3(this.getSourceInfo(), o603000000, c1264000000, f1200000000);
+    final R_default_Int $tmp1024 = lifted_43700000.exec_default(l_string_class_124200, l_string_v_125700, this_122800, l_int_v_125700);
+    final int lifted_4551000 = $tmp1024.value;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_219000 = $tmp1024.get_1();
+    final read_1 lifted_43690000 = new read_1(this.getSourceInfo(), lifted_4551000);
+    final R_default_V $tmp1025 = lifted_43690000.exec_default(l_string_class_124200, l_string_v_125700, this_122800, l_int_v_219000);
+    final A_V lifted_4553000 = $tmp1025.value;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_311800 = $tmp1025.get_1();
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_out25300 = l_int_v_311800;
+    final A_V result_out53100 = lifted_4553000;
+    return new R_default_V(result_out53100, l_int_v_out25300);
   }
 
   public A_Obj get_1()
@@ -132,7 +132,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("readField", 3), _1.toStrategoTerm(factory), factory.makeString(_2), factory.makeString(_3));
+    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("readField", 3), _1.toStrategoTerm(factory), TermUtils.termFromString(_2, factory), TermUtils.termFromString(_3, factory));
     if(getSourceInfo() != null)
     { 
       getSourceInfo().apply(term);

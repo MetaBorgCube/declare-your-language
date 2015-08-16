@@ -46,22 +46,22 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
     }
   }
 
-  public R_default_V exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_V exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     this.specializeChildren(0);
-    final A_This this_in23400 = _1;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_in31500 = _2;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_in31500 = _3;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_in31500 = _4;
-    final int loc4500000 = this._1;
-    final A_This this_124300 = this_in23400;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_V> env_131800 = env_in31500;
-    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> c_138100 = c_in31500;
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> S3100000 = store_in31500;
-    final A_V lifted_18910000 = S3100000.get(loc4500000);
-    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> store_out31500 = S3100000;
-    final A_V result_out31500 = lifted_18910000;
-    return new R_default_V(result_out31500, store_out31500);
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_in26500 = _1;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_in28700 = _2;
+    final A_This this_in25800 = _3;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_in28700 = _4;
+    final int loc41000000 = this._1;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_Class> l_string_class_127600 = l_string_class_in26500;
+    final com.github.krukow.clj_ds.PersistentMap<String, A_V> l_string_v_128900 = l_string_v_in28700;
+    final A_This this_126500 = this_in25800;
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> S27000000 = l_int_v_in28700;
+    final A_V lifted_43710000 = S27000000.get(loc41000000);
+    final com.github.krukow.clj_ds.PersistentMap<Integer, A_V> l_int_v_out28600 = S27000000;
+    final A_V result_out56400 = lifted_43710000;
+    return new R_default_V(result_out56400, l_int_v_out28600);
   }
 
   public int get_1()
@@ -71,7 +71,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("read", 1), factory.makeInt(_1));
+    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("read", 1), TermUtils.termFromInt(_1, factory));
     if(getSourceInfo() != null)
     { 
       getSourceInfo().apply(term);

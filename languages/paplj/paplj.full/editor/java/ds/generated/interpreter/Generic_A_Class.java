@@ -4,6 +4,7 @@ import org.metaborg.meta.interpreter.framework.*;
 import org.spoofax.interpreter.terms.*;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.interpreter.core.Tools;
+import java.util.Objects;
 
 @SuppressWarnings("unused") public class Generic_A_Class extends A_Class implements IGenericNode
 { 
@@ -11,6 +12,7 @@ import org.spoofax.interpreter.core.Tools;
 
   public Generic_A_Class (INodeSource source, IStrategoTerm term) 
   { 
+    Objects.requireNonNull(term);
     this.setSourceInfo(source);
     this.aterm = term;
   }
@@ -38,7 +40,7 @@ import org.spoofax.interpreter.core.Tools;
       final INodeSource source = NodeSource.fromStrategoTerm(term);
       if(name.equals("Class") && term.getSubtermCount() == 4)
       { 
-        A_Class replacement = replace(new Class_4(source, Tools.asJavaString(term.getSubterm(0)), new Generic_A_Extends(NodeSource.fromStrategoTerm(term.getSubterm(1)), term.getSubterm(1)), new L_A_Field(NodeSource.fromStrategoTerm(term.getSubterm(2))).fromStrategoTerm(term.getSubterm(2)), new L_A_Method(NodeSource.fromStrategoTerm(term.getSubterm(3))).fromStrategoTerm(term.getSubterm(3))));
+        A_Class replacement = replace(new Class_4(source, TermUtils.stringFromTerm(term.getSubterm(0)), new Generic_A_Extends(NodeSource.fromStrategoTerm(term.getSubterm(1)), term.getSubterm(1)).specialize(1), new L_A_Field(NodeSource.fromStrategoTerm(term.getSubterm(2))).fromStrategoTerm(term.getSubterm(2)), new L_A_Method(NodeSource.fromStrategoTerm(term.getSubterm(3))).fromStrategoTerm(term.getSubterm(3))));
         if(depth > 0)
         { 
           replacement.specializeChildren(depth - 1);
@@ -46,7 +48,6 @@ import org.spoofax.interpreter.core.Tools;
         return replacement;
       }
     }
-    IGenericNode replacement = null;
     throw new RewritingException(aterm.toString());
   }
 

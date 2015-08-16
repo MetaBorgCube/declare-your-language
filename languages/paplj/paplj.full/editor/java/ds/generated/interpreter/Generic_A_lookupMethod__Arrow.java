@@ -4,6 +4,7 @@ import org.metaborg.meta.interpreter.framework.*;
 import org.spoofax.interpreter.terms.*;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.interpreter.core.Tools;
+import java.util.Objects;
 
 @SuppressWarnings("unused") public class Generic_A_lookupMethod__Arrow extends A_lookupMethod__Arrow implements IGenericNode
 { 
@@ -11,6 +12,7 @@ import org.spoofax.interpreter.core.Tools;
 
   public Generic_A_lookupMethod__Arrow (INodeSource source, IStrategoTerm term) 
   { 
+    Objects.requireNonNull(term);
     this.setSourceInfo(source);
     this.aterm = term;
   }
@@ -38,7 +40,7 @@ import org.spoofax.interpreter.core.Tools;
       final INodeSource source = NodeSource.fromStrategoTerm(term);
       if(name.equals("lookupMethod") && term.getSubtermCount() == 2)
       { 
-        A_lookupMethod__Arrow replacement = replace(new lookupMethod_2(source, new Generic_A_Obj(NodeSource.fromStrategoTerm(term.getSubterm(0)), term.getSubterm(0)), Tools.asJavaString(term.getSubterm(1))));
+        A_lookupMethod__Arrow replacement = replace(new lookupMethod_2(source, new Generic_A_Obj(NodeSource.fromStrategoTerm(term.getSubterm(0)), term.getSubterm(0)).specialize(1), TermUtils.stringFromTerm(term.getSubterm(1))));
         if(depth > 0)
         { 
           replacement.specializeChildren(depth - 1);
@@ -46,7 +48,6 @@ import org.spoofax.interpreter.core.Tools;
         return replacement;
       }
     }
-    IGenericNode replacement = null;
     throw new RewritingException(aterm.toString());
   }
 
@@ -55,7 +56,7 @@ import org.spoofax.interpreter.core.Tools;
     return aterm;
   }
 
-  public R_default_Method exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_Method exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     return specialize(1).exec_default(_1, _2, _3, _4);
   }

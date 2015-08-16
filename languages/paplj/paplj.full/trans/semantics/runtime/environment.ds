@@ -4,8 +4,8 @@ imports trans/semantics/runtime/values
 imports trans/semantics/signatures/Common-sig
 
 signature
-  aliases
-    Env : Map<String, V>  
+  sort aliases
+    Env = Map<String, V>  
   variables
     E : Env
   constructors

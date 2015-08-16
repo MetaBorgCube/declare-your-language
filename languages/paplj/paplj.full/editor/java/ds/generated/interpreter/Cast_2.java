@@ -73,7 +73,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
     }
   }
 
-  public R_default_V exec_default(A_This _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, com.github.krukow.clj_ds.PersistentMap<String, A_Class> _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
+  public R_default_V exec_default(com.github.krukow.clj_ds.PersistentMap<String, A_Class> _1, com.github.krukow.clj_ds.PersistentMap<String, A_V> _2, A_This _3, com.github.krukow.clj_ds.PersistentMap<Integer, A_V> _4)
   { 
     this.specializeChildren(0);
     return super.exec_default(_1, _2, _3, _4);
@@ -91,7 +91,7 @@ import com.github.krukow.clj_lang.PersistentTreeMap;
 
   @Override public IStrategoTerm toStrategoTerm(ITermFactory factory)
   { 
-    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("Cast", 2), factory.makeString(_1), _2.toStrategoTerm(factory));
+    IStrategoAppl term = factory.makeAppl(factory.makeConstructor("Cast", 2), TermUtils.termFromString(_1, factory), _2.toStrategoTerm(factory));
     if(getSourceInfo() != null)
     { 
       getSourceInfo().apply(term);
