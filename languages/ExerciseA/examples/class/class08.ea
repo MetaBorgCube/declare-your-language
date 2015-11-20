@@ -1,0 +1,11 @@
+program class08
+
+class A {
+  Bool x
+  Num y
+  Num f(Num x, Num y) {
+    1 + x * y
+  }
+}
+
+run 3
