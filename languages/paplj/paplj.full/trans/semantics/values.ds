@@ -14,15 +14,16 @@ signature // basic values
     
 // use separate scope for methods in order to have shared run-time instance 
 // of method table?
- 
+
+  
 signature // representation of Class at run-time 
-  aliases
-    ClassMap : Map<String, Class>
+  sort aliases
+    C = Map<String, Class>
   constructors    
     loadClass   : String --> Class
-    initClasses : List(Class) --> ClassMap
+    initClasses : List(Class) --> C
   variables
-    C : ClassMap
+    C : C 
     
 rules
 
@@ -33,9 +34,9 @@ rules
 
 signature // object values
   sorts Obj Super FieldSet 
-  aliases
-    FM : Map<String, Int> 
-    MM : Map<String, Method>   
+  sort aliases
+    FM = Map<String, Int> 
+    MM = Map<String, Method>   
   variables
     FM : FM
     MM : MM
@@ -70,8 +71,8 @@ rules
   initSuper(Extends(c)) --> initObject(loadClass(c)).
 
   initFields([]) --> {}.
-  initFields([Field(t, f) | fs]) --> {f |--> allocate(v), FM}
-  where defaultValue(t) --> v; initFields(fs) --> FM.
+  initFields([Field(t, f) | fs]) --> {f |--> addr, FM}
+  where defaultValue(t) --> v; initFields(fs) --> FM; allocate(v) --> addr.
   
   defaultValue(NumT()) --> NumV(0).
   defaultValue(BoolT()) --> BoolV(false).
