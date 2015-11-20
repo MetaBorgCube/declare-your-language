@@ -17,7 +17,7 @@ language
   start symbols : Program Expr
   
   provider : include/paplj.ctree
-//  provider : include/paplj-java.jar
+  provider : include/paplj-java.jar
   observer : editor-analyze (multifile)
   
 references

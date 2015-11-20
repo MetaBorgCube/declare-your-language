@@ -9,6 +9,8 @@ imports runtime/task/-
 imports runtime/analysis/-
 imports runtime/editor/-
   
+imports runtime/analysis/core
+
 imports pretty-print/pp 
 imports desugar/desugar
 imports check/check
@@ -93,7 +95,7 @@ rules // Debugging
 //	editor-analyze = analysis-default-editor
 //	
 //	analysis-single-default-interface = 
-//		analysis-single-default(pre-trans, post-trans, pp-message-top | <language>)
+//		analyze-all(pre-trans, post-trans, pp-message-top | <language>)
 //	analysis-multiple-default-interface = 
 //		analysis-multiple-default(parse-file <+ !(), pre-trans, post-trans, pp-message-top | <language>, <project-path>)
 //	
@@ -103,23 +105,24 @@ rules // Debugging
 //    (ast, path, project-path) -> (analyzed-ast, error*)
 //    with
 //      (analyzed-ast, error*, warning*, note*) := <analysis-single-default-interface>(ast, path, project-path)
-// 
-//rules	//@see http://yellowgrass.org/issue/Spoofax/823
-//	
-//	pp-message-top = origin-track-forced((id, strip-annos; pp-message))
-//	pp-message : Def(uri) -> <pp-uri>uri
-//	pp-message = not(is-list); (is-string <+ pp-result <+ pp-partial-lang-string <+ (strip-annos; write-to-string))
-//	pp-message = map(pp-message); concat-strings
-//	// pp-message: list -> $[<div>[<map(pp-message); separate-by(|"<br/>"); concat-strings>list]</div>]
-//	// 	where is-list
-//	
-//	pp-result:
-//	    result@Result(_) -> msg
-//	    where
-//	       if <task-has-failed> result then
-//	         msg := "fail"
-//	       else
-//	         msg := <task-get-results; map(pp-message); separate-by(|" or "); concat-strings> result
-//	       end
+    
+ 
+rules	//@see http://yellowgrass.org/issue/Spoofax/823
+	
+	pp-message-top = origin-track-forced((id, strip-annos; pp-message))
+	pp-message : Def(uri) -> <pp-uri>uri
+	pp-message = not(is-list); (is-string <+ pp-result <+ pp-partial-PAPLJ-string <+ (strip-annos; write-to-string))
+	pp-message = map(pp-message); concat-strings
+	// pp-message: list -> $[<div>[<map(pp-message); separate-by(|"<br/>"); concat-strings>list]</div>]
+	// 	where is-list
+	
+	pp-result:
+	    result@Result(_) -> msg
+	    where
+	       if <task-has-failed> result then
+	         msg := "fail"
+	       else
+	         msg := <task-get-results; map(pp-message); separate-by(|" or "); concat-strings> result
+	       end
 	       
 	       
