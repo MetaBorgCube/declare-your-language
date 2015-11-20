@@ -1,0 +1,14 @@
+module trans/semantics/signatures/Programs-sig
+
+imports
+  trans/semantics/signatures/Classes-sig
+  trans/semantics/signatures/Expressions-sig
+  trans/semantics/signatures/Common-sig
+
+
+signature
+  sorts
+    Program
+
+  constructors
+    Program : String * List(Class) * Expr -> Program

@@ -1,0 +1,13 @@
+module outline
+  
+imports include/PAPLJ
+imports runtime/editor/outline-library
+imports runtime/editor/origins
+
+rules
+  
+  to-outline-label = ?Program(<id>, _, _)
+  to-outline-label = ?Class(<id>, _, _, _)
+  to-outline-label = ?Method(<id>, _, _, _)
+  to-outline-label = ?Call(<id>, _, _)
+  

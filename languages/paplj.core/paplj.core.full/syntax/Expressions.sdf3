@@ -1,0 +1,95 @@
+module Expressions
+
+imports Common 
+
+sorts Expr 
+context-free syntax // arithmetic
+  Expr     = [([Expr])] {bracket}
+  Expr.Num = INT 
+  Expr.Min = [-[Expr]]
+  Expr.Add = [[Expr] + [Expr]] {left}
+  Expr.Sub = [[Expr] - [Expr]] {left}
+  Expr.Mul = [[Expr] * [Expr]] {left} 
+  
+context-free syntax // booleans 
+  Expr.True  = [true]
+  Expr.False = [false]    
+  Expr.Not   = [![Expr]]
+  Expr.And   = [[Expr] && [Expr]] {assoc}
+  Expr.Or    = [[Expr] || [Expr]] {assoc}
+  Expr.Eq    = [[Expr] == [Expr]] {non-assoc}
+  Expr.Neq   = [[Expr] != [Expr]] {non-assoc} 
+  Expr.Lt    = [[Expr] <  [Expr]] {non-assoc} 
+  
+  Expr.If = [
+  	if( [Expr] )
+  	  [Expr] 
+  	else 
+  	  [Expr]
+  ] {right}
+
+sorts Block
+context-free syntax
+
+  Expr = Block
+  Block.Do = [
+  	{ 
+  	  [{Seq ";\n"}*]
+  	}
+  ]
+  
+  Seq = Expr 
+  Seq.Skip = []
+ 
+context-free syntax // variables
+
+  Expr.Var = ID 
+  
+  Expr.Let = [
+  	let [{Bind "\n"}*] 
+  	 in [Expr]
+  ]
+  
+  Bind.Bind = [[Type] [ID] = [Expr]]
+  
+context-free syntax // objects
+    
+  Expr.Get   = [[Expr].[ID]]
+  Expr.Set   = [[Expr].[ID] = [Expr]]
+  Expr.Call  = [[Expr].[ID]([{Expr ", "}*])]
+
+  Expr.New   = [new [ID]()]
+  Expr.This  = [this]
+  Expr.Null  = [null [ID]]
+  Expr.Cast  = [([ID])[Expr]]
+ 
+  Type.NumT   = [Num]
+  Type.BoolT  = [Bool]
+  Type.UnitT  = [Unit]
+  Type.ClassT = ID
+
+context-free priorities
+
+  {Expr.Get Expr.Call Expr.Cast}
+  > {Expr.Not Expr.Min} 
+  > Expr.Mul 
+  > {left: Expr.Add Expr.Sub} 
+  > {non-assoc: Expr.Eq Expr.Neq Expr.Lt } 
+  > Expr.And 
+  > Expr.Or
+  > Expr.Set
+  > {Expr.If Expr.Let}
+  
+template options
+
+  keyword -/- [a-zA-Z0-9]
+  
+lexical syntax // reserved words
+  ID      = Keyword {reject}
+  Keyword = "Num"    
+  Keyword = "Bool"   
+  Keyword = "true"   
+  Keyword = "false"  
+  Keyword = "this"  
+  Keyword = "new"
+  
