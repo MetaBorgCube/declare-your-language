@@ -2,10 +2,12 @@ package ds.manual.interpreter;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
+import ds.generated.interpreter.A_This;
+
 public class Natives {
 
 	private static int fresh_counter = 1;
-	
+
 	public static String print_1(String s) {
 		System.err.println(s);
 		return s;
@@ -54,9 +56,12 @@ public class Natives {
 		return i1 > i2;
 	}
 
-	public static boolean isstored_2(PersistentMap<Integer, ?> map,
-			int loc) {
+	public static boolean isstored_2(PersistentMap<Integer, ?> map, int loc) {
 		return map.containsKey(loc);
+	}
+
+	public static A_This mkNullThis_0() {
+		return null;
 	}
 
 }
