@@ -13,7 +13,7 @@ class B extends A {
 }
 
 run 
-  let A b = new B()
+  let B b = new B()
 	 in b.overriding(new A())
 
 

@@ -1,6 +1,6 @@
-program test
+program bintree
 
-class Node  {
+class Node  { 
   Num value
   Node left
   Node right
@@ -11,16 +11,16 @@ class Node  {
   }
 
   Node insert(Num i) {
-    if( i == value )
+    if( i == this.value )
       this
     else
-      if( i <  value )
-        new Node().init(value, left.insert(i), right)
+      if( i <  this.value )
+        new Node().init(this.value, left.insert(i), this.right)
       else
-        new Node().init(value, left, right.insert)
+        new Node().init(this.value, this.left, right.insert(i))
   }
-}
+} 
 
 run
-  new Node().value
+  new Node().value  
   

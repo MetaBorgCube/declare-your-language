@@ -11,7 +11,7 @@ class B extends A {
 
 class C extends B {
 	A a
-}
+}  
 
 run  
  // let C c = new C() 
@@ -26,5 +26,4 @@ run
    	((A)c).x = 2;  
    	((A)c).x;
    	c; 
-   } 
-    
+   }

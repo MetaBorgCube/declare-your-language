@@ -6,7 +6,7 @@ class Z {
 
 class A extends Z {
 	Num count() { 1 }
-}
+} 
 
 class B extends A {
 	Num count() { 2 } 
