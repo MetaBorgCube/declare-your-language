@@ -1,0 +1,40 @@
+program TreeSum
+
+class Node {
+   Num sum() {
+     0
+   }
+}
+ 
+class Leaf extends Node {
+   Num value
+   Num sum() { 
+     this.value
+   }
+}
+
+class Parent extends Node {
+   Node child1
+   Node child2
+   Num sum() {
+     this.child1.sum() + this.child2.sum()
+   }
+}
+
+run
+  let Parent p1 = new Parent()
+      Parent p2 = new Parent()
+      Leaf l1 = new Leaf()
+      Leaf l2 = new Leaf()
+      Leaf l3 = new Leaf()
+      Node n = p1
+   in { 
+     p1.child1 = p2;
+     p1.child2 = l1;
+     p2.child1 = l2; 
+     p2.child2 = l3;
+     l1.value = 3;
+     l2.value = 42;
+     l3.value = 1337;
+     n.sum();
+   }

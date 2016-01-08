@@ -1,0 +1,22 @@
+module ex3-3-new
+
+language PAPLJ
+
+start symbol Program
+
+test new 1 [[ 
+  program test 
+    class [[A]]{ }
+    class B{ }
+    class C{ }
+  run  
+    new [[A]]()
+]] resolve #2 to #1
+
+test new 2 [[ 
+  program test 
+    class A{ Num z }
+    class [[B]] extends A{ }
+  run  
+    new [[B]]()
+]] resolve #2 to #1

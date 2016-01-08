@@ -1,0 +1,29 @@
+program class03
+
+class A {
+	Num x 
+	Num y
+}
+
+class B extends A {
+	Bool x  
+}
+
+class C extends B {
+	A a
+}  
+
+run  
+ // let C c = new C() 
+ //  in {c.a}
+ 
+  let C c = new C()
+   in {
+   	c.a = (A)c;
+   	c;
+   	c.x;
+   	(A)c;
+   	((A)c).x = 2;  
+   	((A)c).x;
+   	c; 
+   }

@@ -1,0 +1,73 @@
+module ex4-1-booleans 
+
+language PAPLJ
+
+test true [[ 
+  program tst run 
+  [[true]]
+]] run get-type to BoolT() 
+
+test false [[ 
+  program tst run 
+  [[false]] 
+]] run get-type to BoolT() 
+
+test not [[
+  program tst run 
+  [[!false]] 
+]]  run get-type to BoolT() 
+
+test not [[
+  program tst run 
+  [[!1]] 
+]] 1 error
+
+test and [[ 
+  program tst run 
+  [[false && true]]
+]] run get-type to BoolT() 
+
+test and [[ 
+  program tst run 
+  [[true && true]]
+]] run get-type to BoolT() 
+
+// etc.
+
+
+test if [[
+  program tst run  
+  [[if (true) 1 else 2]]
+]] run get-type-na to NumT() 
+
+test if [[ 
+  program tst run 
+  [[(if (true) 1 else 2) + 4]]
+]] run get-type-na to NumT() 
+
+test if [[ 
+  program tst run 
+  [[if (false) 1 else 2]]
+]] run get-type-na to NumT() 
+
+
+test eq [[ 
+  program tst run 
+  [[1 == 2]]
+]] run get-type to BoolT() 
+
+test eq [[ 
+  program tst run 
+  [[15 == 15]]
+]] run get-type to BoolT() 
+
+
+test neq [[ 
+  program tst run 
+  [[1 != 2]]
+]]  run get-type to BoolT() 
+
+test neq [[ 
+  program tst run 
+  [[15 != 15]]
+]] run get-type to BoolT() 

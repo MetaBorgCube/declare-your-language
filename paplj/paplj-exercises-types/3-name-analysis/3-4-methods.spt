@@ -1,0 +1,80 @@
+module ex4-6-methods 
+
+language PAPLJ
+
+start symbol Program
+
+test method call [[ 
+  program test 
+    class A { 
+      Num [[const]]() { 78 }
+    }
+  run 
+    new A().[[const]]()
+]] resolve #2 to #1
+
+test type dependent name resolution 1 [[ 
+  program test 
+    class A{
+      A [[init]]() { this }
+    }
+    class B{
+      B init() { this }
+    }
+  run 
+    new A().[[init]]()
+]] resolve #2 to #1
+
+test type dependent name resolution 2 [[ 
+  program test 
+    class A{
+      A init() { this }
+    }
+    class B{
+      B [[init]]() { this }
+    }
+  run 
+    new B().[[init]]()
+]] resolve #2 to #1
+
+
+
+test method parameters [[ 
+  program test 
+    class A { 
+      Num x 
+      A init(Num [[y]], Bool z, A a) {
+        this.x = [[y]];
+        this
+      }
+    }
+  run new A()
+]]  resolve #2 to #1
+
+
+
+
+// test recursive class [[
+//   program test
+//     class Node { 
+//       Num value  
+//       Node left
+//       Node right
+//       Node init(Num v, Node l, Node r) {
+//       	this.value = v;
+//       	this.left = l;
+//       	this.right = r;
+//       }
+//       Node insert(Num i) {
+//       	if(i == value) this
+//       	else if(i < value) 
+//       	  [[new Node().init(value, left.insert(i), right)]]
+//       	else 
+//       	  new Node().init(value, left, right.insert)
+//       }
+//     }
+//   run new Node().value
+// ]] run get-type-na to ClassT("Node")
+
+
+

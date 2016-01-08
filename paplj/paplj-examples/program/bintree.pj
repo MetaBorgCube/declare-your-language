@@ -1,0 +1,26 @@
+program bintree
+
+class Node  { 
+  Num value
+  Node left
+  Node right
+  Node init(Num v, Node l, Node r) {
+    this.value = v;
+    this.left = l;
+    this.right = r;   
+  }
+
+  Node insert(Num i) {
+    if( i == this.value )
+      this
+    else
+      if( i <  this.value )
+        new Node().init(this.value, left.insert(i), this.right)
+      else
+        new Node().init(this.value, this.left, right.insert(i))
+  }
+} 
+
+run
+  new Node().value  
+  

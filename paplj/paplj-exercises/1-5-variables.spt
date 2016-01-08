@@ -1,0 +1,99 @@
+module ex5-3-variables 
+
+language PAPLJ
+
+start symbol Expr
+
+test let [[ 
+  let Num x = 2 in x
+]] parse to    
+    Let(
+      [Bind(NumT(), "x", Num("2"))]
+    , Var("x")
+    )
+
+
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3
+   in x + y
+]] parse to    
+    Let(
+      [ Bind(NumT(), "x", Num("2"))
+      , Bind(NumT(), "y", Num("3"))
+      ]
+    , Add(Var("x"), Var("y"))
+    )
+    
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in x + y
+]] parse to
+   Let(
+      [ Bind(NumT(), "x", Num("2"))
+      , Bind(NumT(), "y", Add(Num("3"), Var("x")))
+      ]
+    , Add(Var("x"), Var("y"))
+    )
+
+test let [[ 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in let Num x = 6
+       in x + y
+]] parse to
+   Let(
+      [ Bind(NumT(), "x", Num("2"))
+      , Bind(NumT(), "y", Add(Num("3"), Var("x")))
+      ]
+    , Let(
+        [Bind(NumT(), "x", Num("6"))]
+      , Add(Var("x"), Var("y"))
+      )
+    )
+
+test let [[ 
+  let 
+     Bool x = true
+     Num y = let Num x = 8 in 3 + x
+   in 0 + y
+]] parse to
+   Let(
+      [ Bind(BoolT(), "x", True())
+      , Bind(
+          NumT()
+        , "y"
+        , Let(
+            [Bind(NumT(), "x", Num("8"))]
+          , Add(Num("3"), Var("x"))
+          )
+        )
+      ]
+    , Add(Num("0"), Var("y"))
+    )
+    
+test let [[ 
+  let 
+     Num x = 6 
+     Num y = let Num x = 8 + x in 3 + x
+   in x + y
+]] parse to
+   Let(
+      [ Bind(NumT(), "x", Num("6"))
+      , Bind(
+          NumT()
+        , "y"
+        , Let(
+            [Bind(NumT(), "x", Add(Num("8"), Var("x")))]
+          , Add(Num("3"), Var("x"))
+          )
+        )
+      ]
+    , Add(Var("x"), Var("y"))
+    )
+    
+

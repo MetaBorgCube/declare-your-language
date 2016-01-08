@@ -1,0 +1,50 @@
+module ex4-3-variables 
+
+language PAPLJ
+
+test let [[ 
+  program tst run 
+  let Num x = 2 in [[x]]
+]] run get-type to NumT() 
+
+
+test let [[ 
+  program tst run 
+  let 
+    Num x = 2 
+    Num y = 3
+   in [[x + y]]
+]] run get-type to NumT() 
+
+test let [[ 
+  program tst run 
+  let 
+    Num x = 2 
+    Num y = 3 + [[x]]
+   in x + y
+]] run get-type to NumT() 
+
+test let [[ 
+  program tst run 
+  let 
+    Num x = 2 
+    Num y = 3 + x
+   in let Num x = 6
+       in [[x]] + y
+]] run get-type to NumT() 
+
+test let [[ 
+  program tst run 
+  let 
+     Bool x = true
+     Num y = let Num x = 8 in 3 + [[x]]
+   in 0 + y
+]] run get-type to NumT() 
+
+test let [[ 
+  program tst run 
+  let 
+     Num x = 6 
+     Num y = let Num x = 8 + x in 3 + [[x]]
+   in x + y
+]] run get-type-na to NumT() 
