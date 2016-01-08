@@ -2,7 +2,7 @@ module ex4-7-add-type-annotations
 
 // solve in: trans/desugar/desugar-rules.str
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

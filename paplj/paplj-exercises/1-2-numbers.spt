@@ -1,6 +1,6 @@
 module ex4-2-numbers 
 
-language PAPLJ
+language paplj
 
 start symbol Expr
 

@@ -1,6 +1,6 @@
 module ex3-2-fields
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

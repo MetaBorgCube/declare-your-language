@@ -1,6 +1,6 @@
 module ex5-3-variables 
 
-language PAPLJ
+language paplj
 
 start symbol Expr
 

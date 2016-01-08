@@ -1,6 +1,6 @@
 module ex4-4-new
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

@@ -2,7 +2,7 @@ module ex2-3-resugaring-method-body
 
 // solve in: trans/desugar/resugar-rules.str
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

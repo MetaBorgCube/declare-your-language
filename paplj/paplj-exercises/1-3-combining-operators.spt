@@ -1,5 +1,5 @@
 module ex1-3-combining-operators
-language PAPLJ
+language paplj
 start symbol Expr
 
 test not [[

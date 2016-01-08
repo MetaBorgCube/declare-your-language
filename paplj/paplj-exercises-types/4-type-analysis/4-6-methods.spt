@@ -1,6 +1,6 @@
 module ex4-6-methods 
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

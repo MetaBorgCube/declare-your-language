@@ -1,6 +1,6 @@
 module ex5-7-counter
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

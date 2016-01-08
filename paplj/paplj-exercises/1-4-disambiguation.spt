@@ -1,5 +1,5 @@
 module ex1-4-disambiguation
-language PAPLJ
+language paplj
 start symbol Expr
 
 test true literal [[ 

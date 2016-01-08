@@ -1,6 +1,6 @@
 module ex4-3-variables 
 
-language PAPLJ
+language paplj
 
 test let [[ 
   program tst run 

@@ -1,6 +1,6 @@
 module ex5-5-fields 
 
-language PAPLJ
+language paplj
 
 start symbol Program
 

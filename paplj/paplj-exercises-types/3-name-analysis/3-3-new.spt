@@ -1,6 +1,6 @@
 module ex3-3-new
 
-language PAPLJ
+language paplj
 
 start symbol Program
 
