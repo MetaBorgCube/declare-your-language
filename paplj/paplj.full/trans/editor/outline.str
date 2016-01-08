@@ -1,10 +1,8 @@
 module outline
 
-imports
-  
-  include/paplj
-  runtime/editor/outline-library
-  runtime/editor/origins
+imports include/paplj
+imports runtime/editor/outline-library
+imports runtime/editor/origins
 
 rules
   

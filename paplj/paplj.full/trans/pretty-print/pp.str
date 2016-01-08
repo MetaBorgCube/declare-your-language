@@ -1,4 +1,4 @@
-module pp
+module pretty-print/pp
 
 imports
 
