@@ -1,0 +1,26 @@
+module paplj.main
+
+imports
+
+  Colorer
+  Menus
+  Syntax
+  Views
+
+language
+  
+  name : paplj
+  
+  extensions : pj
+
+  table         : include/paplj.tbl
+  start symbols : Start
+  
+  provider : include/paplj.ctree
+  provider : include/paplj-java.jar
+  observer : editor-analyze (multifile)
+  
+references
+
+  reference _ : editor-resolve
+  hover _     : editor-hover
