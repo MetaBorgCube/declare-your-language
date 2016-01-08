@@ -2,7 +2,7 @@ module ex2-2-desugaring
 
 // solve in: trans/desugar/desugar-rules.str
 
-language PAPLJ
+language paplj
 
 start symbol Expr
 
