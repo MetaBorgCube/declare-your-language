@@ -1,4 +1,0 @@
-module trans/semantics/semantics
-
-imports trans/semantics/interpret
-                
