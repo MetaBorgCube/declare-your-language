@@ -2,6 +2,8 @@ package ds.manual.interpreter;
 
 import com.github.krukow.clj_ds.PersistentMap;
 
+import ds.generated.interpreter.A_This;
+
 //import ds.generated.interpreter.A_This;
 
 public class Natives {
@@ -60,8 +62,8 @@ public class Natives {
 		return map.containsKey(loc);
 	}
 
-//	public static A_This mkNullThis_0() {
-//		return null;
-//	}
+	public static A_This mkNullThis_0() {
+		return null;
+	}
 
 }

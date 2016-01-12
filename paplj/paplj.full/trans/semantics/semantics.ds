@@ -7,14 +7,14 @@ imports trans/semantics/interpret
 
 signature
   arrows
-    Program -_init-> V
+    Program -init-> V
 
   native operators
     mkNullThis: This
 
 rules
   
-  p : Program -_init-> v
+  p : Program -init-> v
   where
     Map<String,Class> {}, Map<String, V> {}, This mkNullThis() |- p :: Map<Int, V> {} --> v :: Map<Int, V> _.    
 
