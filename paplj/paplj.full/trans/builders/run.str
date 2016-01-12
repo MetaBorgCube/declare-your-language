@@ -25,19 +25,26 @@ rules
   
   runprogram-value = runprogram; ?R_default_V(<render-value>, _)
  
+//  run-program-basic-builder :
+//    (selected, position, ast, path, project-path) -> (filename, result)
+//    with				
+//	    (ast', error*) := <analyze-ast-step> (ast, path, project-path);
+//			
+//      filename := <guarantee-extension(|"run.aterm")> path;
+//      if not([] := error*) then
+//        <debug(!"Fix errors before generating code. Exiting code generation. ")> error*;
+//        result := None()
+//      else
+//        result := <strip-annos; debug(!"ast: "); runprogram> ast'
+//      end
+
   run-program-basic-builder :
     (selected, position, ast, path, project-path) -> (filename, result)
-    with				
-	    (ast', error*) := <analyze-ast-step> (ast, path, project-path);
-			
+    with		
       filename := <guarantee-extension(|"run.aterm")> path;
-      if not([] := error*) then
-        <debug(!"Fix errors before generating code. Exiting code generation. ")> error*;
-        result := None()
-      else
-        result := <strip-annos; debug(!"ast: "); runprogram> ast'
-      end
-          
+      result := <strip-annos; debug(!"ast: "); runprogram> ast
+
+                
   editor-run-program-debug :
     (selected, position, ast, path, project-path) -> (filename, result)
     with 

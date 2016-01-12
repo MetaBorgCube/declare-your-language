@@ -15,13 +15,16 @@ imports runtime/editor/-
  
 rules // Analysis
 
-  editor-analyze = analyze-all(pre-desugar, post-desugar, pp-message-top|<language>)
+  editor-analyze = 
+    analyze-all(pre-desugar, post-desugar, pp-message-top|<language>)
      
 rules 
 
-	pre-trans = pre-desugar
+	pre-trans = 
+	  pre-desugar
 	
-	post-trans = post-desugar
+	post-trans = 
+	  post-desugar
 
 	analysis-single-default-interface = 
 		analyze-all(pre-trans, post-trans, pp-message-top | <language>)
@@ -31,7 +34,7 @@ rules
   analyze-ast-step: 
     (ast, path, project-path) -> (analyzed-ast, error*)
     with
-      (analyzed-ast, error*, warning*, note*) := <analysis-single-default-interface>(ast, path, project-path)
+      (analyzed-ast, error*, warning*, note*) := <analyze-all(pre-trans, post-trans, pp-message-top | <language>)>(ast, path, project-path)
  
 rules	//@see http://yellowgrass.org/issue/Spoofax/823
 	
