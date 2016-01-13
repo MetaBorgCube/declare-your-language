@@ -17,13 +17,13 @@ imports signatures/Classes-sig
 
 signature
   constructors
-    R_default_V : Value * Store -> Result
+    R_init_V : Value -> Result
     
 rules
 	
   external runprogram(|)
   
-  runprogram-value = runprogram; ?R_default_V(<render-value>, _)
+  runprogram-value = runprogram; ?R_init_V(<render-value>)
  
 //  run-program-basic-builder :
 //    (selected, position, ast, path, project-path) -> (filename, result)
@@ -53,8 +53,8 @@ rules
           
   editor-run-program :
     tuple@(selected, position, ast, path, project-path) -> (filename, <render-value>result)
-    with 
-      (filename, R_default_V(result, _)) := <run-program-basic-builder>tuple
+    with
+      (filename, R_init_V(result)) := <run-program-basic-builder> tuple
 
 rules
   
