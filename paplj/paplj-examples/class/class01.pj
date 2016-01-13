@@ -1,0 +1,6 @@
+program class01
+
+  class A {
+  }
+  
+run new A()
