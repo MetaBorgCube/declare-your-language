@@ -54,6 +54,13 @@
       <type>spoofax-language</type>
       <scope>${metaborg-meta-lang-scope}</scope>
     </dependency>
+    <dependency>
+      <groupId>org.metaborg</groupId>
+      <artifactId>dynsem</artifactId>
+      <version>${metaborg-version}</version>
+      <type>spoofax-language</type>
+      <scope>${metaborg-meta-lang-scope}</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -66,4 +73,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
