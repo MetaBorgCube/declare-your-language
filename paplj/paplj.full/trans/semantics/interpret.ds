@@ -81,6 +81,14 @@ rules // objects
 
   This o |- This() --> o.  
   
+  Cast(t1, o@ObjV(t2, _, _, _)) --> o.
+  // where t1 == t2. // check that t1 is supertype of t2
+  
+  
+//  Cast(t1, o@ObjV(t2, _, _, _)) --> Exc("").
+//  where // t1 is not a supertype of t2
+ 
+  
 rules // list of expressions
 
   []: List(Expr) --> [].
