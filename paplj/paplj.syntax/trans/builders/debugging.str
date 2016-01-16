@@ -1,0 +1,62 @@
+module debugging
+
+imports builders/analysis
+
+imports	editor-common.generated
+imports runtime/index/-
+imports runtime/nabl/-
+imports runtime/properties/-
+imports runtime/types/-
+imports runtime/task/-
+imports runtime/analysis/-
+imports runtime/editor/-
+	
+rules // Debugging
+  
+  debug-show-analyzed:
+    (_, _, ast, path, _) -> (filename, result)
+    with
+      filename := <guarantee-extension(|"analyzed.aterm")> path;
+      result   := ast
+  
+  debug-index-project =
+    analysis-debug-index-project(|<language>)
+  debug-index-project-resolve = 
+    analysis-debug-index-project-resolve(|<language>)
+  debug-index-partition =
+    analysis-debug-index-partition(|<language>)
+
+  debug-task-project =
+    analysis-debug-task-project(|<language>)
+  debug-task-partition =
+    analysis-debug-task-partition(|<language>)
+  debug-task-selection =
+    analysis-debug-task-selection(|<language>)
+  debug-index-partition-resolve =
+    analysis-debug-index-partition-resolve(|<language>)
+    
+  debug-project =
+    analysis-debug-project(|<language>)
+  debug-partition =
+    analysis-debug-partition(|<language>)	
+		
+rules
+
+   debug-show-desugared :
+     (selected, position, ast, path, project-path) -> (filename, result)
+     with
+ 		  (ast', error*) := <analyze-ast-step> (ast, path, project-path);
+ 			
+       filename := <guarantee-extension(|"desugared.aterm")> path;
+       result := <strip-annos> ast'
+      
+   debug-show-analyzed-resolved:
+ 		(selected, position, ast, path, project-path) -> (filename, result)
+ 			where
+ 	    	language := <language>
+ 			with
+ 				filename := <guarantee-extension(|"analyzed.aterm")> path;
+ 				ast'		 := <bottomup(try(id{bottomup(try(give-task-results))}))>ast;
+ 				ast''		 := <bottomup(try(id{bottomup(try(rm-annotations);try(pp-uri;string-replace(|"\"","")))}))>ast';
+ 				result	 := ast''
+
