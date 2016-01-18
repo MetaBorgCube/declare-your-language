@@ -1,0 +1,56 @@
+module analysis
+
+imports desugar/desugar
+imports check/check
+imports pretty-print/pp
+
+imports editor-common.generated
+imports runtime/index/-
+imports runtime/nabl/-
+imports runtime/properties/-
+imports runtime/types/-
+imports runtime/task/-
+imports runtime/analysis/-
+imports runtime/editor/-
+ 
+rules // Analysis
+
+  editor-analyze = 
+    analyze-all(pre-desugar, post-desugar, pp-message-top|<language>)
+     
+rules 
+
+	pre-trans = 
+	  pre-desugar
+	
+	post-trans = 
+	  post-desugar
+
+	analysis-single-default-interface = 
+		analyze-all(pre-trans, post-trans, pp-message-top | <language>)
+		
+rules
+
+  analyze-ast-step: 
+    (ast, path, project-path) -> (analyzed-ast, error*)
+    with
+      (analyzed-ast, error*, warning*, note*) := <analyze-all(pre-trans, post-trans, pp-message-top | <language>)>(ast, path, project-path)
+ 
+rules	//@see http://yellowgrass.org/issue/Spoofax/823
+	
+	pp-message-top = origin-track-forced((id, strip-annos; pp-message))
+	pp-message : Def(uri) -> <pp-uri>uri
+	pp-message = not(is-list); (is-string <+ pp-result <+ pp-partial-paplj-string <+ (strip-annos; write-to-string))
+	pp-message = map(pp-message); separate-by(|"\n"); concat-strings
+	// pp-message: list -> $[<div>[<map(pp-message); separate-by(|"<br/>"); concat-strings>list]</div>]
+	// 	where is-list
+	
+	pp-result:
+	    result@Result(_) -> msg
+	    where
+	       if <task-has-failed> result then
+	         msg := "fail"
+	       else
+	         msg := <task-get-results; map(pp-message); separate-by(|" or "); concat-strings> result
+	       end
+	       

@@ -1,0 +1,66 @@
+module names
+
+imports 
+  src-gen/signatures/Programs-sig
+  src-gen/signatures/Expressions-sig
+  src-gen/signatures/Classes-sig
+
+namespaces Program Class Field Method Variable
+	
+binding rules // programs
+
+  Program(name, _, _) :   
+  	defines Program name
+  	scopes Class, Variable
+
+binding rules // classes
+
+  Class(c, _, _, _) :
+  	defines Class c of type ClassT(c)
+  	scopes Field, Method, Variable
+  	implicitly defines Variable This() of type ClassT(c)
+  	
+  Extends(c) : 
+  	imports Field, Method from Class c
+
+  ClassT(c) :
+  	refers to Class c
+  	
+  New(c) : 
+  	refers to Class c
+	
+  Null(c) :
+  	refers to Class c
+  	
+  Cast(c, e) :
+  	refers to Class c
+  	 	
+binding rules // fields
+
+//  Field(t, f) :
+//  	
+//  Get(e, f) :
+//  	
+//  Set(e1, f, e2) :
+
+binding rules // methods
+  	
+  Method(t, m, ps, e) :
+  	defines Method m of type (t*, t)
+  	where ps has type t*
+  	scopes Variable
+  	
+//  Call(e1, m, e*) :
+  	
+binding rules // variables
+ 	
+//  Param(t, x) :
+//  	
+//  Let(bs, e) :
+//  
+//  Bind(t, x, e) : 
+// 	
+//  This() :
+//  	
+//  Var(x) :
+  	

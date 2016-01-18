@@ -1,0 +1,9 @@
+module trans/semantics/signatures/PAPLJ-sig
+
+imports
+  trans/semantics/signatures/Programs-sig
+  trans/semantics/signatures/Classes-sig
+  trans/semantics/signatures/Expressions-sig
+
+
+signature

@@ -1,0 +1,10 @@
+module outline
+
+imports include/paplj
+imports runtime/editor/outline-library
+imports runtime/editor/origins
+
+rules
+  
+  to-outline-label = fail
+  

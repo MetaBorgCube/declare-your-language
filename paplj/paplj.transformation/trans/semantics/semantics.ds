@@ -1,0 +1,20 @@
+module trans/semantics/semantics
+
+imports trans/semantics/interpret
+
+
+// Entry point
+
+signature
+  arrows
+    Program -init-> V
+
+  native operators
+    mkNullThis: This
+
+rules
+  
+  p : Program -init-> v
+  where
+    Map<String,Class> {}, Map<String, V> {}, This mkNullThis() |- p :: Map<Int, V> {} --> v :: Map<Int, V> _.    
+
