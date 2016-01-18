@@ -9,7 +9,7 @@ test default value [[
     class A{ Num x }
   run 
     let A a = new A()
-     in {
+     in { 
        a.x
      }
 ]] parse to

@@ -12,8 +12,8 @@ test new 1 [[
 ]] run runprogram-value
 to ObjV("A"
         , NoSuper()
-        , Map("FM", [])
-        , Map("MM", [])
+        , Map()
+        , Map()
         )
         
 test new 2 [[ 
@@ -27,12 +27,12 @@ to  ObjV("B"
         , Super(
             ObjV("A"
             , NoSuper()
-            , Map("FM", [])
-            , Map("MM", [])
+            , Map()
+            , Map()
             )
           )
-        , Map("FM", [])
-        , Map("MM", [])
+        , Map()
+        , Map()
         )
         
 test new 3 [[ 
@@ -46,10 +46,10 @@ to  ObjV("B"
         , Super(
             ObjV("A"
             , NoSuper()
-            , Map("FM", [Bind("z", _)])
-            , Map("MM", [])
+            , Map(Bind("z", _),[])
+            , Map()
             )
           )
-        , Map("FM", [])
-        , Map("MM", [])
+        , Map()
+        , Map()
         )

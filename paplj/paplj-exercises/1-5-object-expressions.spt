@@ -1,20 +1,20 @@
 module ex1-5-object-expressions
 
 language paplj
-
+  
 start symbol Expr
-
+ 
 test new [[ 
   new A() 
 ]] parse to New("A")
-
-test this [[ 
+ 
+test this [[  
   this
 ]] parse to This()
 
 test get [[ 
   x.f
-]] parse to Get(Var("x"), "f")
+]] parse to Get(Var("x"), "f") 
 
 test new field access [[ 
   new B().g
@@ -22,10 +22,8 @@ test new field access [[
 
 test chain [[ 
   new B().g.h.i
-]] parse to Get(Get(Get(New("B"), "g"), "h"), "i")
-
-
-
+]] parse to Get(Get(Get(New("B"), "g"), "h"), "i") 
+ 
 test set [[ 
   x.f = 1
 ]] parse to Set(Var("x"), "f", Num("1"))
@@ -42,7 +40,6 @@ test chain set [[
     , "i"
     , Get(This(), "x")
     )
-
 
 test method call [[ 
   x.f()

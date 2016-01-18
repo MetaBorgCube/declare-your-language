@@ -4,12 +4,11 @@ language paplj
 
 start symbol Program
 
-test let [[ 
+test let [[
   program tst run
   let Num x = 2 in x
-]] run runprogram-value  
-to NumV("2")
-
+]] run runprogram-value
+to NumV("2")  
 
 test let [[ 
   program tst run
@@ -18,8 +17,8 @@ test let [[
     Num y = 3
    in x + y
 ]] run runprogram-value  
-to NumV("5")
-
+to NumV("5")  
+  
 test let [[ 
   program tst run
   let 
@@ -45,7 +44,7 @@ test let [[
      Num x = 2 
      Num y = let Num x = 8 in 3 + x
    in x + y
-]] run runprogram-value  
+]] run runprogram-value
 to NumV("13")
 
 test let [[ 

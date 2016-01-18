@@ -1,0 +1,17 @@
+module ex1-5-object-expressions
+
+language paplj
+
+start symbol Expr
+
+test get [[ 
+  x.f
+]] parse to Get(Var("x"), "f")
+
+test set [[ 
+  x.f = 1
+]] parse to Set(Var("x"), "f", Num("1"))
+
+test method call [[ 
+  x.f()
+]] parse to Call(Var("x"), "f", [])

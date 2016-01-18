@@ -5,7 +5,7 @@ start symbol Expr
 test not [[
   !x
 ]] parse to Not(Var("x"))
-
+   
 test and [[
 	x && y
 ]] parse to And(Var("x"), Var("y"))
@@ -54,7 +54,7 @@ test lt add [[
   x < (y + z)
 ]] parse to Lt(Var("x"), Add(Var("y"), Var("z")))
 
-test lt and [[
+test lt and [[ 
   (w < x) && (y < z)
 ]] parse to  And(
                 Lt(Var("w"), Var("x"))

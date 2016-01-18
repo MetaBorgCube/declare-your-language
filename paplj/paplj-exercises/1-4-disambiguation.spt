@@ -10,7 +10,7 @@ test false literal [[
   false 
 ]] parse to False()
 
-test not over and priority [[ 
+test not over and priority [[
   !x && y 
 ]] parse to And(Not(Var("x")), Var("y"))
 

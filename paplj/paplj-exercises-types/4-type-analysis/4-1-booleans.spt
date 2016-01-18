@@ -12,7 +12,7 @@ test false [[
   [[false]] 
 ]] run get-type to BoolT() 
 
-test not [[
+test not [[ 
   program tst run 
   [[!false]] 
 ]]  run get-type to BoolT() 

@@ -6,7 +6,7 @@ start symbol Program
 
 test true [[ 
   program tst run
-  true 
+  true  
 ]] run runprogram-value 
 to BoolV(TrueV())
 
@@ -76,4 +76,10 @@ test neq [[
 to BoolV(FalseV())
 
 
+
+test lt [[ 
+  program tst run
+  15 < 15
+]] run runprogram-value 
+to BoolV(FalseV())
 

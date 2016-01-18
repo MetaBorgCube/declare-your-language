@@ -2,12 +2,12 @@ module ex5-2-numbers
 
 language paplj
 
-start symbol Program
+start symbol Program 
 
-test number [[  
+test number [[
   program tst run
   1 
-]] run runprogram-value 
+]] run runprogram-value  
 to NumV("1")
 
 test min [[  

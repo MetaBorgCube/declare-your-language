@@ -7,7 +7,7 @@ start symbol Expr
 // boolean expressions
 
 test true [[ 
-  true
+  true   
 ]] parse to True()
 
 test false [[ 

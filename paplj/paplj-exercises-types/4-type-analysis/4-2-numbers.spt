@@ -15,7 +15,7 @@ test min [[
 test add [[ 
   program tst run  
   [[1 + 2]]
-]] run get-type to NumT() 
+]] run get-type to NumT()  
 
 test sub [[ 
   program tst run  

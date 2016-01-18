@@ -11,7 +11,7 @@ test default value [[
     let A a = new A()
      in {
        a.x
-     }
+     } 
 ]] run runprogram-value
 to NumV("0")
 

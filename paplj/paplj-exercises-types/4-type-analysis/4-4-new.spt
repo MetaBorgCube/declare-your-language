@@ -17,7 +17,7 @@ test new 2 [[
     class B extends A{ }
   run  
     [[new B()]]
-]] run get-type-na to ClassT("B") 
+]] run get-type-na to ClassT("B")  
         
 test new 3 [[ 
   program test 

@@ -2,9 +2,9 @@ module ex4-2-numbers
 
 language paplj
 
-start symbol Expr
+start symbol Expr 
 
-test number [[  
+test number [[
   1
 ]] parse to Num("1")
 
@@ -15,12 +15,12 @@ test min [[
 test add [[  
   1 + 2
 ]] parse to Add(Num("1"), Num("2"))
-
+ 
 test sub [[  
   1 - 2
 ]] parse to Sub(Num("1"), Num("2"))
 
-test mul [[  
+test mul [[
   11 * 29
 ]] parse to Mul(Num("11"), Num("29"))
 

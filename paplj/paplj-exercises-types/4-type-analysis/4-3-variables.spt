@@ -13,7 +13,7 @@ test let [[
   let 
     Num x = 2 
     Num y = 3
-   in [[x + y]]
+   in [[x + y]] 
 ]] run get-type to NumT() 
 
 test let [[ 

@@ -12,17 +12,17 @@ test default value [[
      in {
        [[a]].x
      }
-]] run get-type-na to ClassT("A") 
+]] run get-type-na to ClassT("A")  
 
-// test set returns value [[ 
-//   program test 
-//     class A{ Num x }
-//   run 
-//     let A a = new A()
-//      in {
-//        [[a.x = 4]]
-//      }
-// ]] run get-type-na to NumT()
+ test set returns value [[ 
+   program test 
+     class A{ Num x }
+   run  
+     let A a = new A()
+      in {
+        [[a.x = 4]]
+      }
+ ]] run get-type-na to NumT()
 
 test set changes field value [[ 
   program test 
