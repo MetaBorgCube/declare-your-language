@@ -15,7 +15,7 @@ rules
     
 rules // boolean expressions
    
-  True()  --> BoolV(true).
+  True()  --> BoolV(false). 
   False() --> BoolV(false). 
   
   Not(BoolV(true)) --> BoolV(false).
@@ -28,12 +28,6 @@ rules // boolean expressions
    
   // Or
   // If
- 
-//  Or(BoolV(true), _)  --> BoolV(true).
-//  Or(BoolV(false), e) --> e.
-//  
-//  If(BoolV(true), e, _)  --> e.
-//  If(BoolV(false), _, e) --> e.
   
 rules // control-flow
 
@@ -52,12 +46,6 @@ rules // arithmetic expressions
   // Add
   // Sub
   // Mul
-  
-//  Add(NumV(i), NumV(j)) --> NumV(plusI(i, j)).
-//  
-//  Sub(NumV(i), NumV(j)) --> NumV(minusI(i, j)).
-//  
-//  Mul(NumV(i), NumV(j)) --> NumV(timesI(i, j)).
   
   Neq(e1, e2) --> Not(Eq(e1, e2)).
   
