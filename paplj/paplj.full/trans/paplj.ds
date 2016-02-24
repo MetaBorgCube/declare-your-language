@@ -1,3 +1,3 @@
-module paplj
+module trans/paplj
 
 imports trans/semantics/semantics

@@ -1,0 +1,37 @@
+---
+id: org.metaborg.dyl.paplj:paplj.full:1.0.0-SNAPSHOT
+name: paplj
+metaborgVersion: 2.0.0-SNAPSHOT
+dependencies:
+  compile:
+  - org.metaborg:org.metaborg.meta.lang.esv:${metaborgVersion}
+  - org.metaborg:org.metaborg.meta.lang.template:${metaborgVersion}
+  - org.metaborg:org.metaborg.meta.lang.nabl:${metaborgVersion}
+  - org.metaborg:org.metaborg.meta.lang.ts:${metaborgVersion}
+  - org.metaborg:dynsem:${metaborgVersion}
+  source:
+  - org.metaborg:org.metaborg.meta.lib.analysis:${metaborgVersion}
+  java:
+  - org.metaborg:org.metaborg.meta.interpreter.framework:${metaborgVersion}
+pardonedLanguages:
+- EditorService
+- Stratego-Sugar
+- SDF
+language:
+  stratego:
+    format: ctree
+    args:
+    - -la
+    - stratego-lib
+    - -la
+    - stratego-sglr
+    - -la
+    - stratego-gpp
+    - -la
+    - stratego-xtc
+    - -la
+    - stratego-aterm
+    - -la
+    - stratego-sdf
+    - -la
+    - strc
