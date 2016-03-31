@@ -2,7 +2,7 @@ module builders/run
 
 imports builders/analysis
 
-imports editor-common.generated
+imports stratego/metaborg
 imports runtime/analysis/-
 imports runtime/index/-
 imports runtime/nabl/-

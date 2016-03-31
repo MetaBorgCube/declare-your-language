@@ -2,7 +2,7 @@ module debugging
 
 imports builders/analysis
 
-imports	editor-common.generated
+imports	stratego/metaborg
 imports runtime/index/-
 imports runtime/nabl/-
 imports runtime/properties/-

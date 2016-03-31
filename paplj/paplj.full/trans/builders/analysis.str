@@ -4,7 +4,7 @@ imports desugar/desugar
 imports check/check
 imports pretty-print/pp
 
-imports editor-common.generated
+imports stratego/metaborg
 imports runtime/index/-
 imports runtime/nabl/-
 imports runtime/properties/-

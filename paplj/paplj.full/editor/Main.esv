@@ -9,15 +9,13 @@ imports
 
 language
   
-  name : paplj
-  
   extensions : pj
 
-  table         : include/paplj.tbl
+  table         : target/metaborg/sdf.tbl
   start symbols : Start
   
-  provider : include/paplj.ctree
-  provider : include/paplj-java.jar
+  provider : target/metaborg/stratego.ctree
+  provider : target/metaborg/stratego-javastrat.jar
   observer : editor-analyze (multifile)
   
 references

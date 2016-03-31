@@ -2,7 +2,7 @@ module desugar/desugar-types
 
 imports src-gen/signatures/Expressions-sig
 
-imports editor-common.generated
+imports stratego/metaborg
 imports runtime/analysis/-
 imports runtime/index/-
 imports runtime/nabl/-

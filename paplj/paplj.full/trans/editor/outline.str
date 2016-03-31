@@ -1,6 +1,6 @@
 module outline
 
-imports include/paplj
+imports signatures/-
 imports runtime/editor/outline-library
 imports runtime/editor/origins
 

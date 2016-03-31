@@ -28,14 +28,13 @@ menus
       action: "Selection" = debug-task-selection
     end
     
-  menu: "Transform" (openeditor) (realtime) 
+  menu: "Transform" (openeditor) (realtime)
+  
     action: "Desugar"       = editor-desugar 
     action: "Desugar AST"   = editor-desugar-ast
     action: "Desugar Types" = editor-post-analysis-desugar
     
-  menu: "Run"       (openeditor) 
+  menu: "Run"       (openeditor)
+  
     action: "Run"         = editor-run-program
     action: "Run (Debug)" = editor-run-program-debug
-
-//  menu: "Generation"          (openeditor) (realtime)  
-//    action: "Generate Java" = generate-java   

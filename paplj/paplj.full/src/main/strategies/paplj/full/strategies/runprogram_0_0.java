@@ -12,7 +12,6 @@ public class runprogram_0_0 extends Strategy {
 
 	@Override
 	public IStrategoTerm invoke(Context context, IStrategoTerm program) {
-		return new Generic_A_Program(null, program).exec_init().toStrategoTerm(
-				context.getFactory());
+		return new Generic_A_Program(null, program).exec_init().toStrategoTerm(context.getFactory());
 	}
 }

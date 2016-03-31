@@ -4,7 +4,7 @@ imports src-gen/signatures/Programs-sig
 imports src-gen/signatures/Expressions-sig
 imports desugar/desugar
 
-imports editor-common.generated
+imports stratego/metaborg
 imports runtime/analysis/-
 imports runtime/index/-
 imports runtime/nabl/-

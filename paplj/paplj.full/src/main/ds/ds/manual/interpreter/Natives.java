@@ -4,10 +4,7 @@ import com.github.krukow.clj_ds.PersistentMap;
 
 import ds.generated.interpreter.A_This;
 
-//import ds.generated.interpreter.A_This;
-
 public class Natives {
-
 	private static int fresh_counter = 1;
 
 	public static String print_1(String s) {
@@ -65,5 +62,4 @@ public class Natives {
 	public static A_This mkNullThis_0() {
 		return null;
 	}
-
 }

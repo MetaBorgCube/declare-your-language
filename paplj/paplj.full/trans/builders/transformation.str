@@ -3,7 +3,7 @@ module transformation
 imports desugar/desugar 
 imports pretty-print/pp 
 
-imports editor-common.generated
+imports stratego/metaborg
 imports runtime/analysis/-
 imports runtime/index/-
 imports runtime/nabl/-
